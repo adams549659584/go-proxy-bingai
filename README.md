@@ -28,6 +28,14 @@
 
 - https://bing.vcanbb.top
 
+> railway 
+
+- https://bing-railway.vcanbb.top
+
+- https://go-proxy-bingai-production.up.railway.app
+
+
+
 ### 获取cookies
 
 - 访问 https://www.bing.com/ 或 https://cn.bing.com/ ，登录
@@ -56,3 +64,20 @@ docker run -d -p 8080:8080 --name go-proxy-bingai --restart=unless-stopped adams
 - 直接下载 Release 运行
 
 在 [Github Releases](https://github.com/adams549659584/go-proxy-bingai/releases) 下载适用于对应平台的压缩包，解压后可得到可执行文件 go-proxy-bingai，直接运行即可。
+
+- Railway
+
+> 主要配置 Dockerfile 路径 及 端口就可以
+
+```bash
+PORT=8080
+RAILWAY_DOCKERFILE_PATH=docker/Dockerfile
+```
+使用模板部署  [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/uIckWS?referralCode=BBs747) 
+![Railway 模板部署](./docs/img/railway-1.png)
+
+可自行部署配置
+
+![Railway 环境变量](./docs/img/railway-2.png)
+
+![Railway 域名](./docs/img/railway-3.png)
