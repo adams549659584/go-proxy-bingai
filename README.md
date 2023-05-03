@@ -36,6 +36,19 @@
 
 ### 部署
 
-> 需 https 域名
+> 需 https 域名 (自行配置 nginx 等)
+
+> 支持 Linux (amd64 / arm64)
 
 - docker 部署 , 参考 [Dockerfile](./docker/Dockerfile) 、[docker-compose.yml](./docker/docker-compose.yml)
+
+示例
+
+```bash
+# 运行容器 监听8080 端口
+docker run -d -p 8080:8080 --name go-proxy-bingai --restart=unless-stopped adams549659584/go-proxy-bingai
+```
+
+- 直接下载 Release 运行
+
+在 [Github Releases](https://github.com/adams549659584/go-proxy-bingai/releases) 下载适用于对应平台的压缩包，解压后可得到可执行文件 go-proxy-bingai，直接运行即可。
