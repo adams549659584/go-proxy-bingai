@@ -73,10 +73,11 @@ docker run -d -p 8080:8080 --name go-proxy-bingai --restart=unless-stopped adams
 PORT=8080
 RAILWAY_DOCKERFILE_PATH=docker/Dockerfile
 ```
-使用模板部署  [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/uIckWS?referralCode=BBs747) 
+使用模板部署，点这里 =>  [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/uIckWS?referralCode=BBs747) 
+
 ![Railway 模板部署](./docs/img/railway-1.png)
 
-可自行部署配置
+自行使用 Railway 部署配置如下
 
 ![Railway 环境变量](./docs/img/railway-2.png)
 
