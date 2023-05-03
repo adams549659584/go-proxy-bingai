@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"math/rand"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
@@ -28,6 +29,7 @@ var (
 	KEEP_HEADERS     = map[string]bool{
 		"Accept":                   true,
 		"Accept-Encoding":          true,
+		"Accept-Language":          true,
 		"Referer":                  true,
 		"Connection":               true,
 		"Cookie":                   true,
@@ -36,6 +38,8 @@ var (
 		"Sec-Websocket-Extensions": true,
 		"Sec-Websocket-Key":        true,
 		"Sec-Websocket-Version":    true,
+		"X-Request-Id":             true,
+		"X-Forwarded-For":          true,
 	}
 )
 
@@ -85,6 +89,10 @@ func newSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 
 		req.Header.Set("Referer", fmt.Sprintf("%s/search?q=Bing+AI", BING_URL.String()))
 
+		// 随机ip
+		randIp := fmt.Sprintf("%d.%d.%d.%d", randInt(1, 10), randInt(1, 255), randInt(1, 255), randInt(1, 255))
+		req.Header.Set("X-Forwarded-For", randIp)
+
 		for hKey, _ := range req.Header {
 			if _, isExist := KEEP_HEADERS[hKey]; !isExist {
 				req.Header.Del(hKey)
@@ -124,6 +132,7 @@ func newSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 		return nil
 	}
 	errorHandler := func(res http.ResponseWriter, req *http.Request, err error) {
+		log.Println("代理异常 ：", err)
 		res.Write([]byte(err.Error()))
 	}
 	// 代理请求   请求回来的内容   报错自动调用
@@ -221,4 +230,9 @@ func modifyDefaultBody(res *http.Response, originalScheme string, originalHost s
 	res.Body = io.NopCloser(bytes.NewReader(modifiedBody))
 
 	return nil
+}
+
+func randInt(min int, max int) int {
+	rand.Seed(time.Now().UnixNano())
+	return rand.Intn(max-min+1) + min
 }
