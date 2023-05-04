@@ -37,13 +37,13 @@
 
 - https://bing.vcanbb.top
 
-### Railway 
+### Railway搭建
 
 - https://bing-railway.vcanbb.top
 
 - https://go-proxy-bingai-production.up.railway.app
 
-### Vercel
+### Vercel搭建
 
 - https://bing-vercel.vcanbb.top
 
