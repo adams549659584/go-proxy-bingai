@@ -22,21 +22,19 @@
 
 ![手机未登录](./docs/img/4.png)
 
-### 演示站点：
+## 演示站点：
 
 > 甲骨文小鸡仔，轻虐
 
 - https://bing.vcanbb.top
 
-> railway 
+> Railway 
 
 - https://bing-railway.vcanbb.top
 
 - https://go-proxy-bingai-production.up.railway.app
 
-
-
-### 获取cookies
+## 获取cookies
 
 - 访问 https://www.bing.com/ 或 https://cn.bing.com/ ，登录
 
@@ -46,13 +44,15 @@
 
 ![获取Cookie](./docs/img/5.png)
 
-### 部署
+## 部署
 
 > 需 https 域名 (自行配置 nginx 等)
 
 > 支持 Linux (amd64 / arm64)
 
-- docker 部署 , 参考 [Dockerfile](./docker/Dockerfile) 、[docker-compose.yml](./docker/docker-compose.yml)
+### docker
+
+> 参考 [Dockerfile](./docker/Dockerfile) 、[docker-compose.yml](./docker/docker-compose.yml)
 
 示例
 
@@ -61,11 +61,11 @@
 docker run -d -p 8080:8080 --name go-proxy-bingai --restart=unless-stopped adams549659584/go-proxy-bingai
 ```
 
-- 直接下载 Release 运行
+### Release
 
 在 [Github Releases](https://github.com/adams549659584/go-proxy-bingai/releases) 下载适用于对应平台的压缩包，解压后可得到可执行文件 go-proxy-bingai，直接运行即可。
 
-- Railway
+### Railway
 
 > 主要配置 Dockerfile 路径 及 端口就可以
 
@@ -73,7 +73,7 @@ docker run -d -p 8080:8080 --name go-proxy-bingai --restart=unless-stopped adams
 PORT=8080
 RAILWAY_DOCKERFILE_PATH=docker/Dockerfile
 ```
-使用模板部署，点这里 =>  [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/uIckWS?referralCode=BBs747) 
+一键部署，点这里 =>  [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/uIckWS?referralCode=BBs747) 
 
 ![Railway 模板部署](./docs/img/railway-1.png)
 
@@ -82,3 +82,7 @@ RAILWAY_DOCKERFILE_PATH=docker/Dockerfile
 ![Railway 环境变量](./docs/img/railway-2.png)
 
 ![Railway 域名](./docs/img/railway-3.png)
+
+### Vercel
+
+一键部署，点这里 => [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/adams549659584/go-proxy-bingai&project-name=go-proxy-bingai&repository-name=go-proxy-bingai)

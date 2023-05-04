@@ -1,7 +1,7 @@
 // 引入workbox 框架
 importScripts('./js/sw/workbox-sw.js');
 
-const SW_VERSION = '1.0.0';
+const SW_VERSION = '1.1.0';
 const CACHE_PREFIX = 'BingAI';
 
 workbox.setConfig({ debug: false, logLevel: 'warn' });
@@ -33,6 +33,10 @@ workbox.precaching.precacheAndRoute([
   {
     url: '/web/js/sw/workbox-window.prod.umd.min.js',
     revision: '2023.05.03',
+  },
+  {
+    url: '/rp/LOB20GsbD-KR9Gwi_Ukp8-BJZCQ.br.js',
+    revision: '2023.05.04',
   },
   // html
   {
@@ -96,4 +100,21 @@ self.addEventListener('message', event => {
   if (replyPort && message && message.type === 'GET_VERSION') {
     replyPort.postMessage(SW_VERSION);
   }
+});
+
+// 安装阶段可删除旧缓存等等
+self.addEventListener('install', async event => {
+  await caches.open(`${CACHE_PREFIX}-js`).then(async cache => {
+    const requests = await cache.keys();
+    return await Promise.all(
+      requests.map(request => {
+        if (true || request.url.includes('xxx')) {
+          console.log(`del old cache : `, request.url);
+          return cache.delete(request);
+        } else {
+          return Promise.resolve();
+        }
+      })
+    );
+  });
 });
