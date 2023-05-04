@@ -8,13 +8,13 @@
 
 - [go-proxy-bing](#go-proxy-bing)
 	- [演示站点](#演示站点)
-  - [获取Cookie](#获取Cookie)
-  - [部署](#部署)
-		- [docker](#docker)
+	- [获取Cookie](#获取Cookie)
+	- [部署](#部署)
+		- [Docker](#Docker)
 		- [Release](#Release)
 		- [Railway](#Railway)
 		- [Vercel](#Vercel)
-
+    
 - 电脑端已登录状态
 
 ![电脑已登录](./docs/img/1.png)
@@ -65,7 +65,7 @@
 
 > 支持 Linux (amd64 / arm64)
 
-### docker
+### Docker
 
 > 参考 [Dockerfile](./docker/Dockerfile) 、[docker-compose.yml](./docker/docker-compose.yml)
 
