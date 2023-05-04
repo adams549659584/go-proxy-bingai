@@ -6,6 +6,15 @@
 
 ⭐ 需要已加入 New Bing 候补名单的账号
 
+- [go-proxy-bing](#go-proxy-bing)
+	- [演示站点](#演示站点)
+  - [获取Cookie](#获取Cookie)
+  - [部署](#部署)
+		- [docker](#docker)
+		- [Release](#Release)
+		- [Railway](#Railway)
+		- [Vercel](#Vercel)
+
 - 电脑端已登录状态
 
 ![电脑已登录](./docs/img/1.png)
@@ -22,19 +31,25 @@
 
 ![手机未登录](./docs/img/4.png)
 
-## 演示站点：
+## 演示站点
 
-> 甲骨文小鸡仔，轻虐
+### 甲骨文小鸡仔，轻虐
 
 - https://bing.vcanbb.top
 
-> Railway 
+### Railway 
 
 - https://bing-railway.vcanbb.top
 
 - https://go-proxy-bingai-production.up.railway.app
 
-## 获取cookies
+### Vercel
+
+- https://bing-vercel.vcanbb.top
+
+- https://go-proxy-bingai-vercel.vercel.app
+
+## 获取Cookie
 
 - 访问 https://www.bing.com/ 或 https://cn.bing.com/ ，登录
 
@@ -85,4 +100,8 @@ RAILWAY_DOCKERFILE_PATH=docker/Dockerfile
 
 ### Vercel
 
-一键部署，点这里 => [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/adams549659584/go-proxy-bingai&project-name=go-proxy-bingai&repository-name=go-proxy-bingai)
+一键部署，点这里 => [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/adams549659584/go-proxy-bingai&project-name=go-proxy-bingai&repository-name=go-proxy-bingai-vercel)
+
+![Vercel 一键部署](./docs/img/vercel-1.png)
+
+![Vercel 域名](./docs/img/vercel-2.png)
