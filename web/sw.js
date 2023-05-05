@@ -61,7 +61,7 @@ workbox.precaching.precacheAndRoute([
   // html
   {
     url: '/web/chat.html',
-    revision: '2023.05.05',
+    revision: '2023.05.05.12',
   },
   // ico
   {
