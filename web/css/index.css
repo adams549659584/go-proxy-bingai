@@ -28,12 +28,6 @@ html {
   overflow-y: scroll
 }
 
-.chat-container {
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  z-index: 0;
-}
 
 .chat-nav {
   position: fixed;
@@ -146,7 +140,14 @@ html {
   margin: 0 auto;
 }
 
-.chat-login .chat-login-btn-save {
+.chat-login-btn-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.chat-login-btn-group .chat-login-btn-save,
+.chat-login-btn-group .chat-login-btn-cancel {
   border-image: linear-gradient(81.62deg, #2870ea 8.72%, #1b4aef 85.01%);
   background: linear-gradient(81.62deg, #2870ea 8.72%, #1b4aef 85.01%);
   border-radius: 1vmin;
@@ -163,6 +164,11 @@ html {
   margin: 4vmin auto;
   cursor: pointer;
   user-select: none;
+}
+
+.chat-login-btn-group .chat-login-btn-cancel {
+  background: #fff;
+  color: #111;
 }
 
 @media screen and (min-width: 750px) {
@@ -183,7 +189,8 @@ html {
     font-size: 16px;
   }
 
-  .chat-login .chat-login-btn-save {
+  .chat-login-btn-group .chat-login-btn-save,
+  .chat-login-btn-group .chat-login-btn-cancel {
     width: 104px;
     height: 50px;
     line-height: 50px;

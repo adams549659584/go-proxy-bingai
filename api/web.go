@@ -6,5 +6,5 @@ import (
 )
 
 func WebStatic(w http.ResponseWriter, r *http.Request) {
-	http.StripPrefix("/web/", http.FileServer(http.FS(web.WebFS))).ServeHTTP(w, r)
+	http.StripPrefix("/web/", http.FileServer(web.GetWebFS())).ServeHTTP(w, r)
 }

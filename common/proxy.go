@@ -100,6 +100,15 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 		log.Println("代理异常 ：", err)
 		res.Write([]byte(err.Error()))
 	}
+
+	// tr := &http.Transport{
+	// 	TLSClientConfig: &tls.Config{
+	// 		// 如果只设置 InsecureSkipVerify: true对于这个问题不会有任何改变
+	// 		InsecureSkipVerify: true,
+	// 		ClientAuth:         tls.NoClientCert,
+	// 	},
+	// }
+
 	// 代理请求   请求回来的内容   报错自动调用
 	return &httputil.ReverseProxy{Director: director, ModifyResponse: modifyFunc, ErrorHandler: errorHandler}
 }

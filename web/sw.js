@@ -1,7 +1,7 @@
 // 引入workbox 框架
 importScripts('./js/sw/workbox-sw.js');
 
-const SW_VERSION = '1.1.0';
+const SW_VERSION = '1.2.0';
 const CACHE_PREFIX = 'BingAI';
 
 workbox.setConfig({ debug: false, logLevel: 'warn' });
@@ -19,34 +19,54 @@ workbox.precaching.precacheAndRoute([
   // css
   {
     url: '/web/css/index.css',
-    revision: '2023.05.03',
+    revision: '2023.05.05',
   },
   // js
   {
-    url: '/web/js/index.js',
-    revision: '2023.05.03',
-  },
-  {
     url: '/web/js/sw/workbox-sw.js',
-    revision: '2023.05.03',
+    revision: '2023.05.05',
   },
   {
     url: '/web/js/sw/workbox-window.prod.umd.min.js',
-    revision: '2023.05.03',
+    revision: '2023.05.05',
+  },
+  {
+    url: '/rp/oJ7sDoXkkNOICsnFb57ZJHBrHcw.br.js',
+    revision: '2023.05.05',
+  },
+  {
+    url: '/rp/q6gG3uKBf5j5T2ZgRG-BbgRzW_I.br.js',
+    revision: '2023.05.05',
+  },
+  {
+    url: '/rp/YFRe970EMtFzujI9pBYZBGpdHEo.br.js',
+    revision: '2023.05.05',
   },
   {
     url: '/rp/LOB20GsbD-KR9Gwi_Ukp8-BJZCQ.br.js',
-    revision: '2023.05.04',
+    revision: '2023.05.05',
+  },
+  {
+    url: '/rp/6slp3E-BqFf904Cz6cCWPY1bh9E.br.js',
+    revision: '2023.05.05',
+  },
+  {
+    url: '/web/js/sydneyfullscreenconv.js',
+    revision: '2023.05.05',
+  },
+  {
+    url: '/web/js/index.js',
+    revision: '2023.05.05',
   },
   // html
   {
     url: '/web/chat.html',
-    revision: '2023.05.03',
+    revision: '2023.05.05',
   },
   // ico
   {
     url: '/sa/simg/favicon-trans-bg-blue-mg.ico',
-    revision: '2023.05.03',
+    revision: '2023.05.05',
   },
 ]);
 
@@ -54,7 +74,7 @@ workbox.precaching.cleanupOutdatedCaches();
 
 // image
 workbox.routing.registerRoute(
-  ({ request }) => request.destination === 'image',
+  ({ request }) => request.destination === 'image' && !request.url.includes('/fd/ls/l'),
   new workbox.strategies.CacheFirst({
     cacheName: `${CACHE_PREFIX}-image`,
     plugins: [
@@ -93,7 +113,7 @@ workbox.routing.registerRoute(
 );
 
 // service worker通过message和主线程通讯
-self.addEventListener('message', event => {
+self.addEventListener('message', (event) => {
   const replyPort = event.ports[0];
   const message = event.data;
   // console.log(`sw message : `, message);
@@ -103,18 +123,21 @@ self.addEventListener('message', event => {
 });
 
 // 安装阶段可删除旧缓存等等
-self.addEventListener('install', async event => {
-  await caches.open(`${CACHE_PREFIX}-js`).then(async cache => {
-    const requests = await cache.keys();
-    return await Promise.all(
-      requests.map(request => {
-        if (true || request.url.includes('xxx')) {
-          console.log(`del old cache : `, request.url);
-          return cache.delete(request);
-        } else {
-          return Promise.resolve();
-        }
-      })
-    );
-  });
+self.addEventListener('install', async (event) => {
+  const cacheKeys = await caches.keys();
+  for (const cacheKey of cacheKeys) {
+    await caches.open(cacheKey).then(async (cache) => {
+      const requests = await cache.keys();
+      return await Promise.all(
+        requests.map((request) => {
+          if (true || request.url.includes('xxx')) {
+            console.log(`del cache : `, request.url);
+            return cache.delete(request);
+          } else {
+            return Promise.resolve();
+          }
+        })
+      );
+    });
+  }
 });
