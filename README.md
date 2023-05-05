@@ -1,10 +1,12 @@
 # go-proxy-bing
 
-一个用 GO 写的微软 Bing AI 的代理服务。 使用微软原始页面简单定制，基本兼容微软 Bing AI 所有功能。
+一个用 GO 写的微软 Bing AI 的代理服务。 使用微软原始页面简单定制，基本兼容微软 Bing AI 所有功能，无需登录即可畅聊。
 
-⭐ 这个主要是为了避免不开全局，总是跳 https://cn.bing.com/
+⭐ 国内可用
 
-⭐ 需要已加入 New Bing 候补名单的账号
+⭐ 无需登录即可畅聊
+
+⭐ 需要画图等高级功能时，可登录已加入 New Bing 候补名单的账号进行体验
 
 - [go-proxy-bing](#go-proxy-bing)
 	- [演示站点](#演示站点)
@@ -15,21 +17,21 @@
 		- [Railway](#Railway)
 		- [Vercel](#Vercel)
     
-- 电脑端已登录状态
-
-![电脑已登录](./docs/img/1.png)
-
 - 电脑端未登录状态
 
-![电脑未登录](./docs/img/2.png)
+![电脑未登录](./docs/img/bing-nologin.png)
 
-- 手机端已登录状态
+- 电脑端登录
 
-![手机已登录](./docs/img/3.png)
+![电脑端登录](./docs/img/bing-login.png)
+
+- 电脑端画图
+
+![电脑端画图](./docs/img/bing-draw.png)
 
 - 手机端未登录状态
 
-![手机未登录](./docs/img/4.png)
+![手机端未登录](./docs/img/bing-m-nologin.png)
 
 ## 演示站点
 
