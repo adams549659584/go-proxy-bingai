@@ -173,11 +173,19 @@ func modifyGzipBody(res *http.Response, originalScheme string, originalHost stri
 	if err != nil {
 		return err
 	}
+	err = writer.Flush()
+	if err != nil {
+		return err
+	}
+	err = writer.Close()
+	if err != nil {
+		return err
+	}
 
 	// 修改 Content-Length 头
 	res.Header.Set("Content-Length", strconv.Itoa(buf.Len()))
 	// 修改响应内容
-	res.Body = io.NopCloser(bytes.NewReader(buf.Bytes()))
+	res.Body = io.NopCloser(&buf)
 
 	return nil
 }
