@@ -21,7 +21,7 @@ jobs:
           draft: false
           prerelease: false
 
-  linuxamd64build:
+  amd64build:
     name: build amd64 version
     needs: release
     runs-on: ubuntu-latest
@@ -29,13 +29,15 @@ jobs:
       - uses: actions/checkout@v2
       - name: Set up Go
         uses: actions/setup-go@v4
+
       - name: build linux amd64 version
         run: |
           go build -ldflags="-s -w" -tags netgo -trimpath -o go-proxy-bingai main.go
 
-      - name: package
+      - name: package linux amd64
         run: tar -zcvf go-proxy-bingai-linux-amd64.tar.gz go-proxy-bingai
-      - name: upload
+
+      - name: upload linux amd64
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
@@ -45,7 +47,24 @@ jobs:
           asset_name: go-proxy-bingai-linux-amd64.tar.gz
           asset_content_type: application/gzip
 
-  linuxarm64build:
+      - name: build windows amd64 version
+        run: |
+          GOOS=windows GOARCH=amd64 go build -ldflags="-s -w" -tags netgo -trimpath -o go-proxy-bingai.exe main.go
+
+      - name: package windows amd64
+        run: tar -zcvf go-proxy-bingai-windows-amd64.tar.gz go-proxy-bingai.exe          
+
+      - name: upload windows amd64
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ needs.release.outputs.upload_url }}
+          asset_path: go-proxy-bingai-windows-amd64.tar.gz
+          asset_name: go-proxy-bingai-windows-amd64.tar.gz
+          asset_content_type: application/gzip
+
+  arm64build:
     name: build arm64 version
     needs: release
     runs-on: ubuntu-latest
@@ -57,9 +76,10 @@ jobs:
         run: |
           go build -ldflags="-s -w" -tags netgo -trimpath -o go-proxy-bingai main.go
 
-      - name: package
+      - name: package linux arm64
         run: tar -zcvf go-proxy-bingai-linux-arm64.tar.gz go-proxy-bingai
-      - name: upload
+
+      - name: upload linux arm64
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
@@ -67,6 +87,23 @@ jobs:
           upload_url: ${{ needs.release.outputs.upload_url }}
           asset_path: go-proxy-bingai-linux-arm64.tar.gz
           asset_name: go-proxy-bingai-linux-arm64.tar.gz
+          asset_content_type: application/gzip
+
+      - name: build windows amd64 version
+        run: |
+          GOOS=windows GOARCH=arm64 go build -ldflags="-s -w" -tags netgo -trimpath -o go-proxy-bingai.exe main.go
+
+      - name: package windows arm64
+        run: tar -zcvf go-proxy-bingai-windows-arm64.tar.gz go-proxy-bingai.exe          
+
+      - name: upload windows arm64
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ needs.release.outputs.upload_url }}
+          asset_path: go-proxy-bingai-windows-arm64.tar.gz
+          asset_name: go-proxy-bingai-windows-arm64.tar.gz
           asset_content_type: application/gzip
 
   docker-build:
