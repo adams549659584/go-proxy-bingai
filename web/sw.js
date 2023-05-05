@@ -1,7 +1,7 @@
 // 引入workbox 框架
 importScripts('./js/sw/workbox-sw.js');
 
-const SW_VERSION = '1.2.0';
+const SW_VERSION = '1.2.2';
 const CACHE_PREFIX = 'BingAI';
 
 workbox.setConfig({ debug: false, logLevel: 'warn' });
@@ -35,8 +35,8 @@ workbox.precaching.precacheAndRoute([
     revision: '2023.05.05',
   },
   {
-    url: '/rp/q6gG3uKBf5j5T2ZgRG-BbgRzW_I.br.js',
-    revision: '2023.05.05',
+    url: '/rp/TX6KXuLRS5pzZvnN8FM7MahUoUQ.br.js',
+    revision: '2023.05.05.14',
   },
   {
     url: '/rp/YFRe970EMtFzujI9pBYZBGpdHEo.br.js',
@@ -61,7 +61,7 @@ workbox.precaching.precacheAndRoute([
   // html
   {
     url: '/web/chat.html',
-    revision: '2023.05.05.12',
+    revision: '2023.05.05.14',
   },
   // ico
   {

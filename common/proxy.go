@@ -41,18 +41,25 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 	httpsSchemeName := "https"
 	var originalHost string
 	var originalPath string
+	var originalDomain string
 	director := func(req *http.Request) {
 		if req.URL.Scheme == httpsSchemeName || req.Header.Get("X-Forwarded-Proto") == httpsSchemeName {
 			originalScheme = httpsSchemeName
 		}
 		originalHost = req.Host
 		originalPath = req.URL.Path
+		originalDomain = fmt.Sprintf("%s:%s", originalScheme, originalHost)
 
 		req.URL.Scheme = target.Scheme
 		req.URL.Host = target.Host
 		req.Host = target.Host
 
-		req.Header.Set("Referer", fmt.Sprintf("%s/search?q=Bing+AI", BING_URL.String()))
+		originalRefer := req.Referer()
+		if originalRefer != "" && !strings.Contains(originalRefer, "/web/chat.html") {
+			req.Header.Set("Referer", strings.ReplaceAll(originalRefer, originalDomain, BING_URL.String()))
+		} else {
+			req.Header.Set("Referer", fmt.Sprintf("%s/search?q=Bing+AI", BING_URL.String()))
+		}
 
 		// 随机ip
 		randIp := fmt.Sprintf("%d.%d.%d.%d", RandInt(1, 10), RandInt(1, 255), RandInt(1, 255), RandInt(1, 255))
@@ -93,6 +100,16 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 		// 	}
 		// }
 		res.Header.Del("Set-Cookie")
+
+		// 删除 CSP
+		res.Header.Del("Content-Security-Policy-Report-Only")
+		res.Header.Del("Report-To")
+
+		// location := res.Header.Get("Location")
+		// if strings.Contains(location, "https://cn.bing.com") {
+		// 	res.Header.Set("Location", strings.ReplaceAll(location, "https://cn.bing.com", originalDomain))
+		// 	log.Println(`Location : `, location)
+		// }
 
 		return nil
 	}
