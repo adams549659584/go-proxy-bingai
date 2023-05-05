@@ -59,7 +59,7 @@
 
 - 拿到 Cookie 后，在网站设置用户Cookie弹窗填入即可。
 
-![获取Cookie](./docs/img/5.png)
+![获取Cookie](./docs/img/bing-cookie.png)
 
 ## 部署
 
