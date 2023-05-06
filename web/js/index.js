@@ -102,11 +102,14 @@ async function registerSW() {
   if ('serviceWorker' in navigator && workbox) {
     window.addEventListener('load', async function () {
       const wb = new workbox.Workbox('sw.js');
+      let oldSWVersion;
       wb.addEventListener('installed', async function (event) {
         console.log('Service Worker 安装成功:', event);
-        const swVersion = await wb.messageSW({ type: 'GET_VERSION' });
-        alert(`新版本 ${swVersion} 已就绪，刷新后即可体验 ！`);
-        window.location.reload();
+        const newSWVersion = await wb.messageSW({ type: 'GET_VERSION' });
+        if (newSWVersion !== oldSWVersion) {
+          alert(`新版本 ${swVersion} 已就绪，刷新后即可体验 ！`);
+          window.location.reload();
+        }
       });
 
       wb.addEventListener('activated', function (event) {
@@ -117,8 +120,8 @@ async function registerSW() {
         console.log('Service Worker 更新成功:', event);
       });
       const swRegistration = await wb.register();
-      const swVersion = await wb.messageSW({ type: 'GET_VERSION' });
-      console.log('Service Worker Version:', swVersion);
+      oldSWVersion = await wb.messageSW({ type: 'GET_VERSION' });
+      console.log('Service Worker Version:', oldSWVersion);
     });
   }
 }
