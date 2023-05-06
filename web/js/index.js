@@ -107,7 +107,7 @@ async function registerSW() {
         console.log('Service Worker 安装成功:', event);
         const newSWVersion = await wb.messageSW({ type: 'GET_VERSION' });
         if (newSWVersion !== oldSWVersion) {
-          alert(`新版本 ${swVersion} 已就绪，刷新后即可体验 ！`);
+          alert(`新版本 ${newSWVersion} 已就绪，刷新后即可体验 ！`);
           window.location.reload();
         }
       });
