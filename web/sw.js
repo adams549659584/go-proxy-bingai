@@ -1,7 +1,7 @@
 // 引入workbox 框架
 importScripts('./js/sw/workbox-sw.js');
 
-const SW_VERSION = '1.2.6';
+const SW_VERSION = '1.3.0';
 const CACHE_PREFIX = 'BingAI';
 
 workbox.setConfig({ debug: false, logLevel: 'warn' });
@@ -19,54 +19,54 @@ workbox.precaching.precacheAndRoute([
   // css
   {
     url: '/web/css/index.css',
-    revision: '2023.05.05',
+    revision: '2023.05.06',
   },
   // js
   {
     url: '/web/js/sw/workbox-sw.js',
-    revision: '2023.05.05',
+    revision: '2023.05.06',
   },
   {
     url: '/web/js/sw/workbox-window.prod.umd.min.js',
-    revision: '2023.05.05',
+    revision: '2023.05.06',
   },
   {
     url: '/rp/oJ7sDoXkkNOICsnFb57ZJHBrHcw.br.js',
-    revision: '2023.05.05',
+    revision: '2023.05.06',
   },
   {
     url: '/rp/TX6KXuLRS5pzZvnN8FM7MahUoUQ.br.js',
-    revision: '2023.05.05.14',
+    revision: '2023.05.06',
   },
   {
     url: '/rp/YFRe970EMtFzujI9pBYZBGpdHEo.br.js',
-    revision: '2023.05.05',
+    revision: '2023.05.06',
   },
   {
     url: '/rp/LOB20GsbD-KR9Gwi_Ukp8-BJZCQ.br.js',
-    revision: '2023.05.05',
+    revision: '2023.05.06',
   },
   {
     url: '/rp/6slp3E-BqFf904Cz6cCWPY1bh9E.br.js',
-    revision: '2023.05.05',
+    revision: '2023.05.06',
   },
   {
     url: '/web/js/sydneyfullscreenconv.js',
-    revision: '2023.05.05',
+    revision: '2023.05.06',
   },
   {
     url: '/web/js/index.js',
-    revision: '2023.05.05',
+    revision: '2023.05.06',
   },
   // html
   {
     url: '/web/chat.html',
-    revision: '2023.05.05.15',
+    revision: '2023.05.06',
   },
   // ico
   {
-    url: '/sa/simg/favicon-trans-bg-blue-mg.ico',
-    revision: '2023.05.05',
+    url: '/web/img/logo.svg',
+    revision: '2023.05.06',
   },
 ]);
 
