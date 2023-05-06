@@ -34,6 +34,11 @@ var (
 		"X-Request-Id":             true,
 		"X-Forwarded-For":          true,
 	}
+	DEL_LOCATION_DOMAINS = []string{
+		"https://cn.bing.com",
+		"https://www.bing.com",
+	}
+	RAND_IP_COOKIE_NAME = "BingAI_Rand_IP"
 )
 
 func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
@@ -42,6 +47,7 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 	var originalHost string
 	var originalPath string
 	var originalDomain string
+	var randIP string
 	director := func(req *http.Request) {
 		if req.URL.Scheme == httpsSchemeName || req.Header.Get("X-Forwarded-Proto") == httpsSchemeName {
 			originalScheme = httpsSchemeName
@@ -61,9 +67,15 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 			req.Header.Set("Referer", fmt.Sprintf("%s/search?q=Bing+AI", BING_URL.String()))
 		}
 
-		// 随机ip
-		randIp := fmt.Sprintf("%d.%d.%d.%d", RandInt(1, 10), RandInt(1, 255), RandInt(1, 255), RandInt(1, 255))
-		req.Header.Set("X-Forwarded-For", randIp)
+		// 同一会话尽量保持相同的随机IP
+		ckRandIP, _ := req.Cookie(RAND_IP_COOKIE_NAME)
+		if ckRandIP != nil && ckRandIP.Value != "" {
+			randIP = ckRandIP.Value
+		}
+		if randIP == "" {
+			randIP = GetRandomIP()
+		}
+		req.Header.Set("X-Forwarded-For", randIP)
 
 		for hKey, _ := range req.Header {
 			if _, isExist := KEEP_HEADERS[hKey]; !isExist {
@@ -99,17 +111,29 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 		// 		resCookies[i] = strings.ReplaceAll(strings.ReplaceAll(v, ".bing.com", originalHost), "bing.com", originalHost)
 		// 	}
 		// }
-		res.Header.Del("Set-Cookie")
+
+		// 设置随机ip cookie
+		ckRandIP := &http.Cookie{
+			Name:  RAND_IP_COOKIE_NAME,
+			Value: randIP,
+			Path:  "/",
+		}
+		res.Header.Set("Set-Cookie", ckRandIP.String())
 
 		// 删除 CSP
 		res.Header.Del("Content-Security-Policy-Report-Only")
 		res.Header.Del("Report-To")
 
-		// location := res.Header.Get("Location")
-		// if strings.Contains(location, "https://cn.bing.com") {
-		// 	res.Header.Set("Location", strings.ReplaceAll(location, "https://cn.bing.com", originalDomain))
-		// 	log.Println(`Location : `, location)
-		// }
+		// 删除重定向前缀域名 cn.bing.com www.bing.com 等
+		location := res.Header.Get("Location")
+		if location != "" {
+			for _, delLocationDomain := range DEL_LOCATION_DOMAINS {
+				if strings.HasPrefix(location, delLocationDomain) {
+					res.Header.Set("Location", location[len(delLocationDomain):])
+					log.Println("Del Location Domain ：", location)
+				}
+			}
+		}
 
 		return nil
 	}
