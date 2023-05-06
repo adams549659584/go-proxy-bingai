@@ -38,7 +38,8 @@ var (
 		"https://cn.bing.com",
 		"https://www.bing.com",
 	}
-	RAND_IP_COOKIE_NAME = "BingAI_Rand_IP"
+	USER_TOKEN_COOKIE_NAME = "_U"
+	RAND_IP_COOKIE_NAME    = "BingAI_Rand_IP"
 )
 
 func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
@@ -76,6 +77,15 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 			randIP = GetRandomIP()
 		}
 		req.Header.Set("X-Forwarded-For", randIP)
+
+		// 未登录用户，ua 包含 iPhone Mobile 居然秒创建会话id，应该搞了手机优先策略， Android 不行
+		ckUserToken, _ := req.Cookie(USER_TOKEN_COOKIE_NAME)
+		if ckUserToken == nil || ckUserToken.Value == "" {
+			ua := req.UserAgent()
+			if !strings.Contains(ua, "iPhone") && !strings.Contains(ua, "Mobile") {
+				req.Header.Set("User-Agent", "iPhone Mobile "+ua)
+			}
+		}
 
 		for hKey, _ := range req.Header {
 			if _, isExist := KEEP_HEADERS[hKey]; !isExist {

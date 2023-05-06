@@ -108,7 +108,7 @@ async function registerSW() {
         const newSWVersion = await wb.messageSW({ type: 'GET_VERSION' });
         if (newSWVersion !== oldSWVersion) {
           alert(`新版本 ${newSWVersion} 已就绪，刷新后即可体验 ！`);
-          window.location.reload();
+          window.location.reload(true);
         }
       });
 
@@ -140,13 +140,9 @@ async function tryCreateConversationId(trycount = 0) {
   }
   const conversationRes = await fetch('/turing/conversation/create', {
     credentials: 'include',
-  }).then(async (res) => {
-    if (res.status === 200 && res.body && !res.body.locked) {
-      return await res.json();
-    } else {
-      return 'error';
-    }
-  });
+  })
+    .then((res) => res.json())
+    .catch((err) => `error`);
   if (conversationRes?.result?.value === 'Success') {
     console.log('成功创建会话ID : ', conversationRes.conversationId);
     CIB.manager.conversation.updateId(conversationRes.conversationId, getConversationExpiry(), conversationRes.clientId, conversationRes.conversationSignature);
