@@ -15,13 +15,16 @@ form,
 table,
 tr,
 th,
-td {
+td,
+input,
+div {
   border: 0;
   border-collapse: collapse;
   border-spacing: 0;
   list-style: none;
   margin: 0;
-  padding: 0
+  padding: 0;
+  box-sizing: border-box;
 }
 
 html {
@@ -109,10 +112,10 @@ html {
 
 .chat-login-bg .chat-login {
   width: 90vw;
-  /* height: 40vh; */
   background-image: url(/cdx/bg-sprite.png);
   background-position: 0% 0%;
   border-radius: 1vmin;
+  padding: 0 4vmin;
 }
 
 .chat-login .chat-login-title {
@@ -120,81 +123,142 @@ html {
   font-weight: 600;
   text-align: center;
   color: #111;
-  font-size: 6vmin;
-  height: 14vmin;
-  line-height: 14vmin;
+  font-size: 8vmin;
+  margin: 4vmin 0;
 }
 
 .chat-login .chat-login-inp-cookie {
   display: block;
   text-align: center;
-  width: 80vw;
-  height: 14vmin;
-  line-height: 14vmin;
-  margin: 0 auto;
-  font-size: 6vmin;
+  font-size: 5vmin;
   border-radius: 1vmin;
   border: none;
   outline: none;
-  padding: 0;
-  margin: 0 auto;
+  padding: 4vmin;
+  margin: 0;
+  width: 100%;
 }
 
 .chat-login-btn-group {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 }
 
-.chat-login-btn-group .chat-login-btn-save,
-.chat-login-btn-group .chat-login-btn-cancel {
-  border-image: linear-gradient(81.62deg, #2870ea 8.72%, #1b4aef 85.01%);
-  background: linear-gradient(81.62deg, #2870ea 8.72%, #1b4aef 85.01%);
-  border-radius: 1vmin;
-  text-decoration: none;
-  width: 30vmin;
-  height: 14vmin;
-  line-height: 14vmin;
-  box-sizing: border-box;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 6vmin;
-  color: #fff;
-  text-align: center;
-  margin: 4vmin auto;
-  cursor: pointer;
-  user-select: none;
-}
-
-.chat-login-btn-group .chat-login-btn-cancel {
+.chat-login-btn-group .chat-login-btn {
   background: #fff;
   color: #111;
+  border-radius: 1vmin;
+  text-decoration: none;
+  /* height: 12vmin; */
+  /* line-height: 12vmin; */
+  box-sizing: border-box;
+  font-style: normal;
+  font-size: 5vmin;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  margin: 4vmin 0;
+  padding: 3vmin 6vmin;
+}
+
+.chat-login-btn.chat-login-btn-save {
+  border-image: linear-gradient(81.62deg, #2870ea 8.72%, #1b4aef 85.01%);
+  background: linear-gradient(81.62deg, #2870ea 8.72%, #1b4aef 85.01%);
+  color: #fff;
+}
+
+.chat-login-btn.chat-login-btn-reset {
+  background: #f56c6c;
+  color: #fff;
 }
 
 @media screen and (min-width: 750px) {
   .chat-login-bg .chat-login {
-    width: 40vw;
+    width: 550px;
+    padding: 0 20px;
   }
 
   .chat-login .chat-login-title {
     font-size: 36px;
-    height: 80px;
-    line-height: 80px;
+    margin: 20px 0;
   }
 
   .chat-login .chat-login-inp-cookie {
-    width: 36vw;
-    height: 50px;
-    line-height: 50px;
-    font-size: 16px;
+    font-size: 18px;
+    padding: 20px;
   }
 
-  .chat-login-btn-group .chat-login-btn-save,
-  .chat-login-btn-group .chat-login-btn-cancel {
-    width: 104px;
-    height: 50px;
-    line-height: 50px;
-    font-size: 16px;
-    margin: 20px auto;
+  .chat-login-btn.chat-login-btn-save,
+  .chat-login-btn.chat-login-btn-cancel,
+  .chat-login-btn.chat-login-btn-reset {
+    font-size: 20px;
+    margin: 20px 0;
+    padding: 16px 40px;
   }
 }
+
+/* loading start */
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  opacity: 1;
+  transition: opacity 2s ease-out;
+}
+
+.loading-spinner.hidden {
+  opacity: 0;
+}
+
+.loading-spinner>div {
+  width: 30px;
+  height: 30px;
+  background: linear-gradient(90deg, #2870EA 10.79%, #1B4AEF 87.08%);
+
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+  animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+}
+
+.loading-spinner .bounce1 {
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+
+.loading-spinner .bounce2 {
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+
+@-webkit-keyframes sk-bouncedelay {
+
+  0%,
+  80%,
+  100% {
+    -webkit-transform: scale(0)
+  }
+
+  40% {
+    -webkit-transform: scale(1.0)
+  }
+}
+
+@keyframes sk-bouncedelay {
+
+  0%,
+  80%,
+  100% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  }
+
+  40% {
+    -webkit-transform: scale(1.0);
+    transform: scale(1.0);
+  }
+}
+
+/* loading end */

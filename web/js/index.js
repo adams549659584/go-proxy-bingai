@@ -100,28 +100,26 @@ function setCookie(name, value, minutes = 0, path = '/', domain = '') {
 
 async function registerSW() {
   if ('serviceWorker' in navigator && workbox) {
-    const wb = new workbox.Workbox('sw.js');
-    wb.addEventListener('activated', (event) => {
-      // console.log(`离线就绪 : `);
-      // console.log(`activated : `, event);
-      // console.log(`activated isUpdate : `, event.isUpdate);
-      if (event.isUpdate) {
-        // 更新
-        console.log(`sw 有更新，reload() `);
-        wb.messageSkipWaiting();
-        window.location.reload(true);
-      }
-    });
-    wb.addEventListener('waiting', (event) => {
-      console.log(`waiting : `, event);
-    });
-    wb.addEventListener('externalwaiting', (event) => {
-      console.log(`externalwaiting : `, event);
-    });
-    const swRegistration = await wb.register({ immediate: false });
+    window.addEventListener('load', async function () {
+      const wb = new workbox.Workbox('sw.js');
+      wb.addEventListener('installed', async function (event) {
+        console.log('Service Worker 安装成功:', event);
+        const swVersion = await wb.messageSW({ type: 'GET_VERSION' });
+        alert(`新版本 ${swVersion} 已就绪，刷新后即可体验 ！`);
+        window.location.reload();
+      });
 
-    const swVersion = await wb.messageSW({ type: 'GET_VERSION' });
-    console.log('Service Worker Version:', swVersion);
+      wb.addEventListener('activated', function (event) {
+        console.log('Service Worker 激活成功:', event);
+      });
+
+      wb.addEventListener('updated', function (event) {
+        console.log('Service Worker 更新成功:', event);
+      });
+      const swRegistration = await wb.register();
+      const swVersion = await wb.messageSW({ type: 'GET_VERSION' });
+      console.log('Service Worker Version:', swVersion);
+    });
   }
 }
 registerSW();
@@ -153,8 +151,17 @@ async function tryCreateConversationId(trycount = 0) {
     await sleep(300);
     trycount += 1;
     console.log(`开始第 ${trycount} 次重试创建会话ID`);
+    setCookie('BingAI_Rand_IP', '', -1);
     tryCreateConversationId(trycount);
   }
+}
+
+function hideLoading() {
+  const loadingEle = document.querySelector('.loading-spinner');
+  loadingEle.addEventListener('transitionend', function () {
+    loadingEle.remove();
+  });
+  loadingEle.classList.add('hidden');
 }
 
 (function () {
@@ -165,6 +172,9 @@ async function tryCreateConversationId(trycount = 0) {
       var SydFSCModule = false ? SydneyFullScreenConvMob : SydneyFullScreenConv;
       if (SydFSCModule && SydFSCModule.initWithWaitlistUpdate) {
         SydFSCModule.initWithWaitlistUpdate(config, 10);
+
+        // 隐藏加载中
+        hideLoading();
 
         // todo 反馈暂时无法使用，先移除
         document
@@ -184,13 +194,12 @@ async function tryCreateConversationId(trycount = 0) {
 
         // 用户 cookie
         const userCookieName = '_U';
+        const randIpCookieName = 'BingAI_Rand_IP';
         const userCookieVal = getCookie(userCookieName);
         const chatLoginBgEle = document.querySelector('.chat-login-bg');
         if (!userCookieVal) {
           // chatLoginBgEle.style.display = 'flex';
           tryCreateConversationId();
-        } else {
-          document.querySelector('.chat-login-inp-cookie').value = userCookieVal;
         }
         document.querySelector('.chat-login-btn-save').onclick = function () {
           const cookie = document.querySelector('.chat-login-inp-cookie').value;
@@ -205,7 +214,32 @@ async function tryCreateConversationId(trycount = 0) {
         document.querySelector('.chat-login-btn-cancel').onclick = function () {
           chatLoginBgEle.style.display = 'none';
         };
+        document.querySelector('.chat-login-btn-reset').onclick = async function () {
+          // del cookie
+          setCookie(userCookieName, '', -1);
+          setCookie(randIpCookieName, '', -1);
+          // del storage
+          localStorage.clear();
+          sessionStorage.clear();
+          // del sw
+          const cacheKeys = await caches.keys();
+          for (const cacheKey of cacheKeys) {
+            await caches.open(cacheKey).then(async (cache) => {
+              const requests = await cache.keys();
+              return await Promise.all(
+                requests.map((request) => {
+                  console.log(`del cache : `, request.url);
+                  return cache.delete(request);
+                })
+              );
+            });
+          }
+          chatLoginBgEle.style.display = 'none';
+          window.location.reload();
+        };
         document.querySelector('.nav__title-setting').onclick = function () {
+          const userCookieVal = getCookie(userCookieName);
+          document.querySelector('.chat-login-inp-cookie').value = userCookieVal;
           chatLoginBgEle.style.display = 'flex';
         };
       }

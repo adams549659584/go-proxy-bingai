@@ -1,7 +1,7 @@
 // 引入workbox 框架
 importScripts('./js/sw/workbox-sw.js');
 
-const SW_VERSION = '1.3.0';
+const SW_VERSION = 'v1.3.2';
 const CACHE_PREFIX = 'BingAI';
 
 workbox.setConfig({ debug: false, logLevel: 'warn' });
@@ -19,7 +19,7 @@ workbox.precaching.precacheAndRoute([
   // css
   {
     url: '/web/css/index.css',
-    revision: '2023.05.06',
+    revision: '2023.05.06.14',
   },
   // js
   {
@@ -56,12 +56,12 @@ workbox.precaching.precacheAndRoute([
   },
   {
     url: '/web/js/index.js',
-    revision: '2023.05.06.11',
+    revision: '2023.05.06.14',
   },
   // html
   {
     url: '/web/chat.html',
-    revision: '2023.05.06',
+    revision: '2023.05.06.14',
   },
   // ico
   {
@@ -117,27 +117,30 @@ self.addEventListener('message', (event) => {
   const replyPort = event.ports[0];
   const message = event.data;
   // console.log(`sw message : `, message);
+  if (message.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
   if (replyPort && message && message.type === 'GET_VERSION') {
     replyPort.postMessage(SW_VERSION);
   }
 });
 
 // 安装阶段可删除旧缓存等等
-self.addEventListener('install', async (event) => {
-  const cacheKeys = await caches.keys();
-  for (const cacheKey of cacheKeys) {
-    await caches.open(cacheKey).then(async (cache) => {
-      const requests = await cache.keys();
-      return await Promise.all(
-        requests.map((request) => {
-          if (true || request.url.includes('xxx')) {
-            console.log(`del cache : `, request.url);
-            return cache.delete(request);
-          } else {
-            return Promise.resolve();
-          }
-        })
-      );
-    });
-  }
-});
+// self.addEventListener('install', async (event) => {
+//   const cacheKeys = await caches.keys();
+//   for (const cacheKey of cacheKeys) {
+//     await caches.open(cacheKey).then(async (cache) => {
+//       const requests = await cache.keys();
+//       return await Promise.all(
+//         requests.map((request) => {
+//           if (true || request.url.includes('xxx')) {
+//             console.log(`del cache : `, request.url);
+//             return cache.delete(request);
+//           } else {
+//             return Promise.resolve();
+//           }
+//         })
+//       );
+//     });
+//   }
+// });

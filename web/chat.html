@@ -7,7 +7,8 @@
 <head>
   <title>Bing AI</title>
   <meta content="text/html; charset=utf-8" http-equiv="content-type" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover" />
   <meta name="referrer" content="origin-when-cross-origin" />
   <link rel="icon" type="image/svg+xml" href="/web/img/logo.svg" />
   <link rel="manifest" href="/web/manifest.webmanifest">
@@ -51,6 +52,15 @@
     <div id="b_sydBgCover"></div>
   </div>
 
+  <!-- loading start -->
+  <div class="loading-spinner">
+    <div class="bounce1"></div>
+    <div class="bounce2"></div>
+    <div class="bounce3"></div>
+  </div>
+  <!-- loading end -->
+
+  <!-- chat nav start -->
   <div class="chat-nav">
     <a class="nav__title-github" href="https://github.com/adams549659584/go-proxy-bingai" target="_blank">
       <svg height="32" aria-hidden="true" viewBox="0 0 16 16" version="1.1" width="32" data-view-component="true"
@@ -78,15 +88,19 @@
       <div class="chat-login-title">设置用户</div>
       <input class="chat-login-inp-cookie" type="text" placeholder="用户 Cookie ,仅需要 _U 的值">
       <div class="chat-login-btn-group">
-        <div class="chat-login-btn-cancel">
+        <div class="chat-login-btn chat-login-btn-cancel">
           取消
         </div>
-        <div class="chat-login-btn-save">
+        <div class="chat-login-btn chat-login-btn-save">
           保存
+        </div>
+        <div class="chat-login-btn chat-login-btn-reset">
+          重置
         </div>
       </div>
     </div>
   </div>
+  <!-- chat nav end -->
 
   <script type="text/javascript">//<![CDATA[
     (function (n, t) {
