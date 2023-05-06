@@ -140,7 +140,7 @@ async function tryCreateConversationId(trycount = 0) {
   const conversationRes = await fetch('/turing/conversation/create', {
     credentials: 'include',
   }).then(async (res) => {
-    if (res.status === 200 && +res.headers.get('content-length') > 0) {
+    if (res.status === 200 && res.body && !res.body.locked) {
       return await res.json();
     } else {
       return 'error';

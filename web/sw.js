@@ -56,7 +56,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     url: '/web/js/index.js',
-    revision: '2023.05.06',
+    revision: '2023.05.06.11',
   },
   // html
   {
