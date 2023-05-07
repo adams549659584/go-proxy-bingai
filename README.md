@@ -57,6 +57,12 @@
 
 - https://go-proxy-bingai-vercel.vercel.app
 
+### Render搭建
+
+- https://bing-render.vcanbb.top
+
+- https://go-proxy-bingai.onrender.com
+
 ## 获取Cookie
 
 - 访问 https://www.bing.com/ 或 https://cn.bing.com/ ，登录
@@ -117,6 +123,10 @@ RAILWAY_DOCKERFILE_PATH=docker/Dockerfile
 ### Render
 
 一键部署，点这里 => [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/adams549659584/go-proxy-bingai)
+
+![Render 一键部署](./docs/img/render-1.png)
+
+![Render 域名](./docs/img/render-2.png)
 
 
 ## TODO
