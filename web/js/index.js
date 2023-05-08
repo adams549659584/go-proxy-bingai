@@ -107,8 +107,9 @@ async function registerSW() {
         console.log('Service Worker 安装成功:', event);
         const newSWVersion = await wb.messageSW({ type: 'GET_VERSION' });
         if (newSWVersion !== oldSWVersion) {
+          await clearCache();
           alert(`新版本 ${newSWVersion} 已就绪，刷新后即可体验 ！`);
-          window.location.reload(true);
+          window.location.reload();
         }
       });
 
@@ -161,6 +162,25 @@ function hideLoading() {
     loadingEle.remove();
   });
   loadingEle.classList.add('hidden');
+}
+
+async function clearCache() {
+  // del storage
+  localStorage.clear();
+  sessionStorage.clear();
+  // del sw
+  const cacheKeys = await caches.keys();
+  for (const cacheKey of cacheKeys) {
+    await caches.open(cacheKey).then(async (cache) => {
+      const requests = await cache.keys();
+      return await Promise.all(
+        requests.map((request) => {
+          console.log(`del cache : `, request.url);
+          return cache.delete(request);
+        })
+      );
+    });
+  }
 }
 
 (function () {
@@ -217,22 +237,7 @@ function hideLoading() {
           // del cookie
           setCookie(userCookieName, '', -1);
           setCookie(randIpCookieName, '', -1);
-          // del storage
-          localStorage.clear();
-          sessionStorage.clear();
-          // del sw
-          const cacheKeys = await caches.keys();
-          for (const cacheKey of cacheKeys) {
-            await caches.open(cacheKey).then(async (cache) => {
-              const requests = await cache.keys();
-              return await Promise.all(
-                requests.map((request) => {
-                  console.log(`del cache : `, request.url);
-                  return cache.delete(request);
-                })
-              );
-            });
-          }
+          await clearCache();
           chatLoginBgEle.style.display = 'none';
           window.location.reload();
         };
