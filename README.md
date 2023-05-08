@@ -55,7 +55,7 @@
 
 - https://bing-vercel.vcanbb.top
 
-- https://go-proxy-bingai-vercel.vercel.app
+- https://go-proxy-bingai-git-master-adams549659584.vercel.app
 
 ### Render搭建
 

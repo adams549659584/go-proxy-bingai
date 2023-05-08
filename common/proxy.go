@@ -19,7 +19,8 @@ var (
 	BING_CHAT_DOMAIN = "https://sydney.bing.com"
 	BING_CHAT_URL, _ = url.Parse(BING_CHAT_DOMAIN + "/sydney/ChatHub")
 	BING_URL, _      = url.Parse("https://www.bing.com")
-	KEEP_HEADERS     = map[string]bool{
+	// EDGE_SVC_URL, _     = url.Parse("https://edgeservices.bing.com")
+	KEEP_REQ_HEADER_MAP = map[string]bool{
 		"Accept":                   true,
 		"Accept-Encoding":          true,
 		"Accept-Language":          true,
@@ -40,6 +41,8 @@ var (
 	}
 	USER_TOKEN_COOKIE_NAME = "_U"
 	RAND_IP_COOKIE_NAME    = "BingAI_Rand_IP"
+	PROXY_WEB_PREFIX_PATH  = "/web/"
+	PROXY_WEB_PAGE_PATH    = PROXY_WEB_PREFIX_PATH + "chat.html"
 )
 
 func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
@@ -62,7 +65,7 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 		req.Host = target.Host
 
 		originalRefer := req.Referer()
-		if originalRefer != "" && !strings.Contains(originalRefer, "/web/chat.html") {
+		if originalRefer != "" && !strings.Contains(originalRefer, PROXY_WEB_PAGE_PATH) {
 			req.Header.Set("Referer", strings.ReplaceAll(originalRefer, originalDomain, BING_URL.String()))
 		} else {
 			req.Header.Set("Referer", fmt.Sprintf("%s/search?q=Bing+AI", BING_URL.String()))
@@ -88,7 +91,7 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 		}
 
 		for hKey, _ := range req.Header {
-			if _, isExist := KEEP_HEADERS[hKey]; !isExist {
+			if _, ok := KEEP_REQ_HEADER_MAP[hKey]; !ok {
 				req.Header.Del(hKey)
 			}
 		}

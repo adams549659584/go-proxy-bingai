@@ -31,6 +31,9 @@ html {
   overflow-y: scroll
 }
 
+a:visited {
+  color: #111;
+}
 
 .chat-nav {
   position: fixed;
@@ -43,7 +46,8 @@ html {
 }
 
 .nav__title-github,
-.nav__title-setting {
+.nav__title-setting,
+.nav__title-compose {
   display: inline-block;
   width: 32px;
   height: 32px;
@@ -57,7 +61,8 @@ html {
 }
 
 .nav__title-github-icon,
-.nav__title-setting-icon {
+.nav__title-setting-icon,
+.nav__title-compose-icon {
   float: left;
   width: 32px;
   height: 32px;
@@ -65,7 +70,8 @@ html {
 }
 
 .nav__title-github-content,
-.nav__title-setting-content {
+.nav__title-setting-content,
+.nav__title-compose-content {
   float: left;
   margin-left: 5px;
 }
@@ -77,21 +83,17 @@ html {
   }
 
   .nav__title-github,
-  .nav__title-setting {
+  .nav__title-setting,
+  .nav__title-compose {
     margin-bottom: 20px;
   }
 
   .nav__title-github:hover,
-  .nav__title-setting:hover {
+  .nav__title-setting:hover,
+  .nav__title-compose:hover {
     width: 112px;
-    background-color: #212529;
-    color: #fff;
   }
 
-  .nav__title-github:hover .nav__title-github-icon,
-  .nav__title-setting:hover .nav__title-setting-icon {
-    background-color: #fff;
-  }
 
 }
 

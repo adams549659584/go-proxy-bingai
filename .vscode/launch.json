@@ -11,7 +11,8 @@
       "mode": "auto",
       "program": "${workspaceFolder}",
       "env": {
-        "Go-Proxy-BingAI-Debug": "true"
+        "Go-Proxy-BingAI-Debug": "true",
+        "PORT": "8888"
       }
     }
   ]
