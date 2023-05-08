@@ -11,6 +11,8 @@
 ⭐ 遇到一切问题，先点左下角 ![新主题](./docs/img/bing-clear.png) 试试，不行使用刷新大法（Shift + F5 或 Ctrl + Shift + R 或 右上角设置中的重置），最终大招就 清理浏览器缓存 及 Cookie ，比如（24小时限制、未登录提示等等）
 
 - [go-proxy-bing](#go-proxy-bing)
+	- [网页展示](#网页展示)
+	- [侧边栏](#侧边栏)
 	- [演示站点](#演示站点)
 	- [获取Cookie](#获取Cookie)
 	- [部署](#部署)
@@ -20,7 +22,9 @@
 		- [Vercel](#Vercel)
 		- [Render](#Render)
 	- [TODO](#TODO)
-    
+
+## 网页展示
+
 - 电脑端未登录状态
 
 ![电脑未登录](./docs/img/bing-nologin.png)
@@ -38,6 +42,16 @@
 - 手机端未登录状态
 
 ![手机端未登录](./docs/img/bing-m-nologin.png)
+
+## 侧边栏
+
+- 在 Edge 浏览器可把聊天和撰写分别添加侧边栏
+
+![添加侧边栏](./docs/img/sidebar-add.png)
+
+![聊天](./docs/img/sidebar-chat.png)
+
+![撰写](./docs/img/sidebar-compose.png)
 
 ## 演示站点
 
