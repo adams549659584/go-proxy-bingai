@@ -16,7 +16,7 @@ var IS_DEBUG_MODE bool
 var WEB_PATH_MAP = make(map[string]bool)
 
 func init() {
-	IS_DEBUG_MODE = os.Getenv("Go-Proxy-BingAI-Debug") != ""
+	IS_DEBUG_MODE = os.Getenv("Go_Proxy_BingAI_Debug") != ""
 
 	var err error
 	if IS_DEBUG_MODE {

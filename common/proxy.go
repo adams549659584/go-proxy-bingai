@@ -9,10 +9,12 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	"os"
 	"strconv"
 	"strings"
 
 	"github.com/andybalholm/brotli"
+	"golang.org/x/net/proxy"
 )
 
 var (
@@ -164,7 +166,35 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 	// }
 
 	// 代理请求   请求回来的内容   报错自动调用
-	return &httputil.ReverseProxy{Director: director, ModifyResponse: modifyFunc, ErrorHandler: errorHandler}
+	reverseProxy := &httputil.ReverseProxy{
+		Director:       director,
+		ModifyResponse: modifyFunc,
+		ErrorHandler:   errorHandler,
+	}
+
+	// socks
+	socksUrl := os.Getenv("Go_Proxy_BingAI_SOCKS_URL")
+	if socksUrl != "" {
+		socksUser := os.Getenv("Go_Proxy_BingAI_SOCKS_USER")
+		socksPwd := os.Getenv("Go_Proxy_BingAI_SOCKS_PWD")
+		var socksAuth *proxy.Auth
+		if socksUser != "" && socksPwd != "" {
+			socksAuth = &proxy.Auth{
+				User:     socksUser,
+				Password: socksPwd,
+			}
+		}
+		s5Proxy, err := proxy.SOCKS5("tcp", socksUrl, socksAuth, proxy.Direct)
+		if err != nil {
+			panic(err)
+		}
+		tr := &http.Transport{
+			Dial: s5Proxy.Dial,
+		}
+		reverseProxy.Transport = tr
+	}
+
+	return reverseProxy
 }
 
 func replaceResBody(originalBody string, originalScheme string, originalHost string) string {

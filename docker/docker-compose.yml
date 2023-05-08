@@ -10,6 +10,10 @@ services:
     restart: unless-stopped
     ports:
       - 8080:8080
+    # environment:
+    #   - Go_Proxy_BingAI_SOCKS_URL=192.168.0.88:1070
+    #   - Go_Proxy_BingAI_SOCKS_USER=xxx
+    #   - Go_Proxy_BingAI_SOCKS_PWD=xxx
   
 #   go-proxy-bingai:
 #     # 镜像名称
@@ -25,7 +29,11 @@ services:
 #     networks:
 #       - MyNetwork    
 #     ports:
-#       - 8888:8080        
+#       - 8888:8080
+#     environment:
+#       - Go_Proxy_BingAI_SOCKS_URL=192.168.0.88:1070
+#       # - Go_Proxy_BingAI_SOCKS_USER=xxx
+#       # - Go_Proxy_BingAI_SOCKS_PWD=xxx        
 
 # networks:
 #   MyNetwork:
