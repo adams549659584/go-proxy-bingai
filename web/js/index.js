@@ -195,6 +195,11 @@ async function clearCache() {
         // 隐藏加载中
         hideLoading();
 
+        // 支持 localhost 可开发调试用
+        if (location.hostname === 'localhost') {
+          CIB.config.sydney.hostnamesToBypassSecureConnection = CIB.config.sydney.hostnamesToBypassSecureConnection.filter((x) => x !== location.hostname);
+        }
+
         // todo 反馈暂时无法使用，先移除
         document
           .querySelector('cib-serp')

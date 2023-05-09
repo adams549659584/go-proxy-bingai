@@ -104,7 +104,7 @@ Go_Proxy_BingAI_SOCKS_PWD=xxx
 
 ## 部署
 
-> 需 https 域名 (自行配置 nginx 等)
+> ⭐ 需 https 域名 (自行配置 nginx 等) (前后端都有限制 只有在HTTPS的情况下，浏览器 Accept-Encoding 才会包含 br , localhost 除外)
 
 > 支持 Linux (amd64 / arm64)、Windows (amd64 / arm64)
 
