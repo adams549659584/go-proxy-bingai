@@ -22,6 +22,8 @@ const isInput = ref(false);
 const maxTryCreateConversationIdCount = 10;
 const userTokenCookieName = '_U';
 const randIpCookieName = 'BingAI_Rand_IP';
+const isPromptScrolling = ref(false);
+const promptItemHeight = 130;
 
 onMounted(async () => {
   await initChat();
@@ -154,15 +156,10 @@ const handleInputBlur = (ev: FocusEvent) => {
 };
 
 const handleInputTextKey = (ev: KeyboardEvent) => {
-  // console.log('key : ', ev.key);
-  const itemHeight = 130;
   switch (ev.key) {
     case 'ArrowUp':
       {
         ev.preventDefault();
-        const offset = scrollbarRef.value?.getOffset() || 0;
-        selectedPromptIndex.value = Math.round(offset / itemHeight);
-        // console.log('selectedPromptIndex : ', selectedPromptIndex.value);
         if (selectedPromptIndex.value > 0) {
           selectedPromptIndex.value--;
           if (scrollbarRef.value) {
@@ -174,9 +171,6 @@ const handleInputTextKey = (ev: KeyboardEvent) => {
     case 'ArrowDown':
       {
         ev.preventDefault();
-        const offset = scrollbarRef.value?.getOffset() || 0;
-        selectedPromptIndex.value = Math.round(offset / itemHeight);
-        // console.log('selectedPromptIndex : ', selectedPromptIndex.value);
         if (selectedPromptIndex.value < searchPromptList.value.length - 1) {
           selectedPromptIndex.value++;
           if (scrollbarRef.value) {
@@ -207,6 +201,18 @@ const selectPrompt = (item: IPrompt) => {
   CIB.vm.actionBar.inputText = item.prompt;
   isShowChatPrompt.value = false;
 };
+
+const handlePromptListScroll = () => {
+  isPromptScrolling.value = true;
+  setTimeout(() => {
+    if (isPromptScrolling.value === true) {
+      isPromptScrolling.value = false;
+      // 滚动结束设置选中
+      const offset = scrollbarRef.value?.getOffset() || 0;
+      selectedPromptIndex.value = Math.round(offset / promptItemHeight);
+    }
+  }, 100);
+};
 </script>
 
 <template>
@@ -221,6 +227,7 @@ const selectPrompt = (item: IPrompt) => {
         :data-sources="searchPromptList"
         :data-component="ChatPromptItem"
         :keeps="10"
+        @scroll="handlePromptListScroll"
       />
       <NEmpty v-else class="bg-white w-full max-w-[1060px] max-h-[390px] rounded-xl py-6" description="暂无提示词数据">
         <template #extra>
