@@ -21,8 +21,24 @@ tasks:
   build_web:
     dir: frontend
     cmds:
+      # 修订号，例如 0.0.1
+      - npm version patch
       # - pnpm build
       - pnpm install && pnpm build
+  build_web_minor:
+    dir: frontend
+    cmds:
+      # 次版本号，例如 0.1.0
+      - npm version minor
+      # - pnpm build
+      - pnpm install && pnpm build  
+  build_web_major:
+    dir: frontend
+    cmds:
+      # 主版本号，例如 1.0.0
+      - npm version major
+      # - pnpm build
+      - pnpm install && pnpm build      
   build_tpl:
     label: build-{{.TASK}}
     cmds:

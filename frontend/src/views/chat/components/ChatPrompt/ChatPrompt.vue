@@ -8,6 +8,9 @@ import VirtualList from 'vue3-virtual-scroll-list';
 import ChatPromptItem from './ChatPromptItem.vue';
 import { sleep } from '@/utils/utils';
 import cookies from '@/utils/cookies';
+import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner.vue';
+
+const isShowLoading = ref(true);
 
 const promptStore = usePromptStore();
 const { isShowPromptSotre, isShowChatPrompt, keyword, promptList, searchPromptList, selectedPromptIndex } = storeToRefs(promptStore);
@@ -29,6 +32,9 @@ onMounted(async () => {
   await initChat();
   // show
   SydneyFullScreenConv.initWithWaitlistUpdate({ cookLoc: {} }, 10);
+
+  isShowLoading.value = false;
+
   checkUserToken();
   hackStyle();
   initChatPrompt();
@@ -182,7 +188,7 @@ const handleInputTextKey = (ev: KeyboardEvent) => {
     case 'Tab':
     case 'Enter':
       {
-        ev.preventDefault();
+        // ev.preventDefault();
         if (!CIB.vm.actionBar.inputText || !CIB.vm.actionBar.inputText.startsWith('/')) {
           return;
         }
@@ -216,6 +222,7 @@ const handlePromptListScroll = () => {
 </script>
 
 <template>
+  <LoadingSpinner :is-show="isShowLoading" />
   <main>
     <div v-if="isShowChatPrompt" class="box-border fixed bottom-[110px] w-full flex justify-center px-[14px] md:px-[170px] xl:px-[220px] z-999">
       <div class="w-0 md:w-[60px]"></div>

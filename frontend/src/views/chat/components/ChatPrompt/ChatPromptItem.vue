@@ -3,7 +3,7 @@ import { usePromptStore, type IPrompt } from '@/stores/modules/prompt';
 import { NThing, NTag, NEllipsis } from 'naive-ui';
 import { storeToRefs } from 'pinia';
 
-const props = defineProps<{
+defineProps<{
   index: number;
   source: IPrompt;
 }>();
@@ -29,11 +29,11 @@ const selectPrompt = (item: IPrompt) => {
     :class="{
       'bg-gray-100': index === selectedPromptIndex,
     }"
-    @click="selectPrompt(props.source)"
+    @click="selectPrompt(source)"
   >
     <template #description>
-      <NTag type="info"> {{ props.source.act }} </NTag>
+      <NTag type="info"> {{ source.act }} </NTag>
     </template>
-    <NEllipsis :tooltip="false" :line-clamp="2">{{ props.source.prompt }}</NEllipsis>
+    <NEllipsis :tooltip="false" :line-clamp="2">{{ source.prompt }}</NEllipsis>
   </NThing>
 </template>

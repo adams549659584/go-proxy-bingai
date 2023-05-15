@@ -3,7 +3,7 @@ import { usePromptStore, type IPrompt } from '@/stores/modules/prompt';
 import { NThing, NTag, NButton, NEllipsis, useMessage } from 'naive-ui';
 import { storeToRefs } from 'pinia';
 
-const props = defineProps<{
+defineProps<{
   index: number;
   source: IPrompt;
 }>();
@@ -29,12 +29,12 @@ const showEditPromptPop = (item: IPrompt) => {
 <template>
   <NThing class="hover:bg-gray-100 cursor-pointer p-5">
     <template #description>
-      <NTag class="max-w-[150px] xl:max-w-[680px] overflow-ellipsis overflow-hidden" type="info"> {{ props.source.act }} </NTag>
+      <NTag class="max-w-[150px] xl:max-w-[680px] overflow-ellipsis overflow-hidden" type="info"> {{ source.act }} </NTag>
       <div class="float-right">
-        <NButton secondary type="info" size="small" @click="showEditPromptPop(props.source)">编辑</NButton>
-        <NButton secondary class="ml-2" type="error" size="small" @click="delPrompt(props.source)">删除</NButton>
+        <NButton secondary type="info" size="small" @click="showEditPromptPop(source)">编辑</NButton>
+        <NButton secondary class="ml-2" type="error" size="small" @click="delPrompt(source)">删除</NButton>
       </div>
     </template>
-    <NEllipsis :tooltip="false" :line-clamp="2">{{ props.source.prompt }}</NEllipsis>
+    <NEllipsis :tooltip="false" :line-clamp="2">{{ source.prompt }}</NEllipsis>
   </NThing>
 </template>
