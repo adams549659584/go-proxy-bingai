@@ -1,0 +1,43 @@
+{
+  "name": "go-proxy-bingai",
+  "version": "1.6.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "run-p type-check build-only",
+    "preview": "vite preview",
+    "build-only": "vite build",
+    "type-check": "vue-tsc --noEmit -p tsconfig.app.json --composite false",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+    "format": "prettier --write src/"
+  },
+  "dependencies": {
+    "pinia": "^2.0.36",
+    "pinia-plugin-persistedstate": "^3.1.0",
+    "vue": "^3.3.2",
+    "vue-router": "^4.2.0",
+    "vue3-virtual-scroll-list": "^0.2.1"
+  },
+  "devDependencies": {
+    "@rushstack/eslint-patch": "^1.2.0",
+    "@tsconfig/node18": "^2.0.1",
+    "@types/node": "^18.16.8",
+    "@vitejs/plugin-vue": "^4.2.3",
+    "@vue/eslint-config-prettier": "^7.1.0",
+    "@vue/eslint-config-typescript": "^11.0.3",
+    "@vue/tsconfig": "^0.4.0",
+    "autoprefixer": "^10.4.14",
+    "eslint": "^8.39.0",
+    "eslint-plugin-vue": "^9.11.0",
+    "naive-ui": "^2.34.3",
+    "npm-run-all": "^4.1.5",
+    "postcss": "^8.4.23",
+    "prettier": "^2.8.8",
+    "prettier-plugin-tailwindcss": "^0.2.8",
+    "tailwindcss": "^3.3.2",
+    "typescript": "~5.0.4",
+    "vite": "^4.3.5",
+    "vite-plugin-pwa": "^0.14.7",
+    "vue-tsc": "^1.6.4"
+  }
+}

@@ -11,7 +11,7 @@
       "mode": "auto",
       "program": "${workspaceFolder}",
       "env": {
-        "PORT": "8888",
+        "PORT": "8899",
         "Go_Proxy_BingAI_Debug": "true",
         "Go_Proxy_BingAI_SOCKS_URL": "192.168.0.88:1070",
         // "Go_Proxy_BingAI_SOCKS_USER": "xxx",

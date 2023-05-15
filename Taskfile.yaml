@@ -1,0 +1,244 @@
+version: '3'
+
+vars:
+  BUILD_VERSION:
+    sh: git describe --tags
+  BUILD_DATE:
+    sh: date "+%F %T"
+  COMMIT_ID:
+    sh: git rev-parse HEAD
+
+tasks:
+  clean:
+    cmds:
+      - rm -rf frontend/node_modules
+      - rm -rf release
+      # extended globbing is not supported
+      # - rm -rf web/!(web.go)
+      - cp web/web.go web.go
+      - rm -rf web/*
+      - mv web.go web/web.go
+  build_web:
+    dir: frontend
+    cmds:
+      # - pnpm build
+      - pnpm install && pnpm build
+  build_tpl:
+    label: build-{{.TASK}}
+    cmds:
+      - |
+        GOOS={{.GOOS}} GOARCH={{.GOARCH}} GOARM={{.GOARM}} GOMIPS={{.GOMIPS}} GOAMD64={{.GOAMD64}} \
+        go build -tags netgo -trimpath -o release/go_proxy_bingai_{{.TASK}} -ldflags \
+        "-w -s -X 'main.version={{.BUILD_VERSION}}' -X 'main.buildDate={{.BUILD_DATE}}' -X 'main.commitID={{.COMMIT_ID}}'"
+  linux_386:
+    cmds:
+      - task: build_tpl
+        vars: {
+          TASK: "{{.TASK}}",
+          GOOS: linux,
+          GOARCH: 386
+        }
+  linux_amd64:
+    cmds:
+      - task: build_tpl
+        vars: {
+          TASK: "{{.TASK}}",
+          GOOS: linux,
+          GOARCH: amd64
+        }
+  linux_amd64_v2:
+    cmds:
+      - task: build_tpl
+        vars: {
+          TASK: "{{.TASK}}",
+          GOOS: linux,
+          GOARCH: amd64,
+          GOAMD64: v2
+        }
+  linux_amd64_v3:
+    cmds:
+      - task: build_tpl
+        vars: {
+          TASK: "{{.TASK}}",
+          GOOS: linux,
+          GOARCH: amd64,
+          GOAMD64: v3
+        }
+  linux_amd64_v4:
+    cmds:
+      - task: build_tpl
+        vars: {
+          TASK: "{{.TASK}}",
+          GOOS: linux,
+          GOARCH: amd64,
+          GOAMD64: v4
+        }
+  linux_armv5:
+    cmds:
+      - task: build_tpl
+        vars: {
+          TASK: "{{.TASK}}",
+          GOOS: linux,
+          GOARCH: arm,
+          GOARM: 5
+        }
+  linux_armv6:
+    cmds:
+      - task: build_tpl
+        vars: {
+          TASK: "{{.TASK}}",
+          GOOS: linux,
+          GOARCH: arm,
+          GOARM: 6
+        }
+  linux_armv7:
+    cmds:
+      - task: build_tpl
+        vars: {
+          TASK: "{{.TASK}}",
+          GOOS: linux,
+          GOARCH: arm,
+          GOARM: 7
+        }
+  linux_armv8:
+    cmds:
+      - task: build_tpl
+        vars: {
+          TASK: "{{.TASK}}",
+          GOOS: linux,
+          GOARCH: arm64
+        }
+  linux_mips_hardfloat:
+    cmds:
+      - task: build_tpl
+        vars: {
+          TASK: "{{.TASK}}",
+          GOOS: linux,
+          GOARCH: mips,
+          GOMIPS: hardfloat
+        }
+  linux_mipsle_softfloat:
+    cmds:
+      - task: build_tpl
+        vars: {
+          TASK: "{{.TASK}}",
+          GOOS: linux,
+          GOARCH: mipsle,
+          GOMIPS: softfloat
+        }
+  linux_mipsle_hardfloat:
+    cmds:
+      - task: build_tpl
+        vars: {
+          TASK: "{{.TASK}}",
+          GOOS: linux,
+          GOARCH: mipsle,
+          GOMIPS: hardfloat
+        }
+  linux_mips64:
+    cmds:
+      - task: build_tpl
+        vars: {
+          TASK: "{{.TASK}}",
+          GOOS: linux,
+          GOARCH: mips64
+        }
+  linux_mips64le:
+    cmds:
+      - task: build_tpl
+        vars: {
+          TASK: "{{.TASK}}",
+          GOOS: linux,
+          GOARCH: mips64le
+        }
+  windows_386.exe:
+    cmds:
+      - task: build_tpl
+        vars: {
+          TASK: "{{.TASK}}",
+          GOOS: windows,
+          GOARCH: 386
+        }
+  windows_amd64.exe:
+    cmds:
+      - task: build_tpl
+        vars: {
+          TASK: "{{.TASK}}",
+          GOOS: windows,
+          GOARCH: amd64
+        }
+  windows_amd64_v2.exe:
+    cmds:
+      - task: build_tpl
+        vars: {
+          TASK: "{{.TASK}}",
+          GOOS: windows,
+          GOARCH: amd64,
+          GOAMD64: v2
+        }
+  windows_amd64_v3.exe:
+    cmds:
+      - task: build_tpl
+        vars: {
+          TASK: "{{.TASK}}",
+          GOOS: windows,
+          GOARCH: amd64,
+          GOAMD64: v3
+        }
+  windows_amd64_v4.exe:
+    cmds:
+      - task: build_tpl
+        vars: {
+          TASK: "{{.TASK}}",
+          GOOS: windows,
+          GOARCH: amd64,
+          GOAMD64: v4
+        }
+  darwin_amd64:
+    cmds:
+      - task: build_tpl
+        vars: {
+          TASK: "{{.TASK}}",
+          GOOS: darwin,
+          GOARCH: amd64,
+        }
+  darwin_arm64:
+    cmds:
+      - task: build_tpl
+        vars: {
+          TASK: "{{.TASK}}",
+          GOOS: darwin,
+          GOARCH: arm64,
+        }        
+  docker:
+    cmds:
+      - docker build -t adams549659584/go-proxy-bingai:{{.BUILD_VERSION}} -f docker/Dockerfile .
+      - docker tag adams549659584/go-proxy-bingai:{{.BUILD_VERSION}} adams549659584/go-proxy-bingai
+  default:
+    cmds:
+      - task: clean
+      - task: build_web
+      - task: linux_386
+      - task: linux_amd64
+      - task: linux_amd64_v2
+      - task: linux_amd64_v3
+      - task: linux_amd64_v4
+      - task: linux_armv5
+      - task: linux_armv6
+      - task: linux_armv7
+      - task: linux_armv8
+      - task: linux_mips_hardfloat
+      - task: linux_mipsle_softfloat
+      - task: linux_mipsle_hardfloat
+      - task: linux_mips64
+      - task: linux_mips64le
+      - task: windows_386.exe
+      - task: windows_amd64.exe
+      - task: windows_amd64_v2.exe
+      - task: windows_amd64_v3.exe
+      - task: windows_amd64_v4.exe
+      - task: darwin_amd64
+      - task: darwin_arm64
+  release:
+    cmds:
+      - task: default

@@ -44,7 +44,7 @@ var (
 	USER_TOKEN_COOKIE_NAME = "_U"
 	RAND_IP_COOKIE_NAME    = "BingAI_Rand_IP"
 	PROXY_WEB_PREFIX_PATH  = "/web/"
-	PROXY_WEB_PAGE_PATH    = PROXY_WEB_PREFIX_PATH + "chat.html"
+	PROXY_WEB_PAGE_PATH    = PROXY_WEB_PREFIX_PATH + "index.html"
 )
 
 func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
@@ -149,6 +149,11 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 				}
 			}
 		}
+
+		// 跨域
+		res.Header.Set("Access-Control-Allow-Origin", "*")
+		res.Header.Set("Access-Control-Allow-Methods", "*")
+		res.Header.Set("Access-Control-Allow-Headers", "*")
 
 		return nil
 	}
