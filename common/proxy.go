@@ -6,12 +6,14 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"math/rand"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
 	"os"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/andybalholm/brotli"
 	"golang.org/x/net/proxy"
@@ -41,11 +43,27 @@ var (
 		"https://cn.bing.com",
 		"https://www.bing.com",
 	}
-	USER_TOKEN_COOKIE_NAME = "_U"
-	RAND_IP_COOKIE_NAME    = "BingAI_Rand_IP"
-	PROXY_WEB_PREFIX_PATH  = "/web/"
-	PROXY_WEB_PAGE_PATH    = PROXY_WEB_PREFIX_PATH + "index.html"
+	USER_TOKEN_COOKIE_NAME     = "_U"
+	RAND_IP_COOKIE_NAME        = "BingAI_Rand_IP"
+	PROXY_WEB_PREFIX_PATH      = "/web/"
+	PROXY_WEB_PAGE_PATH        = PROXY_WEB_PREFIX_PATH + "index.html"
+	USER_TOKEN_ENV_NAME_PREFIX = "Go_Proxy_BingAI_USER_TOKEN"
+	USER_TOKEN_LIST            []string
+	RAND_COOKIE_INDEX_NAME     = "BingAI_Rand_CK"
 )
+
+func init() {
+	initUserToken()
+}
+
+func initUserToken() {
+	for _, env := range os.Environ() {
+		if strings.HasPrefix(env, USER_TOKEN_ENV_NAME_PREFIX) {
+			parts := strings.SplitN(env, "=", 2)
+			USER_TOKEN_LIST = append(USER_TOKEN_LIST, parts[1])
+		}
+	}
+}
 
 func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 	originalScheme := "http"
@@ -54,6 +72,7 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 	var originalPath string
 	var originalDomain string
 	var randIP string
+	var resCKRandIndex string
 	director := func(req *http.Request) {
 		if req.URL.Scheme == httpsSchemeName || req.Header.Get("X-Forwarded-Proto") == httpsSchemeName {
 			originalScheme = httpsSchemeName
@@ -83,14 +102,23 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 		}
 		req.Header.Set("X-Forwarded-For", randIP)
 
-		// 未登录用户，ua 包含 iPhone Mobile 居然秒创建会话id，应该搞了手机优先策略， Android 不行
+		// 未登录用户
 		ckUserToken, _ := req.Cookie(USER_TOKEN_COOKIE_NAME)
 		if ckUserToken == nil || ckUserToken.Value == "" {
-			ua := req.UserAgent()
-			if !strings.Contains(ua, "iPhone") && !strings.Contains(ua, "Mobile") {
-				req.Header.Set("User-Agent", "iPhone Mobile "+ua)
+			randCKIndex, randCkVal := getRandCookie(req)
+			if randCkVal != "" {
+				resCKRandIndex = strconv.Itoa(randCKIndex)
+				req.AddCookie(&http.Cookie{
+					Name:  USER_TOKEN_COOKIE_NAME,
+					Value: randCkVal,
+				})
 			}
+			// ua := req.UserAgent()
+			// if !strings.Contains(ua, "iPhone") || !strings.Contains(ua, "Mobile") {
+			// 	req.Header.Set("User-Agent", "iPhone Mobile "+ua)
+			// }
 		}
+		req.Header.Set("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 15_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.7 Mobile/15E148 Safari/605.1.15 BingSapphire/1.0.410427012")
 
 		for hKey, _ := range req.Header {
 			if _, ok := KEEP_REQ_HEADER_MAP[hKey]; !ok {
@@ -134,6 +162,16 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 			Path:  "/",
 		}
 		res.Header.Set("Set-Cookie", ckRandIP.String())
+
+		// 设置服务器 cookie 对应索引
+		if resCKRandIndex != "" {
+			ckRandIndex := &http.Cookie{
+				Name:  RAND_COOKIE_INDEX_NAME,
+				Value: resCKRandIndex,
+				Path:  "/",
+			}
+			res.Header.Set("Set-Cookie", ckRandIndex.String())
+		}
 
 		// 删除 CSP
 		res.Header.Del("Content-Security-Policy-Report-Only")
@@ -200,6 +238,33 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 	}
 
 	return reverseProxy
+}
+
+// return cookie index and cookie
+func getRandCookie(req *http.Request) (int, string) {
+	utLen := len(USER_TOKEN_LIST)
+	if utLen == 0 {
+		return 0, ""
+	}
+	if utLen == 1 {
+		return 0, USER_TOKEN_LIST[0]
+	}
+
+	ckRandIndex, _ := req.Cookie(RAND_COOKIE_INDEX_NAME)
+	if ckRandIndex != nil && ckRandIndex.Value != "" {
+		tmpIndex, err := strconv.Atoi(ckRandIndex.Value)
+		if err != nil {
+			log.Println("ckRandIndex err ：", err)
+			return 0, ""
+		}
+		if tmpIndex < utLen {
+			return tmpIndex, USER_TOKEN_LIST[tmpIndex]
+		}
+	}
+	seed := time.Now().UnixNano()
+	rng := rand.New(rand.NewSource(seed))
+	randIndex := rng.Intn(len(USER_TOKEN_LIST))
+	return randIndex, USER_TOKEN_LIST[randIndex]
 }
 
 func replaceResBody(originalBody string, originalScheme string, originalHost string) string {

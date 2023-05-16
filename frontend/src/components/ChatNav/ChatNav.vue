@@ -135,7 +135,7 @@ const clearCache = async () => {
     <NInput size="large" v-model:value="userToken" type="text" placeholder="用户 Cookie ,仅需要 _U 的值" />
     <template #action>
       <NButton size="large" @click="isShowSetTokenModal = false">取消</NButton>
-      <NButton size="large" type="info" @click="saveUserToken">保存</NButton>
+      <NButton ghost size="large" type="info" @click="saveUserToken">保存</NButton>
     </template>
   </NModal>
   <NModal v-model:show="isShowClearCacheModal" preset="dialog" :show-icon="false">
@@ -144,7 +144,7 @@ const clearCache = async () => {
     </template>
     <template #action>
       <NButton size="large" @click="isShowClearCacheModal = false">取消</NButton>
-      <NButton size="large" type="warning" @click="resetCache">确定</NButton>
+      <NButton ghost size="large" type="error" @click="resetCache">确定</NButton>
     </template>
   </NModal>
 </template>

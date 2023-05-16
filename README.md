@@ -100,6 +100,10 @@ Go_Proxy_BingAI_SOCKS_URL=192.168.0.88:1070
 # Socks 账号、密码 可选
 Go_Proxy_BingAI_SOCKS_USER=xxx
 Go_Proxy_BingAI_SOCKS_PWD=xxx
+# 默认用户 Cookie 设置，可选，固定前缀 Go_Proxy_BingAI_USER_TOKEN 可设置多个，未登录用户将随机使用
+Go_Proxy_BingAI_USER_TOKEN_1=xxx
+Go_Proxy_BingAI_USER_TOKEN_2=xxx
+Go_Proxy_BingAI_USER_TOKEN_3=xxx ...
 ```
 
 ## 部署
