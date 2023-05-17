@@ -26,19 +26,19 @@ export const usePromptStore = defineStore(
       {
         type: 1,
         name: 'ChatGPT 中文调教指南 - 简体',
-        url: 'https://raw.githubusercontent.com/PlexPt/awesome-chatgpt-prompts-zh/main/prompts-zh.json',
+        url: './data/prompts/prompts-zh.json',
         refer: 'https://github.com/PlexPt/awesome-chatgpt-prompts-zh',
       },
       {
         type: 1,
         name: 'ChatGPT 中文调教指南 - 繁体',
-        url: 'https://raw.githubusercontent.com/PlexPt/awesome-chatgpt-prompts-zh/main/prompts-zh-TW.json',
+        url: './data/prompts/prompts-zh-TW.json',
         refer: 'https://github.com/PlexPt/awesome-chatgpt-prompts-zh',
       },
       {
         type: 1,
         name: 'Awesome ChatGPT Prompts',
-        url: 'https://raw.githubusercontent.com/f/awesome-chatgpt-prompts/main/prompts.csv',
+        url: './data/prompts/prompts.csv',
         refer: 'https://github.com/f/awesome-chatgpt-prompts',
       },
       {

@@ -251,9 +251,9 @@ const handlePromptListScroll = () => {
         :keeps="10"
         @scroll="handlePromptListScroll"
       />
-      <NEmpty v-else class="bg-white w-full max-w-[1060px] max-h-[390px] rounded-xl py-6" description="暂无提示词数据">
+      <NEmpty v-else class="bg-white w-full max-w-[1060px] max-h-[390px] rounded-xl py-6" description="暂未设置提示词数据">
         <template #extra>
-          <NButton secondary type="info" @click="isShowPromptSotre = true">去添加</NButton>
+          <NButton secondary type="info" @click="isShowPromptSotre = true">去提示词库添加</NButton>
         </template>
       </NEmpty>
     </div>

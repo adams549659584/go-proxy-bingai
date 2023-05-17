@@ -163,7 +163,11 @@ const downloadPrompt = async (config: IPromptDownloadConfig) => {
       :data-component="ChatPromptItem"
       :keeps="10"
     />
-    <NEmpty v-else class="h-[60vh] flex justify-center items-center" description="无数据"> </NEmpty>
+    <NEmpty v-else class="h-[60vh] flex justify-center items-center" description="暂无数据">
+      <template #extra>
+        <NButton secondary type="info" @click="isShowDownloadPop = true">下载提示词</NButton>
+      </template>
+    </NEmpty>
   </NModal>
   <NModal class="w-11/12 xl:w-[600px]" v-model:show="optPromptConfig.isShow" preset="card" :title="optPromptConfig.title">
     <NSpace vertical>
