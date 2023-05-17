@@ -1634,7 +1634,7 @@ packages:
       rollup: 2.79.1
     dev: true
 
-  /@rollup/plugin-replace@5.0.2(rollup@3.21.7):
+  /@rollup/plugin-replace@5.0.2(rollup@3.21.8):
     resolution: {integrity: sha512-M9YXNekv/C/iHHK+cvORzfRYfPbq0RDD8r0G+bMiTXjNGKulPnCT9O3Ss46WfhI6ZOCgApOP7xAdmCQJ+U2LAA==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
@@ -1643,9 +1643,9 @@ packages:
       rollup:
         optional: true
     dependencies:
-      '@rollup/pluginutils': 5.0.2(rollup@3.21.7)
+      '@rollup/pluginutils': 5.0.2(rollup@3.21.8)
       magic-string: 0.27.0
-      rollup: 3.21.7
+      rollup: 3.21.8
     dev: true
 
   /@rollup/pluginutils@3.1.0(rollup@2.79.1):
@@ -1660,7 +1660,7 @@ packages:
       rollup: 2.79.1
     dev: true
 
-  /@rollup/pluginutils@5.0.2(rollup@3.21.7):
+  /@rollup/pluginutils@5.0.2(rollup@3.21.8):
     resolution: {integrity: sha512-pTd9rIsP92h+B6wWwFbW8RkZv4hiR/xKsqre4SIuAOaOEQRxi0lqLke9k2/7WegC85GgUs9pjmOjCUi3In4vwA==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
@@ -1672,7 +1672,7 @@ packages:
       '@types/estree': 1.0.1
       estree-walker: 2.0.2
       picomatch: 2.3.1
-      rollup: 3.21.7
+      rollup: 3.21.8
     dev: true
 
   /@rushstack/eslint-patch@1.2.0:
@@ -3996,7 +3996,7 @@ packages:
       jest-worker: 26.6.2
       rollup: 2.79.1
       serialize-javascript: 4.0.0
-      terser: 5.17.3
+      terser: 5.17.4
     dev: true
 
   /rollup@2.79.1:
@@ -4007,8 +4007,8 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  /rollup@3.21.7:
-    resolution: {integrity: sha512-KXPaEuR8FfUoK2uHwNjxTmJ18ApyvD6zJpYv9FOJSqLStmt6xOY84l1IjK2dSolQmoXknrhEFRaPRgOPdqCT5w==}
+  /rollup@3.21.8:
+    resolution: {integrity: sha512-SSFV2T2fWtQ/vvBip85u2Nr0GNKireabH9d7nXswBg+XSH+jbVDSYptRAEbCEsquhs503rpPA9POYAp0/Jhasw==}
     engines: {node: '>=14.18.0', npm: '>=8.0.0'}
     hasBin: true
     optionalDependencies:
@@ -4310,8 +4310,8 @@ packages:
       unique-string: 2.0.0
     dev: true
 
-  /terser@5.17.3:
-    resolution: {integrity: sha512-AudpAZKmZHkG9jueayypz4duuCFJMMNGRMwaPvQKWfxKedh8Z2x3OCoDqIIi1xx5+iwx1u6Au8XQcc9Lke65Yg==}
+  /terser@5.17.4:
+    resolution: {integrity: sha512-jcEKZw6UPrgugz/0Tuk/PVyLAPfMBJf5clnGueo45wTweoV8yh7Q7PEkhkJ5uuUbC7zAxEcG3tqNr1bstkQ8nw==}
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
@@ -4500,11 +4500,11 @@ packages:
       workbox-build: ^6.5.4
       workbox-window: ^6.5.4
     dependencies:
-      '@rollup/plugin-replace': 5.0.2(rollup@3.21.7)
+      '@rollup/plugin-replace': 5.0.2(rollup@3.21.8)
       debug: 4.3.4
       fast-glob: 3.2.12
       pretty-bytes: 6.1.0
-      rollup: 3.21.7
+      rollup: 3.21.8
       vite: 4.3.6(@types/node@18.16.10)
       workbox-build: 6.5.4
       workbox-window: 6.5.4
@@ -4540,7 +4540,7 @@ packages:
       '@types/node': 18.16.10
       esbuild: 0.17.19
       postcss: 8.4.23
-      rollup: 3.21.7
+      rollup: 3.21.8
     optionalDependencies:
       fsevents: 2.3.2
     dev: true

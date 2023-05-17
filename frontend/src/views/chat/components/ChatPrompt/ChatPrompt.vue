@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, computed } from 'vue';
 import { NEmpty, NButton } from 'naive-ui';
 import conversationCssText from '@/assets/css/conversation.css?raw';
 import { usePromptStore, type IPrompt } from '@/stores/modules/prompt';
@@ -28,6 +28,10 @@ const randIpCookieName = 'BingAI_Rand_IP';
 const isPromptScrolling = ref(false);
 const promptItemHeight = 130;
 
+const isShowHistory = computed(() => {
+  return (CIB.vm.isMobile && CIB.vm.sidePanel.isVisibleMobile) || (!CIB.vm.isMobile && CIB.vm.sidePanel.isVisibleDesktop);
+});
+
 onMounted(async () => {
   await initChat();
   // show
@@ -50,6 +54,10 @@ const initChat = async () => {
 const checkUserToken = () => {
   const userCookieVal = cookies.get(userTokenCookieName);
   if (!userCookieVal) {
+    // 未登录不显示历史记录
+    CIB.vm.sidePanel.isVisibleMobile = false;
+    CIB.vm.sidePanel.isVisibleDesktop = false;
+    // 创建会话id
     tryCreateConversationId();
   }
 };
@@ -165,7 +173,7 @@ const handleInputTextKey = (ev: KeyboardEvent) => {
   switch (ev.key) {
     case 'ArrowUp':
       {
-        ev.preventDefault();
+        // ev.preventDefault();
         if (selectedPromptIndex.value > 0) {
           selectedPromptIndex.value--;
           if (scrollbarRef.value) {
@@ -176,7 +184,7 @@ const handleInputTextKey = (ev: KeyboardEvent) => {
       break;
     case 'ArrowDown':
       {
-        ev.preventDefault();
+        // ev.preventDefault();
         if (selectedPromptIndex.value < searchPromptList.value.length - 1) {
           selectedPromptIndex.value++;
           if (scrollbarRef.value) {
@@ -224,7 +232,14 @@ const handlePromptListScroll = () => {
 <template>
   <LoadingSpinner :is-show="isShowLoading" />
   <main>
-    <div v-if="isShowChatPrompt" class="box-border fixed bottom-[110px] w-full flex justify-center px-[14px] md:px-[170px] xl:px-[220px] z-999">
+    <div
+      v-if="isShowChatPrompt"
+      class="box-border fixed bottom-[110px] w-full flex justify-center px-[14px] md:px-[34px] z-999"
+      :class="{
+        'md:px-[170px]': isShowHistory,
+        'xl:px-[220px]': isShowHistory,
+      }"
+    >
       <div class="w-0 md:w-[60px]"></div>
       <VirtualList
         ref="scrollbarRef"

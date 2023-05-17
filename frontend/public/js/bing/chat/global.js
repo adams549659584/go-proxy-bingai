@@ -52,7 +52,8 @@ _G = {
   DA: 'PUSE01',
   SUIH: 'FfN6lYBDNDOEzj4vnSOJqQ',
   adc: 'b_ad',
-  EF: { cookss: 1, bmcov: 1, crossdomainfix: 1, bmasynctrigger: 1, bmasynctrigger3: 1, newtabsloppyclick: 1, chevroncheckmousemove: 1 },
+  // logsb 启用 sendBeacon 推送日志，并在 sendBeacon 阻止
+  EF: { cookss: 1, bmcov: 1, crossdomainfix: 1, bmasynctrigger: 1, bmasynctrigger3: 1, newtabsloppyclick: 1, chevroncheckmousemove: 1, logsb: 1 },
   gpUrl: '/fd/ls/GLinkPing.aspx?',
 };
 _G.lsUrl = '/fd/ls/l?IG=' + _G.IG;

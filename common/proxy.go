@@ -118,7 +118,16 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 			// 	req.Header.Set("User-Agent", "iPhone Mobile "+ua)
 			// }
 		}
-		req.Header.Set("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 15_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.7 Mobile/15E148 Safari/605.1.15 BingSapphire/1.0.410427012")
+
+		ua := req.UserAgent()
+		isMobile := strings.Contains(ua, "Mobile") || strings.Contains(ua, "Android")
+
+		// m pc 画图大小不一样
+		if isMobile {
+			req.Header.Set("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 15_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.7 Mobile/15E148 Safari/605.1.15 BingSapphire/1.0.410427012")
+		} else {
+			req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36 Edg/113.0.1774.35")
+		}
 
 		for hKey, _ := range req.Header {
 			if _, ok := KEEP_REQ_HEADER_MAP[hKey]; !ok {
@@ -269,10 +278,16 @@ func getRandCookie(req *http.Request) (int, string) {
 
 func replaceResBody(originalBody string, originalScheme string, originalHost string) string {
 	modifiedBodyStr := originalBody
-	originalDomain := fmt.Sprintf("%s://%s", originalScheme, originalHost)
 
-	if strings.Contains(modifiedBodyStr, BING_URL.String()) {
-		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, BING_URL.String(), originalDomain)
+	if originalScheme == "https" {
+		if strings.Contains(modifiedBodyStr, BING_URL.Host) {
+			modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, BING_URL.Host, originalHost)
+		}
+	} else {
+		originalDomain := fmt.Sprintf("%s://%s", originalScheme, originalHost)
+		if strings.Contains(modifiedBodyStr, BING_URL.String()) {
+			modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, BING_URL.String(), originalDomain)
+		}
 	}
 
 	// 对话暂时支持国内网络，而且 Vercel 还不支持 Websocket ，先不用
