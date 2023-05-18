@@ -34,12 +34,11 @@ const isShowHistory = computed(() => {
 
 onMounted(async () => {
   await initChat();
+  checkUserToken();
   // show
   SydneyFullScreenConv.initWithWaitlistUpdate({ cookLoc: {} }, 10);
 
   isShowLoading.value = false;
-
-  checkUserToken();
   hackStyle();
   initChatPrompt();
 });
@@ -55,6 +54,7 @@ const checkUserToken = () => {
   const userCookieVal = cookies.get(userTokenCookieName);
   if (!userCookieVal) {
     // 未登录不显示历史记录
+    CIB.config.features.enableGetChats = false;
     CIB.vm.sidePanel.isVisibleMobile = false;
     CIB.vm.sidePanel.isVisibleDesktop = false;
     // 创建会话id

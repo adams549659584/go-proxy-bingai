@@ -170,6 +170,10 @@ declare const CIB: {
   config: {
     features: {
       enableThreads: boolean;
+      /**
+       * 获取聊天历史
+       */
+      enableGetChats: boolean;
     };
     sydney: {
       /**

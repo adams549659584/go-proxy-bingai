@@ -1,1 +1,5 @@
 @import './base.css';
+
+.cib-serp-main {
+  overflow: hidden;
+}
