@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { h, ref } from 'vue';
-import { NDropdown, type DropdownOption, NModal, NInput, NButton, useDialog, useMessage, NImage } from 'naive-ui';
+import { NDropdown, type DropdownOption, NModal, NInput, NButton, useMessage, NImage } from 'naive-ui';
 import settingSvgUrl from '@/assets/img/setting.svg?url';
 import cookies from '@/utils/cookies';
 import { usePromptStore } from '@/stores/modules/prompt';
@@ -8,6 +8,7 @@ import { storeToRefs } from 'pinia';
 import ChatNavItem from './ChatNavItem.vue';
 import type { Component } from 'vue';
 import { isMobile } from '@/utils/utils';
+import CreateImage from '@/components/CreateImage/CreateImage.vue';
 
 const isShowMore = ref(false);
 const isShowSetTokenModal = ref(false);
@@ -18,11 +19,13 @@ const message = useMessage();
 const promptStore = usePromptStore();
 const { isShowPromptSotre } = storeToRefs(promptStore);
 const isShowClearCacheModal = ref(false);
+const isShowCreateImageModal = ref(false);
 
 const navType = {
   github: 'github',
   setToken: 'setToken',
   compose: 'compose',
+  createImage: 'createImage',
   promptStore: 'promptStore',
   reset: 'reset',
   version: 'version',
@@ -49,6 +52,10 @@ const navConfigs = [
     key: navType.compose,
     label: '撰写文章',
     url: '/web/compose.html',
+  },
+  {
+    key: navType.createImage,
+    label: '图像创建',
   },
   {
     key: navType.reset,
@@ -78,6 +85,12 @@ const handleSelect = (key: string) => {
       break;
     case navType.reset:
       isShowClearCacheModal.value = true;
+      break;
+    case navType.createImage:
+      if (!cookies.get(userTokenCookieName)) {
+        message.warning('体验画图功能需先登录');
+      }
+      isShowCreateImageModal.value = true;
       break;
     default:
       break;
@@ -147,4 +160,5 @@ const clearCache = async () => {
       <NButton ghost size="large" type="error" @click="resetCache">确定</NButton>
     </template>
   </NModal>
+  <CreateImage v-model:show="isShowCreateImageModal" />
 </template>

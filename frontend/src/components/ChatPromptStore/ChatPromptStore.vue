@@ -148,7 +148,7 @@ const downloadPrompt = async (config: IPromptDownloadConfig) => {
       <NInput class="basis-full xl:basis-0 xl:min-w-[300px]" placeholder="搜索提示词" v-model:value="keyword" :clearable="true"></NInput>
       <NButton secondary type="info" @click="isShowDownloadPop = true">下载</NButton>
       <NButton secondary type="info" @click="showAddPromptPop">添加</NButton>
-      <NUpload class="w-auto" accept=".json" :default-upload="false" :show-file-list="false" @change="importPrompt">
+      <NUpload class="w-[56px] xl:w-auto" accept=".json" :default-upload="false" :show-file-list="false" @change="importPrompt">
         <NButton secondary type="success" :loading="isImporting">导入</NButton>
       </NUpload>
       <!-- <NButton secondary type="success">导入</NButton> -->
@@ -163,7 +163,7 @@ const downloadPrompt = async (config: IPromptDownloadConfig) => {
       :data-component="ChatPromptItem"
       :keeps="10"
     />
-    <NEmpty v-else class="h-[60vh] flex justify-center items-center" description="暂无数据">
+    <NEmpty v-else class="h-[40vh] xl:h-[60vh] flex justify-center items-center" description="暂无数据">
       <template #extra>
         <NButton secondary type="info" @click="isShowDownloadPop = true">下载提示词</NButton>
       </template>

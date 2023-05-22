@@ -184,6 +184,10 @@ declare const CIB: {
     };
     messaging: {
       /**
+       * 单次最大对话数
+       */
+      maxTurnsPerConversation: number;
+      /**
        * 打字机速度调节，默认 1000 / 15 = 55 （每秒15字？）
        */
       messageBufferWorkerStreamDelayMS: number;

@@ -29,7 +29,9 @@ const showEditPromptPop = (item: IPrompt) => {
 <template>
   <NThing class="hover:bg-gray-100 cursor-pointer p-5">
     <template #description>
-      <NTag class="max-w-[150px] xl:max-w-[680px] overflow-ellipsis overflow-hidden" type="info"> {{ source.act }} </NTag>
+      <NTag type="info">
+        <span class="inline-block max-w-[120px] xl:max-w-[650px] overflow-hidden text-ellipsis">{{ source.act }}</span>
+      </NTag>
       <div class="float-right">
         <NButton secondary type="info" size="small" @click="showEditPromptPop(source)">编辑</NButton>
         <NButton secondary class="ml-2" type="error" size="small" @click="delPrompt(source)">删除</NButton>

@@ -14,6 +14,8 @@ services:
     #   - Go_Proxy_BingAI_SOCKS_URL=192.168.0.88:1070
     #   - Go_Proxy_BingAI_SOCKS_USER=xxx
     #   - Go_Proxy_BingAI_SOCKS_PWD=xxx
+    #   - Go_Proxy_BingAI_USER_TOKEN_1=xxx
+    #   - Go_Proxy_BingAI_USER_TOKEN_2=xxx
   
 #   go-proxy-bingai:
 #     # 镜像名称

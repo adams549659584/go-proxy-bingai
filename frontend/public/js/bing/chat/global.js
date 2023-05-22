@@ -44,13 +44,13 @@ _G = {
   Mkt: 'en-US',
   RevIpCC: 'us',
   RTL: false,
-  Ver: '20',
+  Ver: '22',
   IG: '0',
-  EventID: '645c60c3f55a42549d538c31cf5dd366',
+  EventID: '646ae52b797848988e6618d6205cf436',
   V: 'web',
   P: 'SERP',
   DA: 'PUSE01',
-  SUIH: 'FfN6lYBDNDOEzj4vnSOJqQ',
+  SUIH: 'BtAuR605UV0NIg083Tp9HA',
   adc: 'b_ad',
   // logsb 启用 sendBeacon 推送日志，并在 sendBeacon 阻止
   EF: { cookss: 1, bmcov: 1, crossdomainfix: 1, bmasynctrigger: 1, bmasynctrigger3: 1, newtabsloppyclick: 1, chevroncheckmousemove: 1, logsb: 1 },
@@ -59,6 +59,10 @@ _G = {
 _G.lsUrl = '/fd/ls/l?IG=' + _G.IG;
 curUrl = '/search';
 function si_T(a) {
+  // if (document.images) {
+  //   _G.GPImg = new Image();
+  //   _G.GPImg.src = _G.gpUrl + 'IG=' + _G.IG + '&' + a;
+  // }
   return true;
 }
 _G.CTT = '3000';

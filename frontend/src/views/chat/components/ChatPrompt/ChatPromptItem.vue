@@ -32,7 +32,9 @@ const selectPrompt = (item: IPrompt) => {
     @click="selectPrompt(source)"
   >
     <template #description>
-      <NTag type="info"> {{ source.act }} </NTag>
+      <NTag type="info">
+        <span class="inline-block max-w-[310px] xl:max-w-[650px] overflow-hidden text-ellipsis">{{ source.act }}</span>
+      </NTag>
     </template>
     <NEllipsis :tooltip="false" :line-clamp="2">{{ source.prompt }}</NEllipsis>
   </NThing>

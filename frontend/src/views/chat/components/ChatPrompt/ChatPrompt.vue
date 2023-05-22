@@ -6,7 +6,7 @@ import { usePromptStore, type IPrompt } from '@/stores/modules/prompt';
 import { storeToRefs } from 'pinia';
 import VirtualList from 'vue3-virtual-scroll-list';
 import ChatPromptItem from './ChatPromptItem.vue';
-import { sleep } from '@/utils/utils';
+import { isMobile, sleep } from '@/utils/utils';
 import cookies from '@/utils/cookies';
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner.vue';
 
@@ -34,6 +34,7 @@ const isShowHistory = computed(() => {
 
 onMounted(async () => {
   await initChat();
+  // CIB.vm.isMobile = isMobile();
   checkUserToken();
   // show
   SydneyFullScreenConv.initWithWaitlistUpdate({ cookLoc: {} }, 10);
@@ -98,8 +99,13 @@ const hackStyle = () => {
   serpEle?.setAttribute('alignment', 'center');
   const conversationEle = serpEle?.shadowRoot?.querySelector('cib-conversation') as HTMLElement;
   // todo 反馈暂时无法使用，先移除
-  conversationEle?.shadowRoot?.querySelector('cib-welcome-container')?.shadowRoot?.querySelector('.learn-tog-item')?.remove();
+  const welcomeEle = conversationEle?.shadowRoot?.querySelector('cib-welcome-container');
+  welcomeEle?.shadowRoot?.querySelector('.learn-tog-item')?.remove();
   serpEle?.shadowRoot?.querySelector('cib-serp-feedback')?.remove();
+  if (isMobile()) {
+    welcomeEle?.shadowRoot?.querySelector('.container-item')?.remove();
+    CIB.vm.actionBar.input.placeholder = '有问题尽管问我...（"/" 触发提示词）';
+  }
   // 加入css
   const conversationStyleEle = document.createElement('style');
   conversationStyleEle.innerText = conversationCssText;

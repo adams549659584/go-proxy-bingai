@@ -6,7 +6,7 @@
 
 ⭐ 支持现有开源提示词库
 
-⭐ 需要画图等高级功能时，可登录微软账号设置用户 Cookie 进行体验
+⭐ 需要画图等高级功能时(需选更有创造力模式或右上角设置中的图像创建)，可登录微软账号设置用户 Cookie 进行体验
 
 ⭐ 遇到一切问题，先点左下角 ![新主题](./docs/img/bing-clear.png) 试试，不行使用刷新大法（Shift + F5 或 Ctrl + Shift + R 或 右上角设置中的一键重置），最终大招就 清理浏览器缓存 及 Cookie ，比如（24 小时限制、未登录提示等等）
 
@@ -100,7 +100,7 @@ Go_Proxy_BingAI_SOCKS_URL=192.168.0.88:1070
 # Socks 账号、密码 可选
 Go_Proxy_BingAI_SOCKS_USER=xxx
 Go_Proxy_BingAI_SOCKS_PWD=xxx
-# 默认用户 Cookie 设置，可选，固定前缀 Go_Proxy_BingAI_USER_TOKEN 可设置多个，未登录用户将随机使用
+# 默认用户 Cookie 设置，可选，不推荐使用，固定前缀 Go_Proxy_BingAI_USER_TOKEN 可设置多个，未登录用户将随机使用，多人共用将很快触发图形验证，并很快达到该账号的24小时限制
 Go_Proxy_BingAI_USER_TOKEN_1=xxx
 Go_Proxy_BingAI_USER_TOKEN_2=xxx
 Go_Proxy_BingAI_USER_TOKEN_3=xxx ...
@@ -130,7 +130,7 @@ docker run -e Go_Proxy_BingAI_SOCKS_URL=192.168.0.88:1070 -e Go_Proxy_BingAI_SOC
 
 - docker compose 示例
 
-```bash
+```yaml
 version: '3'
 
 services:
@@ -147,6 +147,8 @@ services:
     #   - Go_Proxy_BingAI_SOCKS_URL=192.168.0.88:1070
     #   - Go_Proxy_BingAI_SOCKS_USER=xxx
     #   - Go_Proxy_BingAI_SOCKS_PWD=xxx
+    #   - Go_Proxy_BingAI_USER_TOKEN_1=xxx
+    #   - Go_Proxy_BingAI_USER_TOKEN_2=xxx    
 ```
 
 ### Release
