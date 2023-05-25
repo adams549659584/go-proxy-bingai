@@ -1,18 +1,18 @@
 # go-proxy-bing
 
-基于微软 New Bing 简单定制，拥有一致的 UI 体验，支持 ChatGPT 提示词，国内可用，基本兼容微软 Bing AI 所有功能，无需登录即可畅聊。
+基于微软 New Bing 用 Vue3 和 Go 简单定制的微软 New Bing 演示站点，，拥有一致的 UI 体验，支持 ChatGPT 提示词，国内可用，基本兼容微软 Bing AI 所有功能，无需登录即可畅聊。
 
-⭐ Bing 官方聊天服务器（相对较快和稳定，推荐）不可用时， 可用 ModHeader 添加 X-Forwarded-For 请求头，对应 URL 是 wss://sydney.bing.com/sydney/ChatHub，具体可参考 https://zhuanlan.zhihu.com/p/606655303
+⭐ Bing 官方聊天服务器（相对较快和稳定，推荐）不可用时， 可用 ModHeader 添加 X-Forwarded-For 请求头，对应 URL 是 wss://sydney.bing.com/sydney/ChatHub，具体可参考 [issues #71](https://github.com/adams549659584/go-proxy-bingai/issues/71) 及 https://zhuanlan.zhihu.com/p/606655303
 
-⭐ 聊天服务器 (暂时默认 Cloudflare ) 可在右上角 设置 => 服务选择 中切换
+⭐ 聊天服务器 (暂时默认 Cloudflare Workers ) 可在右上角 设置 => 服务选择 中切换
 
-⭐ 自定义聊天服务器参考下面 [部署聊天服务器](#部署聊天服务器) 章节
+⭐ 自定义部署聊天服务器参考下面 [部署聊天服务器](#部署聊天服务器) 章节
 
 ⭐ 国内可用 （部署服务器需要直连 www.bing.com 不重定向 CN ，可配置 socks 连接）
 
-⭐ 支持现有开源提示词库
+⭐ 支持现有开源 ChatGPT 提示词库
 
-⭐ 需要画图等高级功能时(需选更有创造力模式或右上角设置中的图像创建)，可登录微软账号设置用户 Cookie 进行体验
+⭐ 需要画图等高级功能时(需选更有创造力模式或右上角 设置 => 图像创建 )，可登录微软账号设置用户 Cookie 进行体验
 
 ⭐ 遇到一切问题，先点左下角 ![新主题](./docs/img/bing-clear.png) 试试，不行使用刷新大法（Shift + F5 或 Ctrl + Shift + R 或 右上角设置中的一键重置），最终大招就 清理浏览器缓存 及 Cookie ，比如（24 小时限制、未登录提示等等）
 
@@ -42,6 +42,7 @@
 ![电脑端登录](./docs/img/bing-login-1.png)
 ![提示词1](./docs/img/bing-prompt-1.png)
 ![提示词2](./docs/img/bing-prompt-2.png)
+![聊天服务器选择](./docs/img/bing-sydney-service-1.png)
 
 - 电脑端画图
 
