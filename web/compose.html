@@ -2685,6 +2685,13 @@
   //]]></script></div>
   <script type="text/javascript">//<![CDATA[
     _G.HT = new Date;
+    const chatStoreStr = localStorage.getItem('chat-store');
+    let sydneyBaseUrl;
+    if (chatStoreStr) {
+      const chatStore = JSON.parse(chatStoreStr);
+      sydneyBaseUrl = chatStore.selectedSydneyBaseUrl;
+    }
+    CIB.config.sydney.baseUrl = sydneyBaseUrl || 'https://sydney.vcanbb.chat';
   //]]></script>
 </body>
 
