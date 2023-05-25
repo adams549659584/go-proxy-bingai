@@ -9,7 +9,9 @@ import (
 )
 
 func main() {
-	http.HandleFunc("/sydney/ChatHub", api.ChatHub)
+	http.HandleFunc("/sysconf", api.SysConf)
+
+	http.HandleFunc("/sydney/", api.Sydney)
 
 	http.HandleFunc("/web/", api.WebStatic)
 

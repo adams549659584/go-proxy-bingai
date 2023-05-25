@@ -24,7 +24,7 @@ _w['_sydConvConfig'] = {
   Syd2TFlights: '',
   sydIDs:
     'winmuid3tf,osbsdusgreccf,ttstmout,crchatrev,winlongmsgtf,ctrlworkpay,norespwtf,tempcacheread,temptacache,505scss0,508jbcars0,515enbotdets0,5082tsports,515vaoprvs,424dagslnv1s0,kcimgattcf,427startpms0',
-  sydBaseUrl: 'https://sydney.bing.com',
+  sydBaseUrl: 'https://sydney.vcanbb.chat',
   compSydBaseUrl: '',
   isCompliantSydneyEndpointEnabled: false,
   useAccountLinkingForConversationLimitUpsell: false,

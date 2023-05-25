@@ -18,6 +18,7 @@
         // "Go_Proxy_BingAI_SOCKS_PWD": "xxx",
         // "Go_Proxy_BingAI_USER_TOKEN_1": "xxx",
         // "Go_Proxy_BingAI_USER_TOKEN_2": "xxx"
+        // "Go_Proxy_BingAI_AUTH_KEY": "xxx",
       }
     }
   ]

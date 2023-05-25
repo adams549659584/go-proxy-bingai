@@ -68,6 +68,11 @@ interface BingChat {
   isRequestPending: boolean;
   api: {
     bing: {
+      captcha: {
+        client: {
+          sendOperationRequest: (operationArguments: object, operationSpec: object) => {};
+        };
+      };
       conversation: {
         /**
          * 创建请求
@@ -79,6 +84,7 @@ interface BingChat {
         getChats: (O) => {};
       };
     };
+    sydney: {};
   };
   requestToken: {
     cancel: () => Promise<unknown>;
@@ -176,6 +182,7 @@ declare const CIB: {
       enableGetChats: boolean;
     };
     sydney: {
+      baseUrl: string;
       /**
        * 安全域名？移除 localhost，开发即可 create
        */

@@ -2,6 +2,12 @@
 
 基于微软 New Bing 简单定制，拥有一致的 UI 体验，支持 ChatGPT 提示词，国内可用，基本兼容微软 Bing AI 所有功能，无需登录即可畅聊。
 
+⭐ Bing 官方聊天服务器（相对较快和稳定，推荐）不可用时， 可用 ModHeader 添加 X-Forwarded-For 请求头，对应 URL 是 wss://sydney.bing.com/sydney/ChatHub，具体可参考 https://zhuanlan.zhihu.com/p/606655303
+
+⭐ 聊天服务器 (暂时默认 Cloudflare ) 可在右上角 设置 => 服务选择 中切换
+
+⭐ 自定义聊天服务器参考下面 [部署聊天服务器](#部署聊天服务器) 章节
+
 ⭐ 国内可用 （部署服务器需要直连 www.bing.com 不重定向 CN ，可配置 socks 连接）
 
 ⭐ 支持现有开源提示词库
@@ -22,6 +28,7 @@
     - [Railway](#Railway)
     - [Vercel](#Vercel)
     - [Render](#Render)
+  - [部署聊天服务器](#部署聊天服务器)
   - [TODO](#TODO)
 
 ## 网页展示
@@ -104,6 +111,8 @@ Go_Proxy_BingAI_SOCKS_PWD=xxx
 Go_Proxy_BingAI_USER_TOKEN_1=xxx
 Go_Proxy_BingAI_USER_TOKEN_2=xxx
 Go_Proxy_BingAI_USER_TOKEN_3=xxx ...
+# 简单授权认证密码，可选
+Go_Proxy_BingAI_AUTH_KEY=xxx
 ```
 
 ## 部署
@@ -153,7 +162,7 @@ services:
 
 ### Release
 
-在 [Github Releases](https://github.com/adams549659584/go-proxy-bingai/releases) 下载适用于对应平台的压缩包，解压后可得到可执行文件 go-proxy-bingai，直接运行即可。
+在 [GitHub Releases](https://github.com/adams549659584/go-proxy-bingai/releases) 下载适用于对应平台的压缩包，解压后可得到可执行文件 go-proxy-bingai，直接运行即可。
 
 ### Railway
 
@@ -176,6 +185,8 @@ RAILWAY_DOCKERFILE_PATH=docker/Dockerfile
 
 ### Vercel
 
+> ⭐ Vercel 部署不支持 Websocket ，需选择 官方聊天服务器 或 Cloudflare
+
 一键部署，点这里 => [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/adams549659584/go-proxy-bingai&project-name=go-proxy-bingai&repository-name=go-proxy-bingai-vercel)
 
 ![Vercel 一键部署](./docs/img/vercel-1.png)
@@ -190,11 +201,23 @@ RAILWAY_DOCKERFILE_PATH=docker/Dockerfile
 
 ![Render 域名](./docs/img/render-2.png)
 
+## 部署聊天服务器
+
+> 核心代码 [worker.js](./cloudflare/worker.js)
+
+> 具体部署 Cloudflare Workers 教程自行查询，大概如下
+
+- [注册 Cloudflare 账号](https://dash.cloudflare.com/sign-up)
+
+- 创建 Worker 服务，复制 [worker.js](./cloudflare/worker.js) 全部代码，粘贴至创建的服务中，保存并部署。
+
+- 触发器 中自定义访问域名。
+
 ## TODO
 
 - [x] 撰写
 - [x] Vue3 重构
 - [x] 提示词
 - [x] 历史聊天
-- [ ] 导出消息到本地（Markdown、图片、PDF）
-- [ ] 简单访问权限控制
+- [x] 导出消息到本地（Markdown、图片、PDF）
+- [x] 简单访问权限控制

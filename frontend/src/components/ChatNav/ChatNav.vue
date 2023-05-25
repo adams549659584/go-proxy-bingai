@@ -2,33 +2,36 @@
 import { h, ref } from 'vue';
 import { NDropdown, type DropdownOption, NModal, NInput, NButton, useMessage, NImage } from 'naive-ui';
 import settingSvgUrl from '@/assets/img/setting.svg?url';
-import cookies from '@/utils/cookies';
 import { usePromptStore } from '@/stores/modules/prompt';
 import { storeToRefs } from 'pinia';
 import ChatNavItem from './ChatNavItem.vue';
 import type { Component } from 'vue';
 import { isMobile } from '@/utils/utils';
 import CreateImage from '@/components/CreateImage/CreateImage.vue';
+import { useChatStore } from '@/stores/modules/chat';
+import { useUserStore } from '@/stores/modules/user';
 
 const isShowMore = ref(false);
 const isShowSetTokenModal = ref(false);
 const userToken = ref('');
-const userTokenCookieName = '_U';
-const randIpCookieName = 'BingAI_Rand_IP';
 const message = useMessage();
 const promptStore = usePromptStore();
 const { isShowPromptSotre } = storeToRefs(promptStore);
 const isShowClearCacheModal = ref(false);
 const isShowCreateImageModal = ref(false);
+const chatStore = useChatStore();
+const { isShowChatServiceSelectModal } = storeToRefs(chatStore);
+const userStore = useUserStore();
 
 const navType = {
   github: 'github',
+  version: 'version',
+  chatService: 'chatService',
+  promptStore: 'promptStore',
   setToken: 'setToken',
   compose: 'compose',
   createImage: 'createImage',
-  promptStore: 'promptStore',
   reset: 'reset',
-  version: 'version',
 };
 const navConfigs = [
   {
@@ -39,6 +42,10 @@ const navConfigs = [
   {
     key: navType.version,
     label: '版本信息',
+  },
+  {
+    key: navType.chatService,
+    label: '服务选择',
   },
   {
     key: navType.promptStore,
@@ -74,23 +81,35 @@ const handleSelect = (key: string) => {
         message.success(`当前版本号为：${__APP_INFO__.version}`);
       }
       break;
+    case navType.chatService:
+      {
+        isShowChatServiceSelectModal.value = true;
+        chatStore.checkAllSydneyConfig();
+      }
+      break;
     case navType.promptStore:
-      isShowPromptSotre.value = true;
+      {
+        isShowPromptSotre.value = true;
+      }
       break;
     case navType.setToken:
       {
-        userToken.value = cookies.get(userTokenCookieName) || '';
+        userToken.value = userStore.getUserToken();
         isShowSetTokenModal.value = true;
       }
       break;
-    case navType.reset:
-      isShowClearCacheModal.value = true;
-      break;
     case navType.createImage:
-      if (!cookies.get(userTokenCookieName)) {
-        message.warning('体验画图功能需先登录');
+      {
+        if (!userStore.sysConfig?.isSysCK && !userStore.getUserToken()) {
+          message.warning('体验画图功能需先登录');
+        }
+        isShowCreateImageModal.value = true;
       }
-      isShowCreateImageModal.value = true;
+      break;
+    case navType.reset:
+      {
+        isShowClearCacheModal.value = true;
+      }
       break;
     default:
       break;
@@ -98,9 +117,7 @@ const handleSelect = (key: string) => {
 };
 const resetCache = async () => {
   isShowClearCacheModal.value = false;
-  cookies.set(userTokenCookieName, '', -1);
-  cookies.set(randIpCookieName, '', -1);
-  await clearCache();
+  await userStore.resetCache();
   message.success('清理完成');
   window.location.reload();
 };
@@ -110,27 +127,8 @@ const saveUserToken = () => {
     message.warning('请先填入用户 Cookie');
     return;
   }
-  cookies.set(userTokenCookieName, userToken.value, 7 * 24 * 60, '/');
+  userStore.saveUserToken(userToken.value);
   isShowSetTokenModal.value = false;
-};
-
-const clearCache = async () => {
-  // del storage
-  localStorage.clear();
-  sessionStorage.clear();
-  // del sw cache
-  const cacheKeys = await caches.keys();
-  for (const cacheKey of cacheKeys) {
-    await caches.open(cacheKey).then(async (cache) => {
-      const requests = await cache.keys();
-      return await Promise.all(
-        requests.map((request) => {
-          console.log(`del cache : `, request.url);
-          return cache.delete(request);
-        })
-      );
-    });
-  }
 };
 </script>
 
