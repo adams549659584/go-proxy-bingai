@@ -10,8 +10,7 @@ type SysConfig struct {
 	// 是否系统配置 cookie
 	IsSysCK bool `json:"isSysCK"`
 	// 是否已授权
-	IsAuth        bool   `json:"isAuth"`
-	SydneyBaseUrl string `json:"sydneyBaseUrl"`
+	IsAuth bool `json:"isAuth"`
 }
 
 func SysConf(w http.ResponseWriter, r *http.Request) {

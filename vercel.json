@@ -9,7 +9,7 @@
   ],
   "routes": [
     {
-      "src": "/sysconf/.*",
+      "src": "/sysconf",
       "dest": "/api/sysConfig.go"
     },
     {
