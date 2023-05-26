@@ -50,8 +50,6 @@ onMounted(async () => {
   // show conversion
   SydneyFullScreenConv.initWithWaitlistUpdate({ cookLoc: {} }, 10);
 
-  initChatService();
-
   isShowLoading.value = false;
   hackStyle();
   initChatPrompt();
@@ -97,6 +95,7 @@ const afterAuth = (data: SysConfig) => {
   if (!data.isSysCK) {
     userStore.checkUserToken();
   }
+  initChatService();
 };
 
 const initChat = async () => {
