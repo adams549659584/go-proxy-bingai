@@ -86,15 +86,17 @@ export const useUserStore = defineStore(
       // del sw cache
       const cacheKeys = await caches.keys();
       for (const cacheKey of cacheKeys) {
-        await caches.open(cacheKey).then(async (cache) => {
-          const requests = await cache.keys();
-          return await Promise.all(
-            requests.map((request) => {
-              console.log(`del cache : `, request.url);
-              return cache.delete(request);
-            })
-          );
-        });
+        await caches.delete(cacheKey);
+        console.log(`del cache : `, cacheKey);
+        // await caches.open(cacheKey).then(async (cache) => {
+        //   const requests = await cache.keys();
+        //   return await Promise.all(
+        //     requests.map((request) => {
+        //       console.log(`del cache : `, request.url);
+        //       return cache.delete(request);
+        //     })
+        //   );
+        // });
       }
     };
 

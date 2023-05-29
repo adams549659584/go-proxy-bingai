@@ -13,3 +13,15 @@
   position: fixed;
   right: 10px;
 }
+
+@media screen and (max-width: 1536px) {
+  :host([side-panel]) {
+    --side-panel-width: 280px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  :host([side-panel]) {
+    --side-panel-width: 0;
+  }
+}

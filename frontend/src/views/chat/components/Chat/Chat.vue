@@ -45,15 +45,22 @@ const isShowHistory = computed(() => {
 
 onMounted(async () => {
   await initChat();
+  hackDevMode();
   // CIB.vm.isMobile = isMobile();
-  initSysConfig();
   // show conversion
   SydneyFullScreenConv.initWithWaitlistUpdate({ cookLoc: {} }, 10);
+  initSysConfig();
 
   isShowLoading.value = false;
   hackStyle();
   initChatPrompt();
 });
+
+const hackDevMode = () => {
+  if (import.meta.env.DEV) {
+    CIB.manager.chat.api.bing._endpoint = location.origin;
+  }
+};
 
 const initChatService = () => {
   if (selectedSydneyBaseUrl.value) {
@@ -302,9 +309,9 @@ const auth = async () => {
     <ChatServiceSelect />
     <!-- 授权 -->
     <div v-if="isShowUnauthorizedModal" class="fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black/40 z-50">
-      <NResult class="bg-white px-28 py-4 rounded-md" status="403" title="401 未授权">
+      <NResult class="box-border w-11/12 lg:w-[400px] px-4 py-4 bg-white rounded-md" status="403" title="401 未授权">
         <template #footer>
-          <NInput v-model:value="authKey" type="password" placeholder="请输入授权码" maxlength="60"></NInput>
+          <NInput class="w-11/12" v-model:value="authKey" type="password" placeholder="请输入授权码" maxlength="60" clearable></NInput>
           <n-button class="mt-4" secondary type="info" :loading="isAuthBtnLoading" @click="auth">授权</n-button>
         </template>
       </NResult>

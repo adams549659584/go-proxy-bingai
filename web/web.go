@@ -1,25 +1,21 @@
 package web
 
 import (
+	"adams549659584/go-proxy-bingai/common"
 	"embed"
 	"io/fs"
 	"net/http"
-	"os"
 	"path/filepath"
 )
 
 //go:embed *
 var webFS embed.FS
 
-var IS_DEBUG_MODE bool
-
 var WEB_PATH_MAP = make(map[string]bool)
 
 func init() {
-	IS_DEBUG_MODE = os.Getenv("Go_Proxy_BingAI_Debug") != ""
-
 	var err error
-	if IS_DEBUG_MODE {
+	if common.IS_DEBUG_MODE {
 		err = initWebPathMapByDir()
 	} else {
 		err = initWebPathMapByFS()
@@ -56,7 +52,7 @@ func initWebPathMapByFS() error {
 }
 
 func GetWebFS() http.FileSystem {
-	if IS_DEBUG_MODE {
+	if common.IS_DEBUG_MODE {
 		return http.Dir("web")
 	} else {
 		return http.FS(webFS)

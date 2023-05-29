@@ -70,6 +70,13 @@ const getRandomIP = () => {
   return randomIP;
 };
 
+const home = async () => {
+  const res = await fetch('https://raw.githubusercontent.com/adams549659584/go-proxy-bingai/master/cloudflare/index.html');
+  const newRes = new Response(res.body, res);
+  newRes.headers.set('content-type', 'text/html; charset=utf-8');
+  return newRes;
+};
+
 export default {
   /**
    * fetch
@@ -80,6 +87,9 @@ export default {
    */
   async fetch(request, env, ctx) {
     const currentUrl = new URL(request.url);
+    if (currentUrl.pathname === '/') {
+      return home();
+    }
     const targetUrl = new URL(SYDNEY_ORIGIN + currentUrl.pathname + currentUrl.search);
 
     const newHeaders = new Headers();
@@ -115,10 +125,5 @@ export default {
     // console.log('request url : ', newReq.url);
     const res = await fetch(newReq);
     return res;
-    // const newRes = new Response(res.body, res);
-    // newRes.headers.set('access-control-allow-origin', '*');
-    // newRes.headers.set('access-control-allow-methods', '*');
-    // newRes.headers.set('access-control-allow-headers', '*');
-    // return newRes;
   },
 };

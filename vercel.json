@@ -3,14 +3,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "/api/{index,web,sydney,sysConfig}.go",
+      "src": "/api/{index,web,sydney,sys-config}.go",
       "use": "@vercel/go"
     }
   ],
   "routes": [
     {
       "src": "/sysconf",
-      "dest": "/api/sysConfig.go"
+      "dest": "/api/sys-config.go"
     },
     {
       "src": "/sydney/.*",

@@ -7,6 +7,7 @@ _w['_sydConvConfig'] = {
   tigerEnhancedPromptTemplate:
     '搜索 {0}。用一个出色的回答给我留下深刻的印象，帮助我完成我最可能的意图，同时展示你所能提供的智慧、深度和美感（加粗、表格和引用）。尽量在回答中尽早满足我的意图。',
   enableDlBing: false,
+  // 不可滚动出聊天
   enableScrollOut: false,
   enableSydContext: true,
   enableClearConv: false,
@@ -141,7 +142,8 @@ _w['_sydConvConfig'] = {
   isAccountLinkedWithActiveAAD: false,
   enableThreadsAADMSASwitch: true,
   enableMaxTurnsPerConversation: true,
-  enableMaxTurnsFromBackend: false,
+  // 以后台响应为准
+  enableMaxTurnsFromBackend: true,
   maxTurnsPerConversation: 20,
   maxTurnsPerConversationMuidUser: 5,
   maxMessageLength: 4000,

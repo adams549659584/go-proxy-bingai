@@ -74,10 +74,28 @@ devDependencies:
     version: 4.3.6(@types/node@18.16.10)
   vite-plugin-pwa:
     specifier: ^0.14.7
-    version: 0.14.7(vite@4.3.6)(workbox-build@6.5.4)(workbox-window@6.5.4)
+    version: 0.14.7(vite@4.3.6)(workbox-build@6.5.4)(workbox-window@6.6.0)
   vue-tsc:
     specifier: ^1.6.4
     version: 1.6.5(typescript@5.0.4)
+  workbox-cacheable-response:
+    specifier: ^6.6.0
+    version: 6.6.0
+  workbox-expiration:
+    specifier: ^6.6.0
+    version: 6.6.0
+  workbox-precaching:
+    specifier: ^6.6.0
+    version: 6.6.0
+  workbox-routing:
+    specifier: ^6.6.0
+    version: 6.6.0
+  workbox-strategies:
+    specifier: ^6.6.0
+    version: 6.6.0
+  workbox-window:
+    specifier: ^6.6.0
+    version: 6.6.0
 
 packages:
 
@@ -4493,7 +4511,7 @@ packages:
       vue: 3.3.2
     dev: true
 
-  /vite-plugin-pwa@0.14.7(vite@4.3.6)(workbox-build@6.5.4)(workbox-window@6.5.4):
+  /vite-plugin-pwa@0.14.7(vite@4.3.6)(workbox-build@6.5.4)(workbox-window@6.6.0):
     resolution: {integrity: sha512-dNJaf0fYOWncmjxv9HiSa2xrSjipjff7IkYE5oIUJ2x5HKu3cXgA8LRgzOwTc5MhwyFYRSU0xyN0Phbx3NsQYw==}
     peerDependencies:
       vite: ^3.1.0 || ^4.0.0
@@ -4507,7 +4525,7 @@ packages:
       rollup: 3.21.8
       vite: 4.3.6(@types/node@18.16.10)
       workbox-build: 6.5.4
-      workbox-window: 6.5.4
+      workbox-window: 6.6.0
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -4766,8 +4784,18 @@ packages:
       workbox-core: 6.5.4
     dev: true
 
+  /workbox-cacheable-response@6.6.0:
+    resolution: {integrity: sha512-JfhJUSQDwsF1Xv3EV1vWzSsCOZn4mQ38bWEBR3LdvOxSPgB65gAM6cS2CX8rkkKHRgiLrN7Wxoyu+TuH67kHrw==}
+    dependencies:
+      workbox-core: 6.6.0
+    dev: true
+
   /workbox-core@6.5.4:
     resolution: {integrity: sha512-OXYb+m9wZm8GrORlV2vBbE5EC1FKu71GGp0H4rjmxmF4/HLbMCoTFws87M3dFwgpmg0v00K++PImpNQ6J5NQ6Q==}
+    dev: true
+
+  /workbox-core@6.6.0:
+    resolution: {integrity: sha512-GDtFRF7Yg3DD859PMbPAYPeJyg5gJYXuBQAC+wyrWuuXgpfoOrIQIvFRZnQ7+czTIQjIr1DhLEGFzZanAT/3bQ==}
     dev: true
 
   /workbox-expiration@6.5.4:
@@ -4775,6 +4803,13 @@ packages:
     dependencies:
       idb: 7.1.1
       workbox-core: 6.5.4
+    dev: true
+
+  /workbox-expiration@6.6.0:
+    resolution: {integrity: sha512-baplYXcDHbe8vAo7GYvyAmlS4f6998Jff513L4XvlzAOxcl8F620O91guoJ5EOf5qeXG4cGdNZHkkVAPouFCpw==}
+    dependencies:
+      idb: 7.1.1
+      workbox-core: 6.6.0
     dev: true
 
   /workbox-google-analytics@6.5.4:
@@ -4800,6 +4835,14 @@ packages:
       workbox-strategies: 6.5.4
     dev: true
 
+  /workbox-precaching@6.6.0:
+    resolution: {integrity: sha512-eYu/7MqtRZN1IDttl/UQcSZFkHP7dnvr/X3Vn6Iw6OsPMruQHiVjjomDFCNtd8k2RdjLs0xiz9nq+t3YVBcWPw==}
+    dependencies:
+      workbox-core: 6.6.0
+      workbox-routing: 6.6.0
+      workbox-strategies: 6.6.0
+    dev: true
+
   /workbox-range-requests@6.5.4:
     resolution: {integrity: sha512-Je2qR1NXCFC8xVJ/Lux6saH6IrQGhMpDrPXWZWWS8n/RD+WZfKa6dSZwU+/QksfEadJEr/NfY+aP/CXFFK5JFg==}
     dependencies:
@@ -4823,10 +4866,22 @@ packages:
       workbox-core: 6.5.4
     dev: true
 
+  /workbox-routing@6.6.0:
+    resolution: {integrity: sha512-x8gdN7VDBiLC03izAZRfU+WKUXJnbqt6PG9Uh0XuPRzJPpZGLKce/FkOX95dWHRpOHWLEq8RXzjW0O+POSkKvw==}
+    dependencies:
+      workbox-core: 6.6.0
+    dev: true
+
   /workbox-strategies@6.5.4:
     resolution: {integrity: sha512-DEtsxhx0LIYWkJBTQolRxG4EI0setTJkqR4m7r4YpBdxtWJH1Mbg01Cj8ZjNOO8etqfA3IZaOPHUxCs8cBsKLw==}
     dependencies:
       workbox-core: 6.5.4
+    dev: true
+
+  /workbox-strategies@6.6.0:
+    resolution: {integrity: sha512-eC07XGuINAKUWDnZeIPdRdVja4JQtTuc35TZ8SwMb1ztjp7Ddq2CJ4yqLvWzFWGlYI7CG/YGqaETntTxBGdKgQ==}
+    dependencies:
+      workbox-core: 6.6.0
     dev: true
 
   /workbox-streams@6.5.4:
@@ -4845,6 +4900,13 @@ packages:
     dependencies:
       '@types/trusted-types': 2.0.3
       workbox-core: 6.5.4
+    dev: true
+
+  /workbox-window@6.6.0:
+    resolution: {integrity: sha512-L4N9+vka17d16geaJXXRjENLFldvkWy7JyGxElRD0JvBxvFEd8LOhr+uXCcar/NzAmIBRv9EZ+M+Qr4mOoBITw==}
+    dependencies:
+      '@types/trusted-types': 2.0.3
+      workbox-core: 6.6.0
     dev: true
 
   /wrappy@1.0.2:

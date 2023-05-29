@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { NMessageProvider, NConfigProvider, type GlobalThemeOverrides, NDialogProvider } from 'naive-ui';
 import { RouterView } from 'vue-router';
+import ReloadPWA from '@/components/ReloadPWA/ReloadPWA.vue';
 
 const themeOverrides: GlobalThemeOverrides = {
   common: {
@@ -16,6 +17,7 @@ const themeOverrides: GlobalThemeOverrides = {
   <NConfigProvider :theme-overrides="themeOverrides">
     <NDialogProvider>
       <NMessageProvider>
+        <ReloadPWA />
         <RouterView />
       </NMessageProvider>
     </NDialogProvider>

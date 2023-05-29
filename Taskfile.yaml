@@ -44,7 +44,7 @@ tasks:
     cmds:
       - |
         GOOS={{.GOOS}} GOARCH={{.GOARCH}} GOARM={{.GOARM}} GOMIPS={{.GOMIPS}} GOAMD64={{.GOAMD64}} \
-        go build -tags netgo -trimpath -o release/go_proxy_bingai_{{.TASK}} -ldflags \
+        go build -tags netgo -trimpath -o release/go-proxy-bingai_{{.TASK}} -ldflags \
         "-w -s -X 'main.version={{.BUILD_VERSION}}' -X 'main.buildDate={{.BUILD_DATE}}' -X 'main.commitID={{.COMMIT_ID}}'"
   linux_386:
     cmds:
@@ -234,27 +234,27 @@ tasks:
     cmds:
       - task: clean
       - task: build_web
-      - task: linux_386
+      # - task: linux_386
       - task: linux_amd64
-      - task: linux_amd64_v2
-      - task: linux_amd64_v3
-      - task: linux_amd64_v4
-      - task: linux_armv5
-      - task: linux_armv6
-      - task: linux_armv7
+      # - task: linux_amd64_v2
+      # - task: linux_amd64_v3
+      # - task: linux_amd64_v4
+      # - task: linux_armv5
+      # - task: linux_armv6
+      # - task: linux_armv7
       - task: linux_armv8
-      - task: linux_mips_hardfloat
-      - task: linux_mipsle_softfloat
-      - task: linux_mipsle_hardfloat
-      - task: linux_mips64
-      - task: linux_mips64le
-      - task: windows_386.exe
-      - task: windows_amd64.exe
-      - task: windows_amd64_v2.exe
-      - task: windows_amd64_v3.exe
-      - task: windows_amd64_v4.exe
-      - task: darwin_amd64
-      - task: darwin_arm64
+      # - task: linux_mips_hardfloat
+      # - task: linux_mipsle_softfloat
+      # - task: linux_mipsle_hardfloat
+      # - task: linux_mips64
+      # - task: linux_mips64le
+      # - task: windows_386.exe
+      # - task: windows_amd64.exe
+      # - task: windows_amd64_v2.exe
+      # - task: windows_amd64_v3.exe
+      # - task: windows_amd64_v4.exe
+      # - task: darwin_amd64
+      # - task: darwin_arm64
   release:
     cmds:
       - task: default
