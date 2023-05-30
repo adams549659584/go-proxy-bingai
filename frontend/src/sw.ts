@@ -8,7 +8,9 @@ declare let self: ServiceWorkerGlobalScope;
 const CACHE_NAME_PREFIX = 'BingAI';
 
 self.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'SKIP_WAITING') self.skipWaiting();
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
 });
 
 // self.__WB_MANIFEST is default injection point
@@ -21,7 +23,12 @@ cleanupOutdatedCaches();
 registerRoute(new NavigationRoute(createHandlerBoundToURL('./index.html')));
 
 registerRoute(
-  ({ request }) => request.destination === 'style' || request.destination === 'manifest' || request.destination === 'script' || request.destination === 'worker',
+  ({ request, url }) => {
+    if (url.pathname.includes('/sw.js')) {
+      return false;
+    }
+    return request.destination === 'style' || request.destination === 'manifest' || request.destination === 'script' || request.destination === 'worker';
+  },
   new StaleWhileRevalidate({
     cacheName: `${CACHE_NAME_PREFIX}-assets`,
     plugins: [new CacheableResponsePlugin({ statuses: [200] })],
@@ -44,3 +51,18 @@ registerRoute(
     ],
   })
 );
+
+self.addEventListener('activate', async (ev) => {
+  const cacheKeys = await caches.keys();
+  for (const cacheKey of cacheKeys) {
+    // 删除旧缓存
+    if (!cacheKey.startsWith('workbox') && !cacheKey.startsWith(CACHE_NAME_PREFIX)) {
+      await caches.delete(cacheKey);
+      console.log(`del cache : `, cacheKey);
+    }
+  }
+});
+
+self.addEventListener('install', (ev) => {
+  self.skipWaiting();
+});
