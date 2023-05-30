@@ -15,8 +15,8 @@ const __APP_INFO__ = {
 
 const initPwaOptions = (env: Record<string, string>) => {
   const pwaOptions: Partial<VitePWAOptions> = {
-    srcDir: 'src',
-    filename: 'sw.ts',
+    // srcDir: 'src',
+    // filename: 'sw.ts',
     includeAssets: ['img/logo.svg'],
     manifest: {
       name: 'BingAI',
@@ -45,14 +45,48 @@ const initPwaOptions = (env: Record<string, string>) => {
     //   enabled: true,
     //   type: 'module',
     // },
-    strategies: 'injectManifest',
-    workbox: {
-      cleanupOutdatedCaches: true,
-      clientsClaim: true,
-      skipWaiting: true,
-    },
+    // strategies: 'injectManifest',
+    // workbox: {
+    //   cleanupOutdatedCaches: true,
+    //   clientsClaim: true,
+    //   skipWaiting: true,
+    // },
     // 取消注册服务工作进程
     // selfDestroying: true,
+    registerType: 'autoUpdate',
+    workbox: {
+      globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+      runtimeCaching: [
+        {
+          urlPattern: /(.*?)\.(js|css|ts)/, // js /css /ts静态资源缓存
+          handler: 'StaleWhileRevalidate',
+          options: {
+            cacheName: 'BingAI-assets',
+            expiration: {
+              maxEntries: 100,
+              maxAgeSeconds: 60 * 60 * 24 * 7,
+            },
+            cacheableResponse: {
+              statuses: [0, 200],
+            },
+          },
+        },
+        {
+          urlPattern: /(.*?)\.(png|jpe?g|svg|gif|bmp|psd|tiff|tga|eps|ico)/, // 图片缓存
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'BingAI-images',
+            expiration: {
+              maxEntries: 100,
+              maxAgeSeconds: 60 * 60 * 24 * 7,
+            },
+            cacheableResponse: {
+              statuses: [0, 200],
+            },
+          },
+        },
+      ],
+    },
   };
   return pwaOptions;
 };
