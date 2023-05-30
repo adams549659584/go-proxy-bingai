@@ -80,7 +80,7 @@ const home = async (pathname) => {
   let url;
   // if (pathname.startsWith('/github/')) {
   if (pathname.indexOf('/github/') === 0) {
-    url = pathname.replace('/github/', 'https://raw.githubusercontent.com/adams549659584/go-proxy-bingai/master/');
+    url = pathname.replace('/github/', baseUrl);
   } else {
     url = baseUrl + 'cloudflare/index.html';
   }

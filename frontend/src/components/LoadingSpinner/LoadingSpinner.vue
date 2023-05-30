@@ -1,44 +1,35 @@
 <script setup lang="ts">
-import { onMounted } from 'vue';
-import { ref } from 'vue';
-
 defineProps<{
   isShow: boolean;
 }>();
-
-const isRemoveLoading = ref(false);
-
-const loadingRef = ref<HTMLDivElement>();
-
-onMounted(() => {
-  if (loadingRef.value) {
-    loadingRef.value.addEventListener('transitionend', () => {
-      isRemoveLoading.value = true;
-    });
-  }
-});
 </script>
 
 <template>
-  <div v-if="!isRemoveLoading" ref="loadingRef" class="loading-spinner" :class="{ hidden: !isShow }">
-    <div class="bounce1"></div>
-    <div class="bounce2"></div>
-    <div class="bounce3"></div>
-  </div>
+  <Transition name="fade">
+    <div v-if="isShow" class="loading-spinner">
+      <div class="bounce1"></div>
+      <div class="bounce2"></div>
+      <div class="bounce3"></div>
+    </div>
+  </Transition>
 </template>
 
 <style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 2.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
 .loading-spinner {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  opacity: 1;
-  transition: opacity 2s ease-out;
-}
-
-.loading-spinner.hidden {
-  opacity: 0;
 }
 
 .loading-spinner > div {

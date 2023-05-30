@@ -134,10 +134,10 @@ const saveUserToken = () => {
 
 <template>
   <NDropdown v-if="isMobile()" class="select-none" :show="isShowMore" :options="navConfigs" :render-label="renderDropdownLabel" @select="handleSelect">
-    <NImage class="fixed top-6 right-4 cursor-pointer" :src="settingSvgUrl" alt="设置菜单" :preview-disabled="true" @click="isShowMore = !isShowMore"></NImage>
+    <NImage class="fixed top-6 right-4 cursor-pointer z-50" :src="settingSvgUrl" alt="设置菜单" :preview-disabled="true" @click="isShowMore = !isShowMore"></NImage>
   </NDropdown>
   <NDropdown v-else class="select-none" trigger="hover" :options="navConfigs" :render-label="renderDropdownLabel" @select="handleSelect">
-    <NImage class="fixed top-6 right-6 cursor-pointer" :src="settingSvgUrl" alt="设置菜单" :preview-disabled="true"></NImage>
+    <NImage class="fixed top-6 right-6 cursor-pointer z-50" :src="settingSvgUrl" alt="设置菜单" :preview-disabled="true"></NImage>
   </NDropdown>
   <NModal v-model:show="isShowSetTokenModal" preset="dialog" :show-icon="false">
     <template #header>
