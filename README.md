@@ -22,7 +22,7 @@
   - [网页展示](#网页展示)
   - [侧边栏](#侧边栏)
   - [演示站点](#演示站点)
-  - [获取 Cookie](#获取Cookie)
+  - [设置用户](#设置用户)
   - [环境变量](#环境变量)
   - [部署](#部署)
     - [Docker](#Docker)
@@ -90,13 +90,13 @@
 
 - https://go-proxy-bingai.onrender.com
 
-## 获取 Cookie
+## 设置用户
 
 - 访问 https://www.bing.com/ 或 https://cn.bing.com/ ，登录
 
 - F12 或 Ctrl + Shift + I 打开控制台
 
-- 拿到 Cookie 后，在网站设置用户 Cookie 弹窗填入即可。
+- 拿到 Cookie 中 _U 的值 后，在网站设置 => 设置用户 中填入即可。
 
 ![获取Cookie](./docs/img/bing-cookie.png)
 

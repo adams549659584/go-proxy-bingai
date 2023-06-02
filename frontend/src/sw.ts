@@ -24,9 +24,6 @@ registerRoute(new NavigationRoute(createHandlerBoundToURL('./index.html')));
 
 registerRoute(
   ({ request, url }) => {
-    if (url.pathname.includes('/sw.js')) {
-      return false;
-    }
     return request.destination === 'style' || request.destination === 'manifest' || request.destination === 'script' || request.destination === 'worker';
   },
   new StaleWhileRevalidate({
@@ -51,17 +48,6 @@ registerRoute(
     ],
   })
 );
-
-self.addEventListener('activate', async (ev) => {
-  const cacheKeys = await caches.keys();
-  for (const cacheKey of cacheKeys) {
-    // 删除旧缓存
-    if (!cacheKey.startsWith('workbox') && !cacheKey.startsWith(CACHE_NAME_PREFIX)) {
-      await caches.delete(cacheKey);
-      console.log(`del cache : `, cacheKey);
-    }
-  }
-});
 
 self.addEventListener('install', (ev) => {
   self.skipWaiting();
