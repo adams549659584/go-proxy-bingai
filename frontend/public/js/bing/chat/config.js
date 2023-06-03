@@ -325,8 +325,6 @@ _w['_sydConvTranslation'] = {
   speechNoPermissionError: '你需要启用麦克风，我才能听到你的声音。',
   speechAudioPlaybackError: '出错了。',
   stop: '停止',
-  welcomeContainerPrivacyStatement: '隐私声明',
-  welcomeContainerUseTerms: '使用条款',
   welcomeMessageItemContent1: '我可以为我挑剔的只吃橙色食物的孩子做什么饭?',
   welcomeMessageItemContent2: '销量最高的 3 种宠物吸尘器有哪些优点和缺点?',
   welcomeMessageItemContent3: '以海盗的口吻写一首关于外太空鳄鱼的俳句',
