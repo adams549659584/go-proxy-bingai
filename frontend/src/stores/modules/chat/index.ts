@@ -32,8 +32,8 @@ export const useChatStore = defineStore(
         label: 'Cloudflare',
       },
       {
-        baseUrl: location.origin,
-        label: '本站',
+        baseUrl: 'https://solitary-cherry-c533.feng741262690.workers.dev',
+        label: '自建站点2',
       },
       {
         baseUrl: '',
