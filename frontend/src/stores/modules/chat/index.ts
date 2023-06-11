@@ -36,6 +36,10 @@ export const useChatStore = defineStore(
         label: '本站',
       },
       {
+        baseUrl: 'https://bing.blogweb3.space',
+        label: 'Works',
+      },
+      {
         baseUrl: '',
         label: '自定义',
         isCus: true,
