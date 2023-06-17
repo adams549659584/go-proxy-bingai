@@ -207,21 +207,21 @@ RAILWAY_DOCKERFILE_PATH=docker/Dockerfile
 
 ### Replit
 
-1.[点击此处](https://replit.com/login) 进行登录操作，可使用 Github 账户
+- [点击此处登录](https://replit.com/login)，可使用 Github 账户
 
-2.然后在如下页面中，依次点击 *+ Create Repl* - *Import from GitHub*
+- 然后在如下页面中，依次点击 *+ Create Repl* > *Import from GitHub*
 
 ![依次点击 *+ Create Repl* - *Import from GitHub*](./docs/img/replit-1.png)
 
-3.然后在如下页面中，*GitHub URL* 一项输入`adams549659584/go-proxy-bingai`，*Language* 一项选择 `Go`，然后点击 *Import from GitHub* 按钮
+- 然后在如下页面中，*GitHub URL* 一项输入`adams549659584/go-proxy-bingai`，*Language* 一项选择`Go`，然后点击 *Import from GitHub* 按钮
 
 ![*GitHub URL* 一项输入`adams549659584/go-proxy-bingai`，*Language* 一项选择 `Go`，然后点击 *Import from GitHub* 按钮](./docs/img/replit-2.png)
 
-4.稍等片刻后，点击 *Run* 按钮ann 
+- 稍等片刻后，点击 *Run* 按钮
 
-![点击 *Run* 按钮 ](./docs/img/replit-3.png)
+![点击 *Run* 按钮](./docs/img/replit-3.png)
 
-5.等待部署完后，会自动弹出网页预览窗口，**预览窗口中的 URL 可直接复制到浏览器使用**，旁边的 “笔” 按钮可自定义域名。
+- 等待部署完后，会自动弹出网页预览窗口，**将预览窗口的 URL 复制到浏览器使用即可**。旁边的 “笔” 按钮可自定义域名。
 
 ![预览窗口中的 URL 可直接复制到浏览器使用，旁边的 “笔” 按钮可自定义域名](./docs/img/replit-4.png)
 
