@@ -207,6 +207,8 @@ RAILWAY_DOCKERFILE_PATH=docker/Dockerfile
 
 ### Replit
 
+> ⭐ 似乎没有一键部署，不过按照下面的方法也很简单！
+
 - [点击此处登录](https://replit.com/login)，可使用 Github 账户
 
 - 然后在如下页面中，依次点击 *+ Create Repl* > *Import from GitHub*
