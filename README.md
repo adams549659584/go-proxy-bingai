@@ -219,11 +219,11 @@ RAILWAY_DOCKERFILE_PATH=docker/Dockerfile
 
 4.稍等片刻后，点击 *Run* 按钮ann 
 
-![点击 *Run* 按钮 ](./docs/img/replit-2.png)
+![点击 *Run* 按钮 ](./docs/img/replit-3.png)
 
 5.等待部署完后，会自动弹出网页预览窗口，**预览窗口中的 URL 可直接复制到浏览器使用**，旁边的 “笔” 按钮可自定义域名。
 
-![预览窗口中的 URL 可直接复制到浏览器使用，旁边的 “笔” 按钮可自定义域名](./docs/img/replit-3.png)
+![预览窗口中的 URL 可直接复制到浏览器使用，旁边的 “笔” 按钮可自定义域名](./docs/img/replit-4.png)
 
 ## 部署聊天服务器
 
