@@ -30,6 +30,7 @@
     - [Railway](#Railway)
     - [Vercel](#Vercel)
     - [Render](#Render)
+    - [Replit](#Replit)
   - [部署聊天服务器](#部署聊天服务器)
   - [TODO](#TODO)
 
