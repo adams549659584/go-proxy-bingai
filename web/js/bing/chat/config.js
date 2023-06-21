@@ -298,7 +298,7 @@ _w['_sydConvConfig'] = {
 };
 _w['_sydThreads'] = { threads: [] };
 _w['_sydConvTranslation'] = {
-  actionBarPlaceholder: '有问题尽管问我...（Shift + Enter = 换行，"/" 触发提示词）',
+  actionBarPlaceholder: '有问题尽管问我...（Shift + Enter = 换行，"/" 触发助手）',
   actionBarAriaLabel: '询问必应',
   actionBarComposeButton: '新主题',
   actionBarNewChatButtonDesktop: '开始新聊天',
@@ -335,7 +335,7 @@ _w['_sydConvTranslation'] = {
   welcomeMessageItemTitle3: '🎨 支持源作者并帮他找到新工作',
   welcomeMessageItemLabel4: '更多创意中的新增功能：',
   warmWelcomeTitle: '欢迎使用摘摘的假的必应',
-  welcomeSubtitleText: 'GPT公益站点为：beta.zhai-zhai.com',
+  welcomeSubtitleText: 'GPT公益站点：beta.zhai-zhai.com',
   workToggleDescription: '以及你的结果包括哪些内容',
   feedbackFirstMessage: '非常抱歉没有帮助到你。是否可以详细说明你不喜欢的方面?',
   feedbackPromptMessage: '感谢提醒。请提供反馈，以便必应团队可以查看。',
