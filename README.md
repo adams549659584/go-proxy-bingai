@@ -198,11 +198,7 @@ RAILWAY_DOCKERFILE_PATH=docker/Dockerfile
 
 ### Render
 
-一键部署，点这里 => [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/adams549659584/go-proxy-bingai)
-
-![Render 一键部署](./docs/img/render-1.png)
-
-![Render 域名](./docs/img/render-2.png)
+Render 正在封锁部署此项目的账号且拒绝解释，不建议使用 Render 部署项目。
 
 ## 部署聊天服务器
 
