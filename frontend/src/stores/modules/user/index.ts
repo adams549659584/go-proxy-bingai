@@ -66,9 +66,9 @@ export const useUserStore = defineStore(
         CIB.config.features.enableGetChats = false;
         CIB.vm.sidePanel.isVisibleMobile = false;
         CIB.vm.sidePanel.isVisibleDesktop = false;
-        // 创建会话id
-        tryCreateConversationId();
       }
+      // 创建会话id
+      tryCreateConversationId();
     };
 
     const saveUserToken = (token: string) => {
