@@ -90,6 +90,10 @@
 
 - https://go-proxy-bingai.onrender.com
 
+### Sealos 搭建
+
+- https://ovuikranruxz.cloud.sealos.io
+
 ## 设置用户
 
 - 访问 https://www.bing.com/ 或 https://cn.bing.com/ ，登录
@@ -203,6 +207,27 @@ RAILWAY_DOCKERFILE_PATH=docker/Dockerfile
 ![Render 一键部署](./docs/img/render-1.png)
 
 ![Render 域名](./docs/img/render-2.png)
+
+### Sealos
+
+访问 https://cloud.sealos.io/ 登陆进来，点 AppLaunchpad（应用管理），然后新建一个应用。
+
+填写以下配置：
+
+- 应用名称（自定义）：newbing-web
+- 镜像名（默认最新版本）：adams549659584/go-proxy-bingai
+- CPU（推荐）：0.5 Core
+- 内存（推荐）：512 MB
+- 容器暴露端口：8080
+- 外网访问：开启
+
+![](https://hackmd.io/_uploads/rkNl0pI_h.png)
+
+点击右上角部署。
+
+当应用的 STATUS 由 Pending 变为 Running，则表明该应用已成功启动,访问外网地址即可。
+
+![](https://cdn.jsdelivr.net/gh/zuoFeng59556/image/test20230626163703.png)
 
 ## 部署聊天服务器
 
