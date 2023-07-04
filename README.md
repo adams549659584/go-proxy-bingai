@@ -30,6 +30,7 @@
     - [Railway](#Railway)
     - [Vercel](#Vercel)
     - [Render](#Render)
+    - [Replit](#Replit)
   - [部署聊天服务器](#部署聊天服务器)
   - [TODO](#TODO)
 
@@ -203,6 +204,22 @@ RAILWAY_DOCKERFILE_PATH=docker/Dockerfile
 ![Render 一键部署](./docs/img/render-1.png)
 
 ![Render 域名](./docs/img/render-2.png)
+
+### Replit
+
+- [点击此处登录](https://replit.com/login)，可使用 Github 账户
+
+- 然后 [点击此处前往页面](https://replit.com/@saika-rappit/go-proxy-bingai?v=1#README.md) ，依次点击 *Fork* - *Fork Repl*
+
+![依次点击 *Fork* - *Fork Repl*](./docs/img/replit-1.png)
+
+- 稍等片刻后，点击 *Run* 按钮
+
+![点击 *Run* 按钮](./docs/img/replit-2.png)
+
+- 等待部署完后，会自动弹出网页预览窗口，**将预览窗口的 URL 复制到浏览器使用即可**。旁边的 “笔” 按钮可自定义域名。
+
+![预览窗口中的 URL 可直接复制到浏览器使用，旁边的 “笔” 按钮可自定义域名](./docs/img/replit-3.png)
 
 ## 部署聊天服务器
 
