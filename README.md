@@ -207,25 +207,19 @@ RAILWAY_DOCKERFILE_PATH=docker/Dockerfile
 
 ### Replit
 
-> ⭐ 似乎没有一键部署，不过按照下面的方法也很简单！
-
 - [点击此处登录](https://replit.com/login)，可使用 Github 账户
 
-- 然后在如下页面中，依次点击 *+ Create Repl* > *Import from GitHub*
+- 然后 [点击此处前往页面](https://replit.com/@saika-rappit/go-proxy-bingai?v=1#README.md) ，依次点击 *Fork* - *Fork Repl*
 
-![依次点击 *+ Create Repl* - *Import from GitHub*](./docs/img/replit-1.png)
-
-- 然后在如下页面中，*GitHub URL* 一项输入`adams549659584/go-proxy-bingai`，*Language* 一项选择`Go`，然后点击 *Import from GitHub* 按钮
-
-![*GitHub URL* 一项输入`adams549659584/go-proxy-bingai`，*Language* 一项选择 `Go`，然后点击 *Import from GitHub* 按钮](./docs/img/replit-2.png)
+![依次点击 *Fork* - *Fork Repl*](./docs/img/replit-1.png)
 
 - 稍等片刻后，点击 *Run* 按钮
 
-![点击 *Run* 按钮](./docs/img/replit-3.png)
+![点击 *Run* 按钮](./docs/img/replit-2.png)
 
 - 等待部署完后，会自动弹出网页预览窗口，**将预览窗口的 URL 复制到浏览器使用即可**。旁边的 “笔” 按钮可自定义域名。
 
-![预览窗口中的 URL 可直接复制到浏览器使用，旁边的 “笔” 按钮可自定义域名](./docs/img/replit-4.png)
+![预览窗口中的 URL 可直接复制到浏览器使用，旁边的 “笔” 按钮可自定义域名](./docs/img/replit-3.png)
 
 ## 部署聊天服务器
 
