@@ -120,7 +120,7 @@ _w['_sydConvConfig'] = {
   disableCibNotificationStyleUpdate: false,
   enableSecureConnect: true,
   enableToneCook: true,
-  toneDefault: 'Balanced',
+  toneDefault: 'Creative',
   balTone: 'harmonyv3',
   crtTone: 'h3imaginative',
   prcTone: 'h3precise',
