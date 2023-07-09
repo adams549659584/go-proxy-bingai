@@ -1,0 +1,156 @@
+name: Build Go-Proxy-BingAI
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+    steps:
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+  amd64build:
+    name: build amd64 version
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Go
+        uses: actions/setup-go@v4
+
+      - name: build linux amd64 version
+        run: |
+          go build -ldflags="-s -w" -tags netgo -trimpath -o go-proxy-bingai main.go
+
+      - name: package linux amd64
+        run: tar -zcvf go-proxy-bingai-linux-amd64.tar.gz go-proxy-bingai
+
+      - name: upload linux amd64
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ needs.release.outputs.upload_url }}
+          asset_path: go-proxy-bingai-linux-amd64.tar.gz
+          asset_name: go-proxy-bingai-linux-amd64.tar.gz
+          asset_content_type: application/gzip
+
+      - name: build windows amd64 version
+        run: |
+          GOOS=windows GOARCH=amd64 go build -ldflags="-s -w" -tags netgo -trimpath -o go-proxy-bingai.exe main.go
+
+      - name: package windows amd64
+        run: tar -zcvf go-proxy-bingai-windows-amd64.tar.gz go-proxy-bingai.exe          
+
+      - name: upload windows amd64
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ needs.release.outputs.upload_url }}
+          asset_path: go-proxy-bingai-windows-amd64.tar.gz
+          asset_name: go-proxy-bingai-windows-amd64.tar.gz
+          asset_content_type: application/gzip
+
+  arm64build:
+    name: build arm64 version
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Go
+        uses: actions/setup-go@v4
+      - name: build linux arm64 version
+        run: |
+          go build -ldflags="-s -w" -tags netgo -trimpath -o go-proxy-bingai main.go
+
+      - name: package linux arm64
+        run: tar -zcvf go-proxy-bingai-linux-arm64.tar.gz go-proxy-bingai
+
+      - name: upload linux arm64
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ needs.release.outputs.upload_url }}
+          asset_path: go-proxy-bingai-linux-arm64.tar.gz
+          asset_name: go-proxy-bingai-linux-arm64.tar.gz
+          asset_content_type: application/gzip
+
+      - name: build windows amd64 version
+        run: |
+          GOOS=windows GOARCH=arm64 go build -ldflags="-s -w" -tags netgo -trimpath -o go-proxy-bingai.exe main.go
+
+      - name: package windows arm64
+        run: tar -zcvf go-proxy-bingai-windows-arm64.tar.gz go-proxy-bingai.exe          
+
+      - name: upload windows arm64
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ needs.release.outputs.upload_url }}
+          asset_path: go-proxy-bingai-windows-arm64.tar.gz
+          asset_name: go-proxy-bingai-windows-arm64.tar.gz
+          asset_content_type: application/gzip
+
+  docker-build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      packages: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup timezone
+        uses: zcong1993/setup-timezone@master
+        with:
+          timezone: Asia/Shanghai
+
+      - name: Login to GHCR
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GH_TOKEN }}        
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          platforms: linux/amd64,linux/arm64
+          context: .
+          file: ./docker/Dockerfile  
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+            ghcr.io/${{ github.repository }}:latest
+            docker.io/${{ github.repository }}:${{ github.ref_name }}
+            docker.io/${{ github.repository }}:latest
+          cache-from: type=registry,ref=${{ github.repository }}:cache
+          cache-to: type=registry,ref=${{ github.repository }}:cache,mode=max   
