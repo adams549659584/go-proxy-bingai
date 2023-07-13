@@ -36,7 +36,7 @@ export const useChatStore = defineStore(
         label: '本站',
       },
       {
-        baseUrl: '',
+        baseUrl: 'https://bing-chat-ai-4.readbook.gq',
         label: '自定义',
         isCus: true,
       },
