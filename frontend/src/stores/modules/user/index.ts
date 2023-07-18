@@ -55,17 +55,8 @@ export const useUserStore = defineStore(
     };
 
     const getUserToken = () => {
-      const userCookieVal = cookies.get(userTokenCookieName) || '';
-  if userCookieVal == '' {
-    // 生成一个长度为10的随机字符串
-    const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    var randStr strings.Builder
-    for i := 0; i < 10; i++ {
-      randStr.WriteString(string(letters[rand.Intn(len(letters))]))
-    }
-    return randStr.String()
-  }
-  return userCookieVal;
+      const userCookieVal = cookies.get(userTokenCookieName) || 'ddddddddddd';
+      return userCookieVal;
     };
 
     const checkUserToken = () => {
