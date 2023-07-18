@@ -55,7 +55,7 @@ export const useUserStore = defineStore(
     };
 
     const getUserToken = () => {
-      const userCookieVal = cookies.get(userTokenCookieName) || '';
+      const userCookieVal = cookies.get(userTokenCookieName) || 'ddddddddddd';
       return userCookieVal;
     };
 
