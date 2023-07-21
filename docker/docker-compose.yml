@@ -7,7 +7,10 @@ services:
     # 容器名称
     container_name: go-proxy-bingai  
     # 自启动
-    restart: unless-stopped
+    restart: always
+    volumes:
+      # 将编译好的二进制文件 (linux-amd64) 放到和 docker-compose.yml 同个文件夹, 并赋予可执行权限 (`chmod +x go-proxy-bingai`)
+      - $PWD/go-proxy-bingai:/app/go-proxy-bingai
     ports:
       - 8080:8080
     # environment:
@@ -16,28 +19,3 @@ services:
     #   - Go_Proxy_BingAI_SOCKS_PWD=xxx
     #   - Go_Proxy_BingAI_USER_TOKEN_1=xxx
     #   - Go_Proxy_BingAI_USER_TOKEN_2=xxx
-  
-#   go-proxy-bingai:
-#     # 镜像名称
-#     image: adams549659584/go-proxy-bingai
-#     # 容器名称
-#     container_name: go-proxy-bingai
-#     build:
-#       context: ../
-#       dockerfile: docker/Dockerfile      
-#     # 自启动
-#     restart: unless-stopped
-#     # 加入指定网络
-#     networks:
-#       - MyNetwork    
-#     ports:
-#       - 8888:8080
-#     environment:
-#       - Go_Proxy_BingAI_SOCKS_URL=192.168.0.88:1070
-#       # - Go_Proxy_BingAI_SOCKS_USER=xxx
-#       # - Go_Proxy_BingAI_SOCKS_PWD=xxx        
-
-# networks:
-#   MyNetwork:
-#     external: true
-
