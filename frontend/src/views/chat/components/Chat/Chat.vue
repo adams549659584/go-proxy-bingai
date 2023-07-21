@@ -122,7 +122,7 @@ const hackStyle = () => {
   const conversationEle = serpEle?.shadowRoot?.querySelector('cib-conversation') as HTMLElement;
   // todo 反馈暂时无法使用，先移除
   const welcomeEle = conversationEle?.shadowRoot?.querySelector('cib-welcome-container');
-  welcomeEle?.shadowRoot?.querySelector('.learn-tog-item')?.remove();
+  welcomeEle?.shadowRoot?.querySelector('.footer')?.remove();
   serpEle?.shadowRoot?.querySelector('cib-serp-feedback')?.remove();
   if (isMobile()) {
     welcomeEle?.shadowRoot?.querySelector('.container-item')?.remove();
