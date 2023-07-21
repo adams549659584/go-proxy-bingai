@@ -155,7 +155,9 @@ declare const CIB: {
       /**
        * 输入框文本 赋值即输入问题
        */
-      inputText: string;
+      textInput: {
+        value: string;
+      };
       /**
        * 自动建议的前置文本
        */

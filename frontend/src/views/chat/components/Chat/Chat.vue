@@ -225,7 +225,7 @@ const handleInputTextKey = (ev: KeyboardEvent) => {
     case 'Enter':
       {
         // ev.preventDefault();
-        if (!CIB.vm.actionBar.inputText || !CIB.vm.actionBar.inputText.startsWith('/')) {
+        if (!CIB.vm.actionBar.textInput.value || !CIB.vm.actionBar.textInput.value.startsWith('/')) {
           return;
         }
         selectPrompt(searchPromptList.value[selectedPromptIndex.value]);
@@ -240,7 +240,7 @@ const selectPrompt = (item: IPrompt) => {
     return;
   }
   keyword.value = '';
-  CIB.vm.actionBar.inputText = item.prompt;
+  CIB.vm.actionBar.textInput.value = item.prompt;
   isShowChatPrompt.value = false;
 };
 

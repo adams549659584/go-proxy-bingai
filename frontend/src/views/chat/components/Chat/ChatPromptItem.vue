@@ -17,7 +17,7 @@ const selectPrompt = (item: IPrompt) => {
     return;
   }
   keyword.value = '';
-  CIB.vm.actionBar.inputText = item.prompt;
+  CIB.vm.actionBar.textInput.value = item.prompt;
   CIB.vm.actionBar.input.focus();
   isShowChatPrompt.value = false;
 };
