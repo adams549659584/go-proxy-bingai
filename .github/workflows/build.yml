@@ -9,7 +9,7 @@ jobs:
     name: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Set up Go
         uses: actions/setup-go@v4
@@ -26,6 +26,14 @@ jobs:
           npm install
           npm run build
           cd ..
+
+      - name: Commit latest webFile
+        run: |
+          git config --global user.email "zklcdc@qq.com"
+          git config --global user.name "Harry-zklcdc"
+          git add web/*
+          git commit -m "[Upgrade] 🚀 Upload latest webFile"
+          git push origin HEAD:master
 
       - name: Build binary
         run: |
