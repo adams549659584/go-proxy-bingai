@@ -91,6 +91,14 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 		}
 		req.Header.Set("X-Forwarded-For", randIP)
 
+		if USER_KievRPSSecAuth != "" {
+			// 添加 KievRPSSecAuth Cookie
+			req.AddCookie(&http.Cookie{
+				Name:  "KievRPSSecAuth",
+				Value: USER_KievRPSSecAuth,
+			})
+		}
+
 		// 未登录用户
 		ckUserToken, _ := req.Cookie(USER_TOKEN_COOKIE_NAME)
 		if ckUserToken == nil || ckUserToken.Value == "" {

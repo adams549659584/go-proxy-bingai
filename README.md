@@ -110,6 +110,8 @@ Go_Proxy_BingAI_SOCKS_URL=192.168.0.88:1070
 # Socks 账号、密码 可选
 Go_Proxy_BingAI_SOCKS_USER=xxx
 Go_Proxy_BingAI_SOCKS_PWD=xxx
+# KievRPSSecAuth Cookie的值
+USER_KievRPSSecAuth=xxx
 # 默认用户 Cookie 设置，可选，不推荐使用，固定前缀 Go_Proxy_BingAI_USER_TOKEN 可设置多个，未登录用户将随机使用，多人共用将很快触发图形验证，并很快达到该账号的24小时限制
 Go_Proxy_BingAI_USER_TOKEN_1=xxx
 Go_Proxy_BingAI_USER_TOKEN_2=xxx

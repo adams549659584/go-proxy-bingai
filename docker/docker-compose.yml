@@ -13,7 +13,8 @@ services:
       - $PWD/go-proxy-bingai:/app/go-proxy-bingai
     ports:
       - 8080:8080
-    # environment:
+    environment:
+      - USER_KievRPSSecAuth=xxx
     #   - Go_Proxy_BingAI_SOCKS_URL=192.168.0.88:1070
     #   - Go_Proxy_BingAI_SOCKS_USER=xxx
     #   - Go_Proxy_BingAI_SOCKS_PWD=xxx
