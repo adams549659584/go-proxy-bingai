@@ -62,16 +62,16 @@ export const useUserStore = defineStore(
     };
 
     const checkUserToken = () => {
+      if (historyEnable.value) {
+        CIB.vm.sidePanel.isVisibleDesktop = true;
+      } else {
+        CIB.vm.sidePanel.isVisibleDesktop = false;
+      }
       const token = getUserToken();
       if (!token) {
         // 未登录不显示历史记录
         CIB.config.features.enableGetChats = false;
         CIB.vm.sidePanel.isVisibleMobile = false;
-        CIB.vm.sidePanel.isVisibleDesktop = false;
-      }
-      if (historyEnable.value) {
-        CIB.vm.sidePanel.isVisibleDesktop = true;
-      } else {
         CIB.vm.sidePanel.isVisibleDesktop = false;
       }
       // 创建会话id
