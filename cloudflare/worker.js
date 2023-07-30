@@ -78,7 +78,7 @@ const getRandomIP = () => {
  * @returns
  */
 const home = async (pathname) => {
-  const baseUrl = 'https://raw.githubusercontent.com/adams549659584/go-proxy-bingai/master/';
+  const baseUrl = 'https://raw.githubusercontent.com/Harry-zklcdc/go-proxy-bingai/master/';
   let url;
   // if (pathname.startsWith('/github/')) {
   if (pathname.indexOf('/github/') === 0) {
@@ -103,7 +103,7 @@ export default {
    * @param {*} ctx
    * @returns
    */
-  async fetch(request, env, ctx) {
+  async fetch (request, env, ctx) {
     const currentUrl = new URL(request.url);
     // if (currentUrl.pathname === '/' || currentUrl.pathname.startsWith('/github/')) {
     if (currentUrl.pathname === '/' || currentUrl.pathname.indexOf('/github/') === 0) {
@@ -124,7 +124,10 @@ export default {
     const randIP = getRandomIP();
     // console.log('randIP : ', randIP);
     newHeaders.set('X-Forwarded-For', randIP);
-    newHeaders.set('Cookie', 'KievRPSSecAuth='+KievRPSSecAuth+';');
+    const cookie = request.headers.get('Cookie') || '';
+    if (!cookie.includes('KievRPSSecAuth=')) {
+      newHeaders.set('Cookie', 'KievRPSSecAuth=' + KievRPSSecAuth + ';');
+    }
     const oldUA = request.headers.get('user-agent');
     const isMobile = oldUA.includes('Mobile') || oldUA.includes('Android');
     if (isMobile) {
