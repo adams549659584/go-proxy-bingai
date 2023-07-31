@@ -120,6 +120,7 @@ export const useUserStore = defineStore(
       cookies.set(userTokenCookieName, '', -1);
       cookies.set(randIpCookieName, '', -1);
       cookies.set(authKeyCookieName, '', -1);
+      cookies.set(userKievRPSSecAuthCookieName, '', -1);
       await clearCache();
     };
 
