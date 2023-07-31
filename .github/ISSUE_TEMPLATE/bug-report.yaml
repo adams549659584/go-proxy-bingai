@@ -32,8 +32,8 @@ body:
       description: 请填写相应的版本号。
       value: |
         - OS: <!-- e.g. Windows 10 -->
-        - Platform: <!-- e.g. Discord -->
-        - GoProxiBing version: <!-- e.g. 1.9.0 -->
+        - Browser & Version: <!-- e.g. Chrome 115 -->
+        - GoProxiBing Version: <!-- e.g. 1.9.0 -->
     validations:
       required: true
   - type: textarea
