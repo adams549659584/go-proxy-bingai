@@ -64,6 +64,8 @@ export const useUserStore = defineStore(
     const checkUserToken = () => {
       if (historyEnable.value) {
         CIB.vm.sidePanel.isVisibleDesktop = true;
+        // 设置历史记录侧边栏的高度为 70vh
+        document.querySelector('cib-serp')?.shadowRoot?.querySelector('cib-side-panel')?.shadowRoot?.querySelector('div.scroller')?.setAttribute('style', 'height: 70vh');
       } else {
         CIB.vm.sidePanel.isVisibleDesktop = false;
       }
