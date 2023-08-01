@@ -15,6 +15,7 @@ export const useUserStore = defineStore(
     const randIpCookieName = 'BingAI_Rand_IP';
     const authKeyCookieName = 'BingAI_Auth_Key';
     const historyEnable = ref(true);
+    const themeMode = ref('auto');
 
     const sysConfig = ref<SysConfig>();
 
@@ -137,13 +138,14 @@ export const useUserStore = defineStore(
       getUserKievRPSSecAuth,
       saveUserKievRPSSecAuth,
       historyEnable,
+      themeMode,
     };
   },
   {
     persist: {
       key: 'user-store',
       storage: localStorage,
-      paths: ['historyEnable'],
+      paths: ['historyEnable', 'themeMode'],
     },
   }
 );

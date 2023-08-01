@@ -273,4 +273,6 @@ declare const CIB: {
   onWorkToggleChanged: PublicSubscribeEvent;
 
   responseTone: ToneType;
+
+  changeColorScheme: (O: 0 | 1) => {}
 };
