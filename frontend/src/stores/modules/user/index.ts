@@ -65,10 +65,12 @@ export const useUserStore = defineStore(
     const checkUserToken = () => {
       if (historyEnable.value) {
         CIB.vm.sidePanel.isVisibleDesktop = true;
-        // 设置历史记录侧边栏的高度为 70vh
-        document.querySelector('cib-serp')?.shadowRoot?.querySelector('cib-side-panel')?.shadowRoot?.querySelector('div.scroller')?.setAttribute('style', 'height: 70vh');
+        document.querySelector('cib-serp')?.setAttribute('alignment', 'left');
+        // 设置历史记录侧边栏的高度为 90vh
+        document.querySelector('cib-serp')?.shadowRoot?.querySelector('cib-side-panel')?.shadowRoot?.querySelector('div.scroller')?.setAttribute('style', 'height: 90vh');
       } else {
         CIB.vm.sidePanel.isVisibleDesktop = false;
+        document.querySelector('cib-serp')?.setAttribute('alignment', 'center');
       }
       const token = getUserToken();
       if (!token) {
@@ -76,6 +78,7 @@ export const useUserStore = defineStore(
         CIB.config.features.enableGetChats = false;
         CIB.vm.sidePanel.isVisibleMobile = false;
         CIB.vm.sidePanel.isVisibleDesktop = false;
+        document.querySelector('cib-serp')?.setAttribute('alignment', 'center');
       }
       // 创建会话id
       tryCreateConversationId();

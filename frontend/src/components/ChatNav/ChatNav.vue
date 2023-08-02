@@ -184,10 +184,12 @@ const saveSetting = () => {
   if (history.value) {
     if (userStore.getUserToken()) {
       CIB.vm.sidePanel.isVisibleDesktop = true;
+      document.querySelector('cib-serp')?.setAttribute('alignment', 'left');
     }
   } else {
     CIB.vm.sidePanel.isVisibleDesktop = false;
     CIB.vm.sidePanel.isVisibleMobile = false;
+    document.querySelector('cib-serp')?.setAttribute('alignment', 'center');
   }
   themeMode.value = themeModeSetting.value;
   if (themeModeSetting.value == 'light') {

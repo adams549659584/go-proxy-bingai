@@ -63,7 +63,6 @@ onMounted(async () => {
   } else if (themeMode.value == 'dark') {
     CIB.changeColorScheme(1);
   } else if (themeMode.value == 'auto') {
-    // CIB.changeColorScheme(2);
     if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
       CIB.changeColorScheme(1);
     } else {
@@ -133,12 +132,10 @@ const hackStyle = () => {
     CIB.config.sydney.hostnamesToBypassSecureConnection = CIB.config.sydney.hostnamesToBypassSecureConnection.filter((x) => x !== location.hostname);
   }
   const serpEle = document.querySelector('cib-serp');
-  // 居中
-  serpEle?.setAttribute('alignment', 'center');
   const conversationEle = serpEle?.shadowRoot?.querySelector('cib-conversation') as HTMLElement;
   // todo 反馈暂时无法使用，先移除
   const welcomeEle = conversationEle?.shadowRoot?.querySelector('cib-welcome-container');
-  welcomeEle?.shadowRoot?.querySelector('.footer')?.remove();
+  welcomeEle?.shadowRoot?.querySelector('.preview-container')?.remove();
   serpEle?.shadowRoot?.querySelector('cib-serp-feedback')?.remove();
   if (isMobile()) {
     welcomeEle?.shadowRoot?.querySelector('.container-item')?.remove();
