@@ -1,0 +1,42 @@
+name: Help Wanted
+description: 需要帮助
+title: "[Help] 🤔 "
+labels:
+  - help wanted
+body:
+  - type: textarea
+    attributes:
+      label: Describe the help wanted
+      description: 请简明地表述 需要 什么 帮助。
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Steps to behave
+      description: 请描述你的操作顺序等。
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Expected behavior
+      description: 请描述期望的行为。
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Screenshots
+      description: 请尽量详细地提供相关截图，可以是聊天记录、控制台日志和服务端日志、数据包内容等。
+  - type: textarea
+    attributes:
+      label: Versions
+      description: 请填写相应的版本号。
+      value: |
+        - OS: <!-- e.g. Windows 10 -->
+        - Browser & Version: <!-- e.g. Chrome 115 -->
+        - GoProxiBing Version: <!-- e.g. 1.9.0 -->
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Additional context
+      description: 请描述其他想要补充的信息。
