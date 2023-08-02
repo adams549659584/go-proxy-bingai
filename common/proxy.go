@@ -49,6 +49,7 @@ var (
 	}
 	USER_TOKEN_COOKIE_NAME          = "_U"
 	USER_KievRPSSecAuth_COOKIE_NAME = "KievRPSSecAuth"
+	USER_RwBf_COOKIE_NAME           = "_RwBf"
 	RAND_COOKIE_INDEX_NAME          = "BingAI_Rand_CK"
 	RAND_IP_COOKIE_NAME             = "BingAI_Rand_IP"
 	PROXY_WEB_PREFIX_PATH           = "/web/"
@@ -118,6 +119,17 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 			// if !strings.Contains(ua, "iPhone") || !strings.Contains(ua, "Mobile") {
 			// 	req.Header.Set("User-Agent", "iPhone Mobile "+ua)
 			// }
+		}
+
+		ckUserRwBf, _ := req.Cookie(USER_RwBf_COOKIE_NAME)
+		if ckUserRwBf == nil || ckUserRwBf.Value == "" {
+			if USER_RwBf != "" {
+				// 添加 RwBf Cookie
+				req.AddCookie(&http.Cookie{
+					Name:  USER_RwBf_COOKIE_NAME,
+					Value: USER_RwBf,
+				})
+			}
 		}
 
 		ua := req.UserAgent()

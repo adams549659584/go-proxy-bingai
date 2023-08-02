@@ -12,6 +12,7 @@ export const useUserStore = defineStore(
     const maxTryCreateConversationIdCount = 10;
     const userTokenCookieName = '_U';
     const userKievRPSSecAuthCookieName = 'KievRPSSecAuth';
+    const userRwBfCookieName = '_RwBf';
     const randIpCookieName = 'BingAI_Rand_IP';
     const authKeyCookieName = 'BingAI_Auth_Key';
     const historyEnable = ref(true);
@@ -114,12 +115,21 @@ export const useUserStore = defineStore(
     };
 
     const getUserKievRPSSecAuth = () => {
-        const userCookieVal = cookies.get(userKievRPSSecAuthCookieName) || '';
-        return userCookieVal;
+      const userCookieVal = cookies.get(userKievRPSSecAuthCookieName) || '';
+      return userCookieVal;
     };
 
     const saveUserKievRPSSecAuth = (token: string) => {
-        cookies.set(userKievRPSSecAuthCookieName, token, 7 * 24 * 60, '/');
+      cookies.set(userKievRPSSecAuthCookieName, token, 7 * 24 * 60, '/');
+    };
+
+    const getUserRwBf = () => {
+      const userCookieVal = cookies.get(userRwBfCookieName) || '';
+      return userCookieVal;
+    };
+
+    const saveUserRwBf = (token: string) => {
+      cookies.set(userRwBfCookieName, token, 7 * 24 * 60, '/');
     };
 
     const resetCache = async () => {
@@ -127,6 +137,7 @@ export const useUserStore = defineStore(
       cookies.set(randIpCookieName, '', -1);
       cookies.set(authKeyCookieName, '', -1);
       cookies.set(userKievRPSSecAuthCookieName, '', -1);
+      cookies.set(userRwBfCookieName, '', -1);
       await clearCache();
     };
 
@@ -140,6 +151,8 @@ export const useUserStore = defineStore(
       setAuthKey,
       getUserKievRPSSecAuth,
       saveUserKievRPSSecAuth,
+      getUserRwBf,
+      saveUserRwBf,
       historyEnable,
       themeMode,
     };

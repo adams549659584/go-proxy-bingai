@@ -16,6 +16,7 @@ const isShowSettingModal = ref(false);
 const isShowSetAboutModal = ref(false);
 const userToken = ref('');
 const userKievRPSSecAuth = ref('');
+const userRwBf = ref('');
 const message = useMessage();
 const promptStore = usePromptStore();
 const { isShowPromptSotre } = storeToRefs(promptStore);
@@ -134,6 +135,7 @@ const handleSelect = (key: string) => {
       {
         userToken.value = userStore.getUserToken();
         userKievRPSSecAuth.value = userStore.getUserKievRPSSecAuth();
+        userRwBf.value = userStore.getUserRwBf();
         history.value = historyEnable.value;
         themeModeSetting.value = themeMode.value;
         isShowSettingModal.value = true;
@@ -179,6 +181,11 @@ const saveSetting = () => {
     message.warning('请先填入用户 KievRPSSecAuth Cookie');
   } else {
     userStore.saveUserKievRPSSecAuth(userKievRPSSecAuth.value);
+  }
+  if (!userRwBf.value) {
+    message.warning('请先填入用户 _RwBf Cookie');
+  } else {
+    userStore.saveUserRwBf(userRwBf.value);
   }
   historyEnable.value = history.value;
   if (history.value) {
@@ -233,6 +240,9 @@ const saveSetting = () => {
         </NFormItem>
         <NFormItem path="token" label="KievRPSSecAuth">
           <NInput size="large" v-model:value="userKievRPSSecAuth" type="text" placeholder="用户 Cookie ,仅需要 KievRPSSecAuth 的值" />
+        </NFormItem>
+        <NFormItem path="token" label="_RwBf">
+          <NInput size="large" v-model:value="userRwBf" type="text" placeholder="用户 Cookie ,仅需要 _RwBf 的值" />
         </NFormItem>
         <NFormItem path="history" label="历史记录">
           <NSwitch v-model:value="history" />

@@ -15,8 +15,9 @@ var (
 	// user token
 	USER_TOKEN_ENV_NAME_PREFIX = "Go_Proxy_BingAI_USER_TOKEN"
 	USER_TOKEN_LIST            []string
-	// KievRPSSecAuth Cookie
+	// USer Cookie
 	USER_KievRPSSecAuth string
+	USER_RwBf           string
 	// 访问权限密钥，可选
 	AUTH_KEY             string
 	AUTH_KEY_COOKIE_NAME = "BingAI_Auth_Key"
@@ -38,6 +39,7 @@ func initEnv() {
 	AUTH_KEY = os.Getenv("Go_Proxy_BingAI_AUTH_KEY")
 	// KievRPSSecAuth Cookie
 	USER_KievRPSSecAuth = os.Getenv("USER_KievRPSSecAuth")
+	USER_RwBf = os.Getenv("USER_RwBf")
 }
 
 func initUserToken() {
