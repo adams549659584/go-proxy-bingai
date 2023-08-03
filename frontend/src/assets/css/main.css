@@ -3,3 +3,23 @@
 .cib-serp-main {
   overflow: hidden;
 }
+
+/* 新主页移动端样式 */
+@media (max-width: 768px) {
+  .b_wlcmTileWrap {
+    min-width: 50%;
+  }
+  .b_wlcmTileWrap,
+  .b_wlcmTile {
+    padding: 3px 6px !important;
+  }
+  div#b_sydWelcomeTemplate {
+    margin-top: 2em !important;
+  }
+  .b_wlcmTile p {
+    margin: 3px;
+  }
+  .b_wlcmTile h1 {
+    margin: 5px; 
+  }
+}
