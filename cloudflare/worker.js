@@ -1,6 +1,6 @@
 // 同查找 _U 一样, 查找 KievRPSSecAuth、_RwBf 的值并替换下方的xxx
 const KievRPSSecAuth = 'xxx';
-const _RwBf = 'xxx'
+const _RwBf = 'xxx';
 const SYDNEY_ORIGIN = 'https://sydney.bing.com';
 const BING_ORIGIN = 'https://www.bing.com';
 const KEEP_REQ_HEADERS = [
@@ -173,6 +173,8 @@ export default {
     const newRes = new Response(res.body, res);
     newRes.headers.set('Access-Control-Allow-Origin', request.headers.get('Origin'));
     newRes.headers.set('Access-Control-Allow-Methods', 'GET,HEAD,POST,OPTIONS');
+    newRes.headers.set('Access-Control-Allow-Credentials', 'true');
+    newRes.headers.set('Access-Control-Allow-Headers', '*');
     return newRes;
   },
 };
