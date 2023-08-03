@@ -80,7 +80,6 @@ const hackDevMode = () => {
 const initChatService = () => {
   if (selectedSydneyBaseUrl.value) {
     CIB.config.sydney.baseUrl = selectedSydneyBaseUrl.value;
-    CIB.config.bing.baseUrl = location.origin;
     isShowChatServiceSelectModal.value = false;
   } else {
     isShowChatServiceSelectModal.value = true;
@@ -94,6 +93,13 @@ const initChatService = () => {
     }
     chatStore.checkAllSydneyConfig();
   }
+  CIB.config.bing.baseUrl = location.origin;
+  CIB.config.bing.signIn.baseUrl = location.origin;
+  CIB.config.answers.baseUrl = location.origin;
+  CIB.config.answers.secondTurnScreenshotBaseUrl = location.origin;
+  CIB.config.contentCreator.baseUrl = location.origin;
+  CIB.config.visualSearch.baseUrl = location.origin;
+  CIB.config.suggestionsv2.baseUrl = location.origin;
 };
 
 const initSysConfig = async () => {
@@ -140,7 +146,6 @@ const hackStyle = () => {
   serpEle?.shadowRoot?.querySelector('cib-serp-feedback')?.remove();
   if (isMobile()) {
     welcomeEle?.shadowRoot?.querySelector('.container-item')?.remove();
-    // serpEle?.querySelector('.b_wlcmTileCont')?.remove();
     CIB.vm.actionBar.input.placeholder = '有问题尽管问我...（"/" 触发提示词）';
   }
   // 加入css

@@ -196,8 +196,18 @@ declare const CIB: {
     };
   };
   config: {
+    answers: {
+      baseUrl: string;
+      secondTurnScreenshotBaseUrl: string;
+    };
     bing: {
       baseUrl: string;
+      signIn: {
+        baseUrl: string;
+      };
+    };
+    contentCreator: {
+        baseUrl: string;
     };
     edgeAction: {
       /**
@@ -212,6 +222,9 @@ declare const CIB: {
        * 获取聊天历史
        */
       enableGetChats: boolean;
+    };
+    suggestionsv2: {
+      baseUrl: string;
     };
     sydney: {
       baseUrl: string;
@@ -231,6 +244,9 @@ declare const CIB: {
        */
       messageBufferWorkerStreamDelayMS: number;
     };
+    visualSearch: {
+      baseUrl: string;
+    }
   };
   manager: {
     chat: BingChat;
