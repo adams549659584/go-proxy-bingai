@@ -80,6 +80,7 @@ const hackDevMode = () => {
 const initChatService = () => {
   if (selectedSydneyBaseUrl.value) {
     CIB.config.sydney.baseUrl = selectedSydneyBaseUrl.value;
+    CIB.config.bing.baseUrl = location.origin;
     isShowChatServiceSelectModal.value = false;
   } else {
     isShowChatServiceSelectModal.value = true;
