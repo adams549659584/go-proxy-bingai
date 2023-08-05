@@ -3,11 +3,14 @@
 
 <head>
   <meta content="text/html; charset=utf-8" http-equiv="content-type" />
-  <link rel="icon" type="image/svg+xml" href="./img/logo.svg" />
-  <meta content="yes" name="apple-mobile-web-app-capable" />
-  <link rel="apple-touch-icon" href="/favicon.ico">
   <meta name="viewport"
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover" />
+  <link rel="icon" href="./img/logo.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./img/pwa/logo-192.png">
+  <meta content="yes" name="apple-mobile-web-app-capable" />
+  <link rel="mask-icon" href="./img/logo.svg" color="#FFFFFF">
+  <meta name="msapplication-TileColor" content="#FFFFFF">
+  <meta name="theme-color" content="#ffffff">
   <meta name="referrer" content="origin-when-cross-origin" />
   <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
   <title>BingAI - 聊天</title>
@@ -37,10 +40,18 @@
   <script src="/js/bing/chat/global.js"></script>
   <script src="/js/bing/chat/amd.js"></script>
   <script src="/js/bing/chat/config.js"></script>
+  <style type="text/css">@import "/css/bing.css";</style>
 </head>
 
 <body>
   <div id="b_sydHeadBg"></div>
+  <div id="sydWelcomeTemplate">
+    <div id="b_sydWelcomeTemplate" class="b_wlcmCont" data-priority="2" style="margin-top: 66px;">
+      <div class="b_wlcmHdr"><div class="b_wlcmLogo"></div>
+      <div class="b_wlcmDesc">必应是由 AI 支持的 Web Copilot</div>
+    </div>
+    <div class="b_wlcmTileCont b_wlcmTileContConsumer"></div>
+  </div>
   <div id="b_sydConvCont" _iid="SERP.5029">
     <div id="b_sydtoporpole" class="b_sydConvAnsTest"></div>
     <div id="b_sydBgCover"></div>

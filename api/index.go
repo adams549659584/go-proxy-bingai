@@ -12,7 +12,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, common.PROXY_WEB_PAGE_PATH, http.StatusFound)
 		return
 	}
-	if strings.HasPrefix("/turing", r.URL.Path) {
+	if strings.HasPrefix(r.URL.Path, "/turing") {
 		if !helper.CheckAuth(r) {
 			helper.UnauthorizedResult(w)
 			return

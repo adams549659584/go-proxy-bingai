@@ -10,7 +10,6 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
-	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -48,44 +47,14 @@ var (
 		"https://cn.bing.com",
 		"https://www.bing.com",
 	}
-	USER_TOKEN_COOKIE_NAME     = "_U"
-	RAND_IP_COOKIE_NAME        = "BingAI_Rand_IP"
-	PROXY_WEB_PREFIX_PATH      = "/web/"
-	PROXY_WEB_PAGE_PATH        = PROXY_WEB_PREFIX_PATH + "index.html"
-	USER_TOKEN_ENV_NAME_PREFIX = "Go_Proxy_BingAI_USER_TOKEN"
-	USER_TOKEN_LIST            []string
-	RAND_COOKIE_INDEX_NAME     = "BingAI_Rand_CK"
-	// socks
-	SOCKS_URL  string
-	SOCKS_USER string
-	SOCKS_PWD  string
-	// 访问权限密钥，可选
-	AUTH_KEY             string
-	AUTH_KEY_COOKIE_NAME = "BingAI_Auth_Key"
+	USER_TOKEN_COOKIE_NAME          = "_U"
+	USER_KievRPSSecAuth_COOKIE_NAME = "KievRPSSecAuth"
+	USER_RwBf_COOKIE_NAME           = "_RwBf"
+	RAND_COOKIE_INDEX_NAME          = "BingAI_Rand_CK"
+	RAND_IP_COOKIE_NAME             = "BingAI_Rand_IP"
+	PROXY_WEB_PREFIX_PATH           = "/web/"
+	PROXY_WEB_PAGE_PATH             = PROXY_WEB_PREFIX_PATH + "index.html"
 )
-
-func init() {
-	initEnv()
-	initUserToken()
-}
-
-func initEnv() {
-	// socks
-	SOCKS_URL = os.Getenv("Go_Proxy_BingAI_SOCKS_URL")
-	SOCKS_USER = os.Getenv("Go_Proxy_BingAI_SOCKS_USER")
-	SOCKS_PWD = os.Getenv("Go_Proxy_BingAI_SOCKS_PWD")
-	// auth
-	AUTH_KEY = os.Getenv("Go_Proxy_BingAI_AUTH_KEY")
-}
-
-func initUserToken() {
-	for _, env := range os.Environ() {
-		if strings.HasPrefix(env, USER_TOKEN_ENV_NAME_PREFIX) {
-			parts := strings.SplitN(env, "=", 2)
-			USER_TOKEN_LIST = append(USER_TOKEN_LIST, parts[1])
-		}
-	}
-}
 
 func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 	originalScheme := "http"
@@ -124,6 +93,17 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 		}
 		req.Header.Set("X-Forwarded-For", randIP)
 
+		ckUserKievRPSSecAuth, _ := req.Cookie(USER_KievRPSSecAuth_COOKIE_NAME)
+		if ckUserKievRPSSecAuth == nil || ckUserKievRPSSecAuth.Value == "" {
+			if USER_KievRPSSecAuth != "" {
+				// 添加 KievRPSSecAuth Cookie
+				req.AddCookie(&http.Cookie{
+					Name:  USER_KievRPSSecAuth_COOKIE_NAME,
+					Value: USER_KievRPSSecAuth,
+				})
+			}
+		}
+
 		// 未登录用户
 		ckUserToken, _ := req.Cookie(USER_TOKEN_COOKIE_NAME)
 		if ckUserToken == nil || ckUserToken.Value == "" {
@@ -139,6 +119,17 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 			// if !strings.Contains(ua, "iPhone") || !strings.Contains(ua, "Mobile") {
 			// 	req.Header.Set("User-Agent", "iPhone Mobile "+ua)
 			// }
+		}
+
+		ckUserRwBf, _ := req.Cookie(USER_RwBf_COOKIE_NAME)
+		if ckUserRwBf == nil || ckUserRwBf.Value == "" {
+			if USER_RwBf != "" {
+				// 添加 RwBf Cookie
+				req.AddCookie(&http.Cookie{
+					Name:  USER_RwBf_COOKIE_NAME,
+					Value: USER_RwBf,
+				})
+			}
 		}
 
 		ua := req.UserAgent()
@@ -186,14 +177,6 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 		// 	}
 		// }
 
-		// 设置随机ip cookie
-		ckRandIP := &http.Cookie{
-			Name:  RAND_IP_COOKIE_NAME,
-			Value: randIP,
-			Path:  "/",
-		}
-		res.Header.Set("Set-Cookie", ckRandIP.String())
-
 		// 设置服务器 cookie 对应索引
 		if resCKRandIndex != "" {
 			ckRandIndex := &http.Cookie{
@@ -216,14 +199,26 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 					res.Header.Set("Location", location[len(delLocationDomain):])
 					log.Println("Del Location Domain ：", location)
 					log.Println("RandIP : ", randIP)
+					// 换新ip
+					randIP = GetRandomIP()
 				}
 			}
 		}
 
+		// 设置随机ip cookie
+		ckRandIP := &http.Cookie{
+			Name:  RAND_IP_COOKIE_NAME,
+			Value: randIP,
+			Path:  "/",
+		}
+		res.Header.Set("Set-Cookie", ckRandIP.String())
+
 		// 跨域
-		// res.Header.Set("Access-Control-Allow-Origin", "*")
-		// res.Header.Set("Access-Control-Allow-Methods", "*")
-		// res.Header.Set("Access-Control-Allow-Headers", "*")
+		// if IS_DEBUG_MODE {
+		// 	res.Header.Set("Access-Control-Allow-Origin", "*")
+		// 	res.Header.Set("Access-Control-Allow-Methods", "*")
+		// 	res.Header.Set("Access-Control-Allow-Headers", "*")
+		// }
 
 		return nil
 	}

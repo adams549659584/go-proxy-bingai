@@ -24,20 +24,31 @@ const selectSydneyConfig = (config: SydneyConfig) => {
   CIB.config.sydney.baseUrl = config.baseUrl;
   isShowChatServiceSelectModal.value = false;
 };
+
+const handleChangeSydneyConfig = (config: SydneyConfig) => {
+  if (!config.baseUrl) {
+    return;
+  }
+  if (!config.baseUrl.startsWith('https://')) {
+    message.error('请填写 https 开头的正确链接');
+    return;
+  }
+  return checkSydneyConfig(config);
+};
 </script>
 
 <template>
-  <NModal class="w-11/12 xl:w-[900px]" v-model:show="isShowChatServiceSelectModal" preset="card" title="聊天服务器设置">
+  <NModal class="w-11/12 lg:w-[900px]" v-model:show="isShowChatServiceSelectModal" preset="card" title="聊天服务器设置">
     <NTable striped>
       <tbody>
         <tr v-for="(config, index) in sydneyConfigs" :key="index">
           <td>
-            <span v-if="config.isCus" class="hidden xl:block">{{ config.label }}</span>
+            <span v-if="config.isCus" class="hidden lg:block">{{ config.label }}</span>
             <span v-else>{{ config.label }}</span>
-            <NInput class="xl:hidden" v-if="config.isCus" v-model:value="config.baseUrl" placeholder="自定义聊天服务器链接" @change="checkSydneyConfig(config)"></NInput>
+            <NInput class="lg:hidden" v-if="config.isCus" v-model:value="config.baseUrl" placeholder="自定义聊天服务器链接" @change="handleChangeSydneyConfig(config)"></NInput>
           </td>
-          <td class="hidden xl:table-cell">
-            <NInput v-if="config.isCus" v-model:value="config.baseUrl" placeholder="自定义聊天服务器链接" @change="checkSydneyConfig(config)"></NInput>
+          <td class="hidden lg:table-cell">
+            <NInput v-if="config.isCus" v-model:value="config.baseUrl" placeholder="自定义聊天服务器链接" @change="handleChangeSydneyConfig(config)"></NInput>
             <span v-else>{{ config.baseUrl }}</span>
           </td>
           <td>
@@ -51,7 +62,7 @@ const selectSydneyConfig = (config: SydneyConfig) => {
           </td>
           <td>
             <div class="flex justify-center items-center flex-wrap gap-2">
-              <NButton class="hidden xl:table-cell" secondary @click="checkSydneyConfig(config)">检测</NButton>
+              <NButton class="hidden lg:table-cell" secondary @click="checkSydneyConfig(config)">检测</NButton>
               <NButton v-if="config.baseUrl === selectedSydneyBaseUrl" secondary type="success">当前</NButton>
               <NButton v-else secondary type="info" @click="selectSydneyConfig(config)">选择</NButton>
             </div>

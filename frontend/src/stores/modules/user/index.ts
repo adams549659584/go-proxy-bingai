@@ -11,8 +11,12 @@ export const useUserStore = defineStore(
   () => {
     const maxTryCreateConversationIdCount = 10;
     const userTokenCookieName = '_U';
+    const userKievRPSSecAuthCookieName = 'KievRPSSecAuth';
+    const userRwBfCookieName = '_RwBf';
     const randIpCookieName = 'BingAI_Rand_IP';
     const authKeyCookieName = 'BingAI_Auth_Key';
+    const historyEnable = ref(true);
+    const themeMode = ref('auto');
 
     const sysConfig = ref<SysConfig>();
 
@@ -60,15 +64,25 @@ export const useUserStore = defineStore(
     };
 
     const checkUserToken = () => {
+      if (historyEnable.value) {
+        CIB.vm.sidePanel.isVisibleDesktop = true;
+        document.querySelector('cib-serp')?.setAttribute('alignment', 'left');
+        // 设置历史记录侧边栏的高度为 90vh
+        document.querySelector('cib-serp')?.shadowRoot?.querySelector('cib-side-panel')?.shadowRoot?.querySelector('div.scroller')?.setAttribute('style', 'height: 90vh');
+      } else {
+        CIB.vm.sidePanel.isVisibleDesktop = false;
+        document.querySelector('cib-serp')?.setAttribute('alignment', 'center');
+      }
       const token = getUserToken();
       if (!token) {
         // 未登录不显示历史记录
         CIB.config.features.enableGetChats = false;
         CIB.vm.sidePanel.isVisibleMobile = false;
         CIB.vm.sidePanel.isVisibleDesktop = false;
-        // 创建会话id
-        tryCreateConversationId();
+        document.querySelector('cib-serp')?.setAttribute('alignment', 'center');
       }
+      // 创建会话id
+      tryCreateConversationId();
     };
 
     const saveUserToken = (token: string) => {
@@ -86,22 +100,44 @@ export const useUserStore = defineStore(
       // del sw cache
       const cacheKeys = await caches.keys();
       for (const cacheKey of cacheKeys) {
-        await caches.open(cacheKey).then(async (cache) => {
-          const requests = await cache.keys();
-          return await Promise.all(
-            requests.map((request) => {
-              console.log(`del cache : `, request.url);
-              return cache.delete(request);
-            })
-          );
-        });
+        await caches.delete(cacheKey);
+        console.log(`del cache : `, cacheKey);
+        // await caches.open(cacheKey).then(async (cache) => {
+        //   const requests = await cache.keys();
+        //   return await Promise.all(
+        //     requests.map((request) => {
+        //       console.log(`del cache : `, request.url);
+        //       return cache.delete(request);
+        //     })
+        //   );
+        // });
       }
+    };
+
+    const getUserKievRPSSecAuth = () => {
+      const userCookieVal = cookies.get(userKievRPSSecAuthCookieName) || '';
+      return userCookieVal;
+    };
+
+    const saveUserKievRPSSecAuth = (token: string) => {
+      cookies.set(userKievRPSSecAuthCookieName, token, 7 * 24 * 60, '/');
+    };
+
+    const getUserRwBf = () => {
+      const userCookieVal = cookies.get(userRwBfCookieName) || '';
+      return userCookieVal;
+    };
+
+    const saveUserRwBf = (token: string) => {
+      cookies.set(userRwBfCookieName, token, 7 * 24 * 60, '/');
     };
 
     const resetCache = async () => {
       cookies.set(userTokenCookieName, '', -1);
       cookies.set(randIpCookieName, '', -1);
       cookies.set(authKeyCookieName, '', -1);
+      cookies.set(userKievRPSSecAuthCookieName, '', -1);
+      cookies.set(userRwBfCookieName, '', -1);
       await clearCache();
     };
 
@@ -113,13 +149,19 @@ export const useUserStore = defineStore(
       saveUserToken,
       resetCache,
       setAuthKey,
+      getUserKievRPSSecAuth,
+      saveUserKievRPSSecAuth,
+      getUserRwBf,
+      saveUserRwBf,
+      historyEnable,
+      themeMode,
     };
   },
   {
     persist: {
       key: 'user-store',
       storage: localStorage,
-      paths: [],
+      paths: ['historyEnable', 'themeMode'],
     },
   }
 );

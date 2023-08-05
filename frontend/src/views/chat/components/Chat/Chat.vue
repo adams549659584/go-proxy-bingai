@@ -43,17 +43,39 @@ const isShowHistory = computed(() => {
   return (CIB.vm.isMobile && CIB.vm.sidePanel.isVisibleMobile) || (!CIB.vm.isMobile && CIB.vm.sidePanel.isVisibleDesktop);
 });
 
+const { themeMode } = storeToRefs(userStore);
+
 onMounted(async () => {
   await initChat();
+  hackDevMode();
   // CIB.vm.isMobile = isMobile();
-  initSysConfig();
   // show conversion
   SydneyFullScreenConv.initWithWaitlistUpdate({ cookLoc: {} }, 10);
+  initSysConfig();
 
   isShowLoading.value = false;
   hackStyle();
   initChatPrompt();
+
+  // set Theme
+  if (themeMode.value == 'light') {
+    CIB.changeColorScheme(0);
+  } else if (themeMode.value == 'dark') {
+    CIB.changeColorScheme(1);
+  } else if (themeMode.value == 'auto') {
+    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      CIB.changeColorScheme(1);
+    } else {
+      CIB.changeColorScheme(0);
+    }
+  }
 });
+
+const hackDevMode = () => {
+  if (import.meta.env.DEV) {
+    CIB.manager.chat.api.bing._endpoint = location.origin;
+  }
+};
 
 const initChatService = () => {
   if (selectedSydneyBaseUrl.value) {
@@ -71,6 +93,13 @@ const initChatService = () => {
     }
     chatStore.checkAllSydneyConfig();
   }
+  CIB.config.bing.baseUrl = location.origin;
+  CIB.config.bing.signIn.baseUrl = location.origin;
+  CIB.config.answers.baseUrl = location.origin;
+  CIB.config.answers.secondTurnScreenshotBaseUrl = location.origin;
+  CIB.config.contentCreator.baseUrl = location.origin;
+  CIB.config.visualSearch.baseUrl = location.origin;
+  CIB.config.suggestionsv2.baseUrl = location.origin;
 };
 
 const initSysConfig = async () => {
@@ -110,12 +139,10 @@ const hackStyle = () => {
     CIB.config.sydney.hostnamesToBypassSecureConnection = CIB.config.sydney.hostnamesToBypassSecureConnection.filter((x) => x !== location.hostname);
   }
   const serpEle = document.querySelector('cib-serp');
-  // 居中
-  serpEle?.setAttribute('alignment', 'center');
   const conversationEle = serpEle?.shadowRoot?.querySelector('cib-conversation') as HTMLElement;
   // todo 反馈暂时无法使用，先移除
   const welcomeEle = conversationEle?.shadowRoot?.querySelector('cib-welcome-container');
-  welcomeEle?.shadowRoot?.querySelector('.learn-tog-item')?.remove();
+  welcomeEle?.shadowRoot?.querySelector('.preview-container')?.remove();
   serpEle?.shadowRoot?.querySelector('cib-serp-feedback')?.remove();
   if (isMobile()) {
     welcomeEle?.shadowRoot?.querySelector('.container-item')?.remove();
@@ -218,7 +245,7 @@ const handleInputTextKey = (ev: KeyboardEvent) => {
     case 'Enter':
       {
         // ev.preventDefault();
-        if (!CIB.vm.actionBar.inputText || !CIB.vm.actionBar.inputText.startsWith('/')) {
+        if (!CIB.vm.actionBar.textInput.value || !CIB.vm.actionBar.textInput.value.startsWith('/')) {
           return;
         }
         selectPrompt(searchPromptList.value[selectedPromptIndex.value]);
@@ -233,7 +260,7 @@ const selectPrompt = (item: IPrompt) => {
     return;
   }
   keyword.value = '';
-  CIB.vm.actionBar.inputText = item.prompt;
+  CIB.vm.actionBar.textInput.value = item.prompt;
   isShowChatPrompt.value = false;
 };
 
@@ -302,9 +329,9 @@ const auth = async () => {
     <ChatServiceSelect />
     <!-- 授权 -->
     <div v-if="isShowUnauthorizedModal" class="fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black/40 z-50">
-      <NResult class="bg-white px-28 py-4 rounded-md" status="403" title="401 未授权">
+      <NResult class="box-border w-11/12 lg:w-[400px] px-4 py-4 bg-white rounded-md" status="403" title="401 未授权">
         <template #footer>
-          <NInput v-model:value="authKey" type="password" placeholder="请输入授权码" maxlength="60"></NInput>
+          <NInput class="w-11/12" v-model:value="authKey" type="password" placeholder="请输入授权码" maxlength="60" clearable></NInput>
           <n-button class="mt-4" secondary type="info" :loading="isAuthBtnLoading" @click="auth">授权</n-button>
         </template>
       </NResult>

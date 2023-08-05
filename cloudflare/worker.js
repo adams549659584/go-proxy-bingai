@@ -1,4 +1,8 @@
+// 同查找 _U 一样, 查找 KievRPSSecAuth、_RwBf 的值并替换下方的xxx
+const KievRPSSecAuth = 'xxx';
+const _RwBf = 'xxx';
 const SYDNEY_ORIGIN = 'https://sydney.bing.com';
+const BING_ORIGIN = 'https://www.bing.com';
 const KEEP_REQ_HEADERS = [
   'accept',
   'accept-encoding',
@@ -70,6 +74,37 @@ const getRandomIP = () => {
   return randomIP;
 };
 
+/**
+ * home
+ * @param {string} pathname
+ * @returns
+ */
+const home = async (pathname) => {
+  const baseUrl = 'https://raw.githubusercontent.com/Harry-zklcdc/go-proxy-bingai/master/';
+  let url;
+  if (pathname.indexOf('/web/') === 0) {
+    url = pathname.replace('/web/', baseUrl+'web/');
+  } else {
+    url = baseUrl + 'web/index.html';
+  }
+  const res = await fetch(url);
+  const newRes = new Response(res.body, res);
+  if (pathname.endsWith('.js')) {
+    newRes.headers.set('content-type', 'application/javascript');
+  } else if (pathname.endsWith('.css')) {
+    newRes.headers.set('content-type', 'text/css');
+  } else if (pathname.endsWith('.svg')) {
+    newRes.headers.set('content-type', 'image/svg+xml');
+  } else if (pathname.endsWith('.ico') || pathname.endsWith('.png')) {
+    newRes.headers.set('content-type', 'image/png');
+  } else {
+    newRes.headers.set('content-type', 'text/html; charset=utf-8');
+  }
+  newRes.headers.delete('content-security-policy');
+  return newRes;
+};
+
+
 export default {
   /**
    * fetch
@@ -78,9 +113,21 @@ export default {
    * @param {*} ctx
    * @returns
    */
-  async fetch(request, env, ctx) {
+  async fetch (request, env, ctx) {
     const currentUrl = new URL(request.url);
-    const targetUrl = new URL(SYDNEY_ORIGIN + currentUrl.pathname + currentUrl.search);
+    // if (currentUrl.pathname === '/' || currentUrl.pathname.startsWith('/github/')) {
+    if (currentUrl.pathname === '/' || currentUrl.pathname.indexOf('/web/') === 0) {
+      return home(currentUrl.pathname);
+    }
+    if (currentUrl.pathname === '/sysconf') {
+      return new Response('{"code":200,"message":"success","data":{"isSysCK":false,"isAuth":true}}')
+    }
+    let targetUrl;
+    if (currentUrl.pathname.includes('/sydney')) {
+      targetUrl = new URL(SYDNEY_ORIGIN + currentUrl.pathname + currentUrl.search);
+    } else {
+      targetUrl = new URL(BING_ORIGIN + currentUrl.pathname + currentUrl.search);
+    }
 
     const newHeaders = new Headers();
     request.headers.forEach((value, key) => {
@@ -95,6 +142,15 @@ export default {
     const randIP = getRandomIP();
     // console.log('randIP : ', randIP);
     newHeaders.set('X-Forwarded-For', randIP);
+    const cookie = request.headers.get('Cookie') || '';
+    let cookies = cookie;
+    if (!cookie.includes('KievRPSSecAuth=')) {
+       cookies += '; KievRPSSecAuth=' + KievRPSSecAuth 
+    }
+    if (!cookie.includes('_RwBf=')) {
+      cookies += '; _RwBf=' + _RwBf
+    }
+    newHeaders.set('Cookie', cookies);
     const oldUA = request.headers.get('user-agent');
     const isMobile = oldUA.includes('Mobile') || oldUA.includes('Android');
     if (isMobile) {
@@ -114,11 +170,11 @@ export default {
     });
     // console.log('request url : ', newReq.url);
     const res = await fetch(newReq);
-    return res;
-    // const newRes = new Response(res.body, res);
-    // newRes.headers.set('access-control-allow-origin', '*');
-    // newRes.headers.set('access-control-allow-methods', '*');
-    // newRes.headers.set('access-control-allow-headers', '*');
-    // return newRes;
+    const newRes = new Response(res.body, res);
+    newRes.headers.set('Access-Control-Allow-Origin', request.headers.get('Origin'));
+    newRes.headers.set('Access-Control-Allow-Methods', 'GET,HEAD,POST,OPTIONS');
+    newRes.headers.set('Access-Control-Allow-Credentials', 'true');
+    newRes.headers.set('Access-Control-Allow-Headers', '*');
+    return newRes;
   },
 };

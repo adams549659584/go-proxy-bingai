@@ -1,7 +1,7 @@
 {
   "extends": "@vue/tsconfig/tsconfig.dom.json",
   "include": [
-    "types",
+    "types/**/*.d.ts",
     "src/**/*",
     "src/**/*.vue",
   ],
@@ -15,6 +15,14 @@
       "@/*": [
         "./src/*"
       ]
-    }
+    },
+    "types": [
+      "vite-plugin-pwa/client"
+    ],
+    "lib": [
+      "ESNext",
+      "DOM",
+      "WebWorker"
+    ]
   }
 }

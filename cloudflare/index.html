@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+  <link rel="icon" type="image/svg+xml" href="/github/frontend/public/img/logo.svg" />
+  <meta content="yes" name="apple-mobile-web-app-capable" />
+  <link rel="apple-touch-icon" href="/github/frontend/public/img/pwa/logo-192.png">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover" />
+  <meta name="referrer" content="origin-when-cross-origin" />
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  <title>BingAI - 聊天</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MM5J5X8QQC"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag () { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-MM5J5X8QQC');
+  </script>
+  <!-- 百度统计 -->
+  <script>
+    var _hmt = _hmt || [];
+    (function () {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?299c614daa53fbcede70f2d22df0a31b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+</head>
+
+<body>
+  <div class="relative flex min-h-screen flex-col justify-center overflow-hidden bg-gray-50 py-6 px-4 sm:py-12">
+    <div class="absolute inset-0 bg-slate-100 bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]">
+    </div>
+    <div
+      class="relative bg-white px-6 pb-8 pt-10 shadow-xl ring-1 ring-gray-900/5 sm:mx-auto sm:max-w-lg sm:rounded-lg sm:px-10 lg:max-w-3xl">
+      <div class="mx-auto max-w-3xl">
+        <div class="flex justify-center">
+          <img src="/github/frontend/public/img/logo.svg" class="h-24" alt="BingAI" />
+        </div>
+        <div class="mt-6 text-center text-3xl text-gray-600">聊天服务器已部署完成</div>
+        <div class="divide-y divide-gray-300/50">
+          <div class="space-y-6 py-8 text-base leading-7 text-gray-600">
+            <ul class="space-y-4">
+              <li class="flex items-center">
+                <svg class="h-6 w-6 flex-none fill-sky-100 stroke-sky-500 stroke-2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="11" />
+                  <path d="m8 13 2.165 2.165a1 1 0 0 0 1.521-.126L16 9" fill="none" />
+                </svg>
+                <p class="ml-4">
+                  在基于 go-proxy-bingai 搭建的站点中
+                  <code class="text-sm font-bold text-sky-500">设置 => 服务选择</code>
+                  添加此站点即可
+                </p>
+              </li>
+              <li class="flex items-center">
+                <svg class="h-6 w-6 flex-none fill-sky-100 stroke-sky-500 stroke-2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="11" />
+                  <path d="m8 13 2.165 2.165a1 1 0 0 0 1.521-.126L16 9" fill="none" />
+                </svg>
+                <p class="ml-4">
+                  如有疑问，请参考
+                  <a href="https://github.com/adams549659584/go-proxy-bingai/issues/81" target="_blank"
+                    class="text-sky-500 hover:text-sky-600">issues #81</a>
+                </p>
+              </li>
+            </ul>
+          </div>
+          <div class="pt-8 text-base font-semibold leading-7">
+            <p class="text-gray-600 overflow-hidden">开源地址：<a href="https://github.com/adams549659584/go-proxy-bingai"
+                target="_blank"
+                class="text-sky-500 hover:text-sky-600">https://github.com/adams549659584/go-proxy-bingai</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
