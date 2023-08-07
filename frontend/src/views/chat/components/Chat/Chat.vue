@@ -93,6 +93,7 @@ const initChatService = () => {
     }
     chatStore.checkAllSydneyConfig();
   }
+  CIB.config.captcha.baseUrl = 'https://www.bing.com'
   CIB.config.bing.baseUrl = location.origin;
   CIB.config.bing.signIn.baseUrl = location.origin;
   CIB.config.answers.baseUrl = location.origin;
