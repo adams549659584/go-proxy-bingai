@@ -206,8 +206,11 @@ declare const CIB: {
         baseUrl: string;
       };
     };
+    captcha: {
+      baseUrl: string;
+    }
     contentCreator: {
-        baseUrl: string;
+      baseUrl: string;
     };
     edgeAction: {
       /**

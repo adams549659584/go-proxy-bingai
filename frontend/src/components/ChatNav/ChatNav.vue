@@ -27,7 +27,9 @@ const { isShowChatServiceSelectModal } = storeToRefs(chatStore);
 const userStore = useUserStore();
 const localVersion = __APP_INFO__.version;
 const lastVersion = ref('加载中...');
-const { historyEnable, themeMode } = storeToRefs(userStore)
+const { historyEnable, themeMode, fullCookiesEnable, cookiesStr } = storeToRefs(userStore)
+let cookiesEnable = ref(false);
+let cookies = ref('');
 let history = ref(true);
 let themeModeSetting = ref('auto');
 let theme = ref(lightTheme);
@@ -137,6 +139,8 @@ const handleSelect = (key: string) => {
         userKievRPSSecAuth.value = userStore.getUserKievRPSSecAuth();
         userRwBf.value = userStore.getUserRwBf();
         history.value = historyEnable.value;
+        cookiesEnable.value = fullCookiesEnable.value;
+        if (cookiesEnable.value) { cookies.value = cookiesStr.value; }
         themeModeSetting.value = themeMode.value;
         isShowSettingModal.value = true;
       }
@@ -172,21 +176,27 @@ const resetCache = async () => {
 };
 
 const saveSetting = () => {
-  if (!userToken.value) {
+  if (cookiesEnable.value) {
+    userStore.saveCookies(cookies.value);
+    cookiesStr.value = cookies.value;
+  } else {
+    if (!userToken.value) {
     message.warning('请先填入用户 _U Cookie');
-  } else {
-    userStore.saveUserToken(userToken.value);
+    } else {
+      userStore.saveUserToken(userToken.value);
+    }
+    if (!userKievRPSSecAuth.value) {
+      message.warning('请先填入用户 KievRPSSecAuth Cookie');
+    } else {
+      userStore.saveUserKievRPSSecAuth(userKievRPSSecAuth.value);
+    }
+    if (!userRwBf.value) {
+      message.warning('请先填入用户 _RwBf Cookie');
+    } else {
+      userStore.saveUserRwBf(userRwBf.value);
+    }
   }
-  if (!userKievRPSSecAuth.value) {
-    message.warning('请先填入用户 KievRPSSecAuth Cookie');
-  } else {
-    userStore.saveUserKievRPSSecAuth(userKievRPSSecAuth.value);
-  }
-  if (!userRwBf.value) {
-    message.warning('请先填入用户 _RwBf Cookie');
-  } else {
-    userStore.saveUserRwBf(userRwBf.value);
-  }
+  fullCookiesEnable.value = cookiesEnable.value;
   historyEnable.value = history.value;
   if (history.value) {
     if (userStore.getUserToken()) {
@@ -235,14 +245,20 @@ const saveSetting = () => {
         <div class="text-3xl py-2">设置</div>
       </template>
       <NForm ref="formRef" label-placement="left" label-width="auto" require-mark-placement="right-hanging" style="margin-top: 16px;">
-        <NFormItem path="token" label="Token">
+        <NFormItem path="cookiesEnable" label="完整 Cookie">
+          <NSwitch v-model:value="cookiesEnable" />
+        </NFormItem>
+        <NFormItem v-show="!cookiesEnable" path="token" label="Token">
           <NInput size="large" v-model:value="userToken" type="text" placeholder="用户 Cookie ,仅需要 _U 的值" />
         </NFormItem>
-        <NFormItem path="token" label="KievRPSSecAuth">
+        <NFormItem v-show="!cookiesEnable" path="token" label="KievRPSSecAuth">
           <NInput size="large" v-model:value="userKievRPSSecAuth" type="text" placeholder="用户 Cookie ,仅需要 KievRPSSecAuth 的值" />
         </NFormItem>
-        <NFormItem path="token" label="_RwBf">
+        <NFormItem v-show="!cookiesEnable" path="token" label="_RwBf">
           <NInput size="large" v-model:value="userRwBf" type="text" placeholder="用户 Cookie ,仅需要 _RwBf 的值" />
+        </NFormItem>
+        <NFormItem v-show="cookiesEnable" path="token" label="Cookies">
+          <NInput size="large" v-model:value="cookies" type="text" placeholder="完整用户 Cookie" />
         </NFormItem>
         <NFormItem path="history" label="历史记录">
           <NSwitch v-model:value="history" />

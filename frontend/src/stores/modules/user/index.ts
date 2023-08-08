@@ -15,7 +15,9 @@ export const useUserStore = defineStore(
     const userRwBfCookieName = '_RwBf';
     const randIpCookieName = 'BingAI_Rand_IP';
     const authKeyCookieName = 'BingAI_Auth_Key';
+    const cookiesStr = ref('');
     const historyEnable = ref(true);
+    const fullCookiesEnable = ref(false);
     const themeMode = ref('auto');
 
     const sysConfig = ref<SysConfig>();
@@ -133,12 +135,23 @@ export const useUserStore = defineStore(
     };
 
     const resetCache = async () => {
-      cookies.set(userTokenCookieName, '', -1);
-      cookies.set(randIpCookieName, '', -1);
-      cookies.set(authKeyCookieName, '', -1);
-      cookies.set(userKievRPSSecAuthCookieName, '', -1);
-      cookies.set(userRwBfCookieName, '', -1);
+      const keys = document.cookie.match(/[^ =;]+(?=\=)/g);
+      if (keys) {
+        for (let i = keys.length; i--;)
+          document.cookie = keys[i] + '=0;expires=' + new Date(0).toUTCString()
+      }
       await clearCache();
+    };
+
+    const saveCookies = (cookiesRaw: string) => {
+      const cookiesArr = cookiesRaw.split(';');
+      for (const cookie of cookiesArr) {
+        const [key, val] = cookie.split('=');
+        console.log(key, val)
+        if (key && val) {
+          cookies.set(key, val, 7 * 24 * 60, '/');
+        }
+      }
     };
 
     return {
@@ -153,7 +166,10 @@ export const useUserStore = defineStore(
       saveUserKievRPSSecAuth,
       getUserRwBf,
       saveUserRwBf,
+      saveCookies,
+      cookiesStr,
       historyEnable,
+      fullCookiesEnable,
       themeMode,
     };
   },
@@ -161,7 +177,7 @@ export const useUserStore = defineStore(
     persist: {
       key: 'user-store',
       storage: localStorage,
-      paths: ['historyEnable', 'themeMode'],
+      paths: ['historyEnable', 'themeMode', 'fullCookiesEnable', 'cookiesStr'],
     },
   }
 );
