@@ -146,8 +146,9 @@ export const useUserStore = defineStore(
     const saveCookies = (cookiesRaw: string) => {
       const cookiesArr = cookiesRaw.split(';');
       for (const cookie of cookiesArr) {
-        const [key, val] = cookie.split('=');
-        console.log(key, val)
+        const cookieArr = cookie.split('=');
+        const key = cookieArr[0].trim();
+        const val = cookieArr.length > 1 ? cookieArr.slice(1, cookieArr.length).join('=').trim() : null ;
         if (key && val) {
           cookies.set(key, val, 7 * 24 * 60, '/');
         }
