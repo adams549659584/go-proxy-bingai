@@ -70,13 +70,6 @@ jobs:
         with:
           timezone: Asia/Shanghai
 
-      - name: Login to GHCR
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GH_TOKEN }}
-
       - name: Login to DockerHub
         uses: docker/login-action@v2
         with:
@@ -97,9 +90,5 @@ jobs:
           file: ./docker/Dockerfile  
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}:${{ github.ref_name }}
-            ghcr.io/${{ github.repository }}:latest
-            docker.io/${{ github.repository }}:${{ github.ref_name }}
-            docker.io/${{ github.repository }}:latest
-          cache-from: type=registry,ref=${{ github.repository }}:cache
-          cache-to: type=registry,ref=${{ github.repository }}:cache,mode=max
+            docker.io/zklcdc/go-proxy-bingai:${{ github.ref_name }}
+            docker.io/zklcdc/go-proxy-bingai:latest
