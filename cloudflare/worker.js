@@ -1,6 +1,8 @@
-// 同查找 _U 一样, 查找 KievRPSSecAuth、_RwBf 的值并替换下方的xxx
-const KievRPSSecAuth = 'xxx';
-const _RwBf = 'xxx';
+// 同查找 _U 一样, 查找 KievRPSSecAuth 的值并替换下方的xxx
+const KievRPSSecAuth = '';
+const _RwBf = '';
+const _U = '';
+
 const SYDNEY_ORIGIN = 'https://sydney.bing.com';
 const BING_ORIGIN = 'https://www.bing.com';
 const KEEP_REQ_HEADERS = [
@@ -97,6 +99,19 @@ const getRandomIP = () => {
 };
 
 /**
+ * 生成随机字符串
+ * @param {number} e
+ * @returns
+ */
+const randomString = (e) => {    
+  e = e || 32;
+  const t = "ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678_-+";
+  var n = "";
+  for (let i = 0; i < e; i++) n += t.charAt(getRandomInt(0, t.length));
+  return n;
+}
+
+/**
  * home
  * @param {string} pathname
  * @returns
@@ -167,10 +182,25 @@ export default {
     const cookie = request.headers.get('Cookie') || '';
     let cookies = cookie;
     if (!cookie.includes('KievRPSSecAuth=')) {
-       cookies += '; KievRPSSecAuth=' + KievRPSSecAuth 
+      if (KievRPSSecAuth.length !== 0) {
+        cookies += '; KievRPSSecAuth=' + KievRPSSecAuth;
+      } else {
+        cookies += '; KievRPSSecAuth=' + randomString(512);
+      }
     }
     if (!cookie.includes('_RwBf=')) {
-      cookies += '; _RwBf=' + _RwBf
+      if (_RwBf.length !== 0) {
+        cookies += '; _RwBf=' + _RwBf
+      } else {
+        cookies += '; _RwBf=' + randomString(256);
+      }
+    }
+    if (!cookie.includes('_U=')) {
+      if (_U.length !== 0) {
+        cookies += '; _U=' + _RwBf
+      } else {
+        cookies += '; _U=' + randomString(128);
+      }
     }
     newHeaders.set('Cookie', cookies);
     const oldUA = request.headers.get('user-agent');
