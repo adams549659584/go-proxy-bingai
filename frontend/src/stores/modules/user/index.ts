@@ -135,10 +135,10 @@ export const useUserStore = defineStore(
     };
 
     const resetCache = async () => {
-      const keys = document.cookie.match(/[^ =;]+(?=\=)/g);
+      const keys = document.cookie.split(";");
       if (keys) {
         for (let i = keys.length; i--;)
-          document.cookie = keys[i] + '=0;expires=' + new Date(0).toUTCString()
+          document.cookie = keys[i].split('=')[0] + '=0; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
       }
       await clearCache();
     };
