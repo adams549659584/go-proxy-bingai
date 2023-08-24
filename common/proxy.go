@@ -3,10 +3,12 @@ package common
 import (
 	"bytes"
 	"compress/gzip"
+	"context"
 	"fmt"
 	"io"
 	"log"
 	"math/rand"
+	"net"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
@@ -15,7 +17,7 @@ import (
 	"time"
 
 	"github.com/andybalholm/brotli"
-	"golang.org/x/net/proxy"
+	xtls "github.com/refraction-networking/utls"
 )
 
 var (
@@ -142,7 +144,7 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 			req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36 Edg/113.0.1774.35")
 		}
 
-		for hKey, _ := range req.Header {
+		for hKey := range req.Header {
 			if _, ok := KEEP_REQ_HEADER_MAP[hKey]; !ok {
 				req.Header.Del(hKey)
 			}
@@ -235,30 +237,37 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 	// 	},
 	// }
 
+	transport := http.DefaultTransport.(*http.Transport).Clone()
+	// 添加JA3指纹
+	transport.DialTLSContext = func(ctx context.Context, network, addr string) (net.Conn, error) {
+		dialer := net.Dialer{}
+		// 创建tcp连接
+		con, err := dialer.DialContext(ctx, network, addr)
+		if err != nil {
+			return nil, err
+		}
+		// 根据地址获取host信息
+		host, _, err := net.SplitHostPort(addr)
+		if err != nil {
+			return nil, err
+		}
+		// 构建tlsconf
+		xtlsConf := &xtls.Config{
+			ServerName:    host,
+			Renegotiation: xtls.RenegotiateNever,
+		}
+		// 构建tls.UConn
+		xtlsConn := xtls.UClient(con, xtlsConf, xtls.HelloEdge_106)
+
+		return xtlsConn, err
+	}
+
 	// 代理请求   请求回来的内容   报错自动调用
 	reverseProxy := &httputil.ReverseProxy{
 		Director:       director,
 		ModifyResponse: modifyFunc,
 		ErrorHandler:   errorHandler,
-	}
-
-	// socks
-	if SOCKS_URL != "" {
-		var socksAuth *proxy.Auth
-		if SOCKS_USER != "" && SOCKS_PWD != "" {
-			socksAuth = &proxy.Auth{
-				User:     SOCKS_USER,
-				Password: SOCKS_PWD,
-			}
-		}
-		s5Proxy, err := proxy.SOCKS5("tcp", SOCKS_URL, socksAuth, proxy.Direct)
-		if err != nil {
-			panic(err)
-		}
-		tr := &http.Transport{
-			Dial: s5Proxy.Dial,
-		}
-		reverseProxy.Transport = tr
+		Transport:      transport,
 	}
 
 	return reverseProxy
