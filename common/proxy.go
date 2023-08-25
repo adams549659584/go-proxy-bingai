@@ -301,9 +301,9 @@ func replaceResBody(originalBody string, originalScheme string, originalHost str
 	}
 
 	// 对话暂时支持国内网络，而且 Vercel 还不支持 Websocket ，先不用
-	// if strings.Contains(modifiedBodyStr, BING_CHAT_DOMAIN) {
-	// 	modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, BING_CHAT_DOMAIN, originalDomain)
-	// }
+	if strings.Contains(modifiedBodyStr, BING_URL.Host) {
+		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, BING_URL.Host, originalHost)
+	}
 
 	// if strings.Contains(modifiedBodyStr, "https://www.bingapis.com") {
 	// 	modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, "https://www.bingapis.com", "https://bing.vcanbb.top")
