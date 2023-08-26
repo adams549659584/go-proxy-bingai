@@ -9,6 +9,7 @@ const KEEP_REQ_HEADERS = [
   'accept',
   'accept-encoding',
   'accept-language',
+  'authorization',
   'connection',
   'cookie',
   'upgrade',
@@ -21,6 +22,11 @@ const KEEP_REQ_HEADERS = [
   'content-type',
   'access-control-request-headers',
   'access-control-request-method',
+  'sec-ms-gec',
+  'sec-ms-gec-version',
+  'x-client-data',
+  'x-ms-client-request-id',
+  'x-ms-useragent',
 ];
 const IP_RANGE = [
   ['4.150.64.0', '4.150.127.255'],       // Azure Cloud EastUS2 16382
