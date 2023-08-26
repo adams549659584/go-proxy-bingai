@@ -29,6 +29,7 @@ var (
 		"Accept":                         true,
 		"Accept-Encoding":                true,
 		"Accept-Language":                true,
+		"Authorization":                  true,
 		"Referer":                        true,
 		"Connection":                     true,
 		"Cookie":                         true,
