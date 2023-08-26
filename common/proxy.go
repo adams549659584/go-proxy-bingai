@@ -43,6 +43,11 @@ var (
 		"Content-Type":                   true,
 		"Access-Control-Request-Headers": true,
 		"Access-Control-Request-Method":  true,
+		"Sec-Ms-Gec":                     true,
+		"Sec-Ms-Gec-Version:":            true,
+		"X-Client-Data":                  true,
+		"X-Ms-Client-Request-Id":         true,
+		"X-Ms-Useragent":                 true,
 	}
 	DEL_LOCATION_DOMAINS = []string{
 		"https://cn.bing.com",
