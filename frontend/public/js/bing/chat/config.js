@@ -1072,3 +1072,9 @@ sj_be(
   },
   1
 );
+
+// 设置未登录用户的 codexMUIDUser 为 true
+const User_UCookieValue = CookieGet('_U')
+if (User_UCookieValue == null || User_UCookieValue == undefined || User_UCookieValue == '') {
+  _w['_sydConvConfig']['codexMUIDUser'] = true
+}

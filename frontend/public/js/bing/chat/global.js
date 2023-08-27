@@ -70,3 +70,9 @@ function si_T(a) {
   return true;
 }
 _G.CTT = '3000';
+
+
+function CookieGet(name) {
+  const v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+  return v ? v[2] : null;
+}
