@@ -25,11 +25,11 @@ _w['_sydConvConfig'] = {
   sydBalOpts: 'fluxhint,glfluxv13',
   sydCrtOpts: 'fluxv13',
   sydPrcOpts: 'ppofp4fp8,fluxv13',
-  voiceSrOptions: 'emovoicecf',
+  voiceSrOptions: '',
   sydBalExtraOpts: 'saharagenconv5',
-  sydCrtExtraOpts: 'gencontentv3',
+  sydCrtExtraOpts: 'clgalileo,gencontentv3',
   sydPrcExtraOpts: 'clgalileo,gencontentv3',
-  sydIDs: 'edi,divkorbl2p,0712newas,wrapuxslimc,sydconfigoptc,kcimgov2cf,0731ziv2,821fluxv13,806log2sph,0518logos,178gentechs0,824fluxhi52s0,0825agicert,621alllocs0,727nrprdrs0',
+  sydIDs: 'edi,divkorbl2p,0712newas,wrapuxslimc,norbingchrome,sydconfigoptc,0731ziv2,821fluxv13,806log2sph,0518logos,178gentechs0,824fluxhi52s0,0825agicert,621alllocs0,727nrprdrs0',
   sydBaseUrl: location.origin,
   compSydBaseUrl: '',
   isCompliantSydneyEndpointEnabled: false,
@@ -115,7 +115,7 @@ _w['_sydConvConfig'] = {
   sydTestCacheMsg: '',
   sydTestMockShareId: '',
   sydTuringSuggestionsMocked: false,
-  traceId: '7UptjwsYY3fm4UmSaKMa8TP5p58u6JQN',
+  traceId: 'j3RAeF5oJk3FKH3EKzpnBtRt7Gp6J3zT',
   extraSappOptions: '',
   extraEdgeOptions: 'eredirecturl',
   extraBceOptions: '',
@@ -649,26 +649,26 @@ _w['_sydConvTranslation'] = {
   newTopicSugg23: '火烈鸟为何为粉色?',
   newTopicSugg24: '全息影像的工作原理是什么?',
   newTopicSugg25: '金字塔是如何建成的?',
-  newUserGreet: '欢迎，这令人激动！你越有创意，我们就越能发现世界。请试着问我一些你一直好奇的内容。',
-  newUserSugg1: '搜索运行状况',
-  newUserSugg2: '写一首歌曲',
+  newUserGreet: '很高兴认识你！我是必应，我不仅仅是一个搜索引擎。我可以帮助你规划群、写一个朋友或询问宇宙。你想要探索什么？',
+  newUserSugg1: '搜索体育信息',
+  newUserSugg2: '搜索电影',
   newUserSugg3: '玩小游戏',
-  repeatUserGreet: '很高兴你回来了！无论你想说什幺，我都持开放态度。我能为你做什么？',
-  repeatUserSugg1: '撰写论文',
-  repeatUserSugg2: '曲奇食谱',
-  repeatUserSugg3: '创作歌曲',
-  creativeGreet: '好吧!这就是创造力。我能帮什么忙？',
-  balancedGreet: '好的，我们来查找答案并聊会天。我可以为你做什么？',
+  repeatUserGreet: '又见面了。我很乐意为你提供任何帮助。如何为你效劳，改进你的一天?',
+  repeatUserSugg1: '生成故事',
+  repeatUserSugg2: '写一首诗',
+  repeatUserSugg3: '做个小测验',
+  creativeGreet: '让我们发挥创意吧！你是否在考虑某个主题，还是即兴发挥？',
+  balancedGreet: '很好，我还可以帮助你发现新事物并找到答案。我们首先应该做什么？',
   preciseGreet: '你好，我在这里帮你查答案。你有哪些问题？',
-  creativeSugg1: '告诉我一个关于小狗的故事',
-  creativeSugg2: '给我一个你想问的问题',
-  creativeSugg3: '给我出个谜语来解',
-  balancedSugg1: '去露营我需要什么？',
-  balancedSugg2: '写一首关于爆米花的诗',
+  creativeSugg1: '告诉我的星座',
+  creativeSugg2: '让我们写一首节拍诗',
+  creativeSugg3: '告诉我一个奇怪的事实',
+  balancedSugg1: '哪种花最香？',
+  balancedSugg2: '附近哪里可以看到星星？',
   balancedSugg3: '蜜蜂如何酿蜜？',
   preciseSugg1: '给我列出今晚晚餐的购物清单',
-  preciseSugg2: '为我编辑内容',
-  preciseSugg3: '谁第一个发现南极洲？',
+  preciseSugg2: '我需要帮助做研究',
+  preciseSugg3: 'Internet 是如何存档？',
   close: '关闭',
   newTopicPrompt: '通过新主题，可以开始与必应就任何主题进行全新对话',
   typingIndicatorStopRespondingAriaLabel: '停止响应',
@@ -704,7 +704,7 @@ _w['_sydConvTranslation'] = {
   sydneySapphireExplainSuggestionShip: '解释',
   sydneySapphireKeyTakeawaysSuggestionShip: '关键要点',
   sydneySapphireGenerateSummaryMessage: '生成此页面的摘要',
-  sydneySapphireGPT4Greet: '让我们通过 GPT-4 🎉获得创意。在发挥创意的同时，响应速度可能会变慢。你是否在考虑某个主题，还是应该为其建立分支?',
+  sydneySapphireGPT4Greet: '很好! GPT-4 🎉会很有趣。在发挥创意的同时，响应速度可能会变慢。你今天想要探索什么?',
   typingIndicatorStopStreamingAriaLabel: '停止流式传输',
   sydneyCarouselCollapse: '折叠',
   sydneyCarouselTitle: '最近的聊天主题',
@@ -972,7 +972,10 @@ _w['_sydConvTranslation'] = {
   starterCompareQuery9: '用孩子能够理解的方式介绍 Internet 的运作原理',
   starterCompareQuery10: '将“诗歌简介”这首诗翻译为法语，并用英语简要解释任何损失的含义',
   notificationMaxTurnsAndOpenEdge: '你已达到对话限制。若要继续聊天，',
-  notificationMaxTurnsAndOpenEdgeCta: '在 Microsoft Edge 中打开'
+  notificationMaxTurnsAndOpenEdgeCta: '在 Microsoft Edge 中打开',
+  actionBarPromptGuideToolTip: 'Prompt guide',
+  actionBarAttachButtonToolTip: 'Attach',
+  actionBarLongPlaceholder: '询问我任何内容或键入/添加人员、文件等'
 };
 function parseQueryParamsFromQuery (n, t) {
   var u, f, e, o;
@@ -1069,3 +1072,9 @@ sj_be(
   },
   1
 );
+
+// 设置未登录用户的 codexMUIDUser 为 true
+const User_UCookieValue = CookieGet('_U')
+if (User_UCookieValue == null || User_UCookieValue == undefined || User_UCookieValue == '') {
+  _w['_sydConvConfig']['codexMUIDUser'] = true
+}
