@@ -1,6 +1,7 @@
 // 同查找 _U 一样, 查找 KievRPSSecAuth 的值并替换下方的xxx
 const KievRPSSecAuth = '';
 const _RwBf = '';
+const MUID = '';
 const _U = '';
 
 const SYDNEY_ORIGIN = 'https://sydney.bing.com';
@@ -201,6 +202,13 @@ export default {
         cookies += '; _RwBf=' + randomString(256);
       }
     }
+    if (!cookie.includes('MUID=')) {
+        if (_RwBf.length !== 0) {
+          cookies += '; MUID=' + _RwBf
+        } else {
+          cookies += '; MUID=' + randomString(256);
+        }
+      }
     if (!cookie.includes('_U=')) {
       if (_U.length !== 0) {
         cookies += '; _U=' + _RwBf
