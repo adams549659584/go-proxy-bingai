@@ -57,6 +57,7 @@ var (
 	USER_TOKEN_COOKIE_NAME          = "_U"
 	USER_KievRPSSecAuth_COOKIE_NAME = "KievRPSSecAuth"
 	USER_RwBf_COOKIE_NAME           = "_RwBf"
+	User_MUID_COOKIE_NAME           = "MUID"
 	RAND_COOKIE_INDEX_NAME          = "BingAI_Rand_CK"
 	RAND_IP_COOKIE_NAME             = "BingAI_Rand_IP"
 	PROXY_WEB_PREFIX_PATH           = "/web/"
@@ -99,6 +100,17 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 			randIP = GetRandomIP()
 		}
 		req.Header.Set("X-Forwarded-For", randIP)
+
+		ckUserMUID, _ := req.Cookie(User_MUID_COOKIE_NAME)
+		if ckUserMUID == nil || ckUserMUID.Value == "" {
+			if USER_MUID != "" {
+				// 添加 MUID Cookie
+				req.AddCookie(&http.Cookie{
+					Name:  User_MUID_COOKIE_NAME,
+					Value: USER_MUID,
+				})
+			}
+		}
 
 		ckUserKievRPSSecAuth, _ := req.Cookie(USER_KievRPSSecAuth_COOKIE_NAME)
 		if ckUserKievRPSSecAuth == nil || ckUserKievRPSSecAuth.Value == "" {
@@ -160,6 +172,12 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 	}
 	//改写返回信息
 	modifyFunc := func(res *http.Response) error {
+		cookies := res.Cookies()
+		res.Header.Set("Set-Cookie", "")
+		for _, cookie := range cookies {
+			values := strings.Split(cookie.String(), ";")
+			res.Header.Add("Set-Cookie", values[0]+"; "+values[1])
+		}
 		contentType := res.Header.Get("Content-Type")
 		if strings.Contains(contentType, "text/javascript") {
 			contentEncoding := res.Header.Get("Content-Encoding")
@@ -191,7 +209,7 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 				Value: resCKRandIndex,
 				Path:  "/",
 			}
-			res.Header.Set("Set-Cookie", ckRandIndex.String())
+			res.Header.Add("Set-Cookie", ckRandIndex.String())
 		}
 
 		// 删除 CSP
@@ -218,7 +236,7 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 			Value: randIP,
 			Path:  "/",
 		}
-		res.Header.Set("Set-Cookie", ckRandIP.String())
+		res.Header.Add("Set-Cookie", ckRandIP.String())
 
 		// 跨域
 		// if IS_DEBUG_MODE {

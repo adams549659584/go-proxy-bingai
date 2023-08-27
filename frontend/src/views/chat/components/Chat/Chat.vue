@@ -112,7 +112,7 @@ const initSysConfig = async () => {
           isShowUnauthorizedModal.value = true;
           return;
         }
-        afterAuth(res.data);
+        await afterAuth(res.data);
       }
       break;
     default:
@@ -121,9 +121,9 @@ const initSysConfig = async () => {
   }
 };
 
-const afterAuth = (data: SysConfig) => {
+const afterAuth = async (data: SysConfig) => {
   if (!data.isSysCK) {
-    userStore.checkUserToken();
+    await userStore.checkUserToken();
   }
   initChatService();
 };
@@ -143,6 +143,12 @@ const hackStyle = () => {
   const conversationEle = serpEle?.shadowRoot?.querySelector('cib-conversation') as HTMLElement;
   // todo 反馈暂时无法使用，先移除
   const welcomeEle = conversationEle?.shadowRoot?.querySelector('cib-welcome-container');
+  const loginTip = welcomeEle?.shadowRoot?.querySelectorAll("div[class='muid-upsell']");
+  if (loginTip?.length) {
+    loginTip.forEach((ele) => {
+      ele.remove();
+    });
+  }
   welcomeEle?.shadowRoot?.querySelector('.preview-container')?.remove();
   serpEle?.shadowRoot?.querySelector('cib-serp-feedback')?.remove();
   if (isMobile()) {

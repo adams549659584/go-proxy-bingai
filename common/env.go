@@ -14,6 +14,7 @@ var (
 	// USer Cookie
 	USER_KievRPSSecAuth string
 	USER_RwBf           string
+	USER_MUID           string
 	// 访问权限密钥，可选
 	AUTH_KEY             string
 	AUTH_KEY_COOKIE_NAME = "BingAI_Auth_Key"
@@ -31,6 +32,9 @@ func initEnv() {
 	AUTH_KEY = os.Getenv("Go_Proxy_BingAI_AUTH_KEY")
 	// KievRPSSecAuth Cookie
 	USER_KievRPSSecAuth = os.Getenv("USER_KievRPSSecAuth")
+	// MUID Cookie
+	USER_MUID = os.Getenv("USER_MUID")
+	// _RwBf Cookie
 	USER_RwBf = os.Getenv("USER_RwBf")
 }
 

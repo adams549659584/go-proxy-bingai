@@ -66,8 +66,10 @@ export const useUserStore = defineStore(
       return userCookieVal;
     };
 
-    const checkUserToken = () => {
-      cookies.set(userMUIDCookieName, '3AC75B6BED5B6C3B03384913EC756D93', 365 * 24 * 60, '/')
+    const checkUserToken = async () => {
+      await fetch('/search?q=Bing+AI&showconv=1&FORM=hpcodx&ajaxhist=0&ajaxserp=0&cc=us', {
+        credentials: 'include',
+      })
       if (historyEnable.value) {
         CIB.vm.sidePanel.isVisibleDesktop = true;
         document.querySelector('cib-serp')?.setAttribute('alignment', 'left');
@@ -136,6 +138,15 @@ export const useUserStore = defineStore(
       cookies.set(userRwBfCookieName, token, 7 * 24 * 60, '/');
     };
 
+    const getUserMUID = () => {
+      const userCookieVal = cookies.get(userMUIDCookieName) || '';
+      return userCookieVal;
+    };
+
+    const saveUserMUID = (token: string) => {
+      cookies.set(userMUIDCookieName, token, 7 * 24 * 60, '/');
+    };
+
     const resetCache = async () => {
       const keys = document.cookie.split(";");
       if (keys) {
@@ -169,6 +180,8 @@ export const useUserStore = defineStore(
       saveUserKievRPSSecAuth,
       getUserRwBf,
       saveUserRwBf,
+      getUserMUID,
+      saveUserMUID,
       saveCookies,
       cookiesStr,
       historyEnable,
