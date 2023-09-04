@@ -65,10 +65,10 @@ curUrl = '/search';
 _G.XLS = "/web/xls.aspx";
 _G.XLS = "/web/xls.aspx";
 _G.XLSM = "/threshold/xls_master.aspx";
-_G.HT=new Date;
-_G.FCT=new Date;
-_G.BCT=new Date;
-function si_T(a) {
+_G.HT = new Date;
+_G.FCT = new Date;
+_G.BCT = new Date;
+function si_T (a) {
   // if (document.images) {
   //   _G.GPImg = new Image();
   //   _G.GPImg.src = _G.gpUrl + 'IG=' + _G.IG + '&' + a;
@@ -79,7 +79,16 @@ _G.CTT = '3000';
 _G.BNFN = "Default";;
 
 
-function CookieGet(name) {
+function CookieGet (name) {
   const v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
   return v ? v[2] : null;
+}
+
+function UserStoreGet (name) {
+  const userStoreStr = localStorage.getItem('user-store');
+  if (userStoreStr) {
+    const userStore = JSON.parse(userStoreStr);
+    return userStore[name]
+  }
+  return null;
 }

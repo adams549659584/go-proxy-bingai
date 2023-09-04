@@ -150,6 +150,7 @@ const hackStyle = () => {
     });
   }
   welcomeEle?.shadowRoot?.querySelector('.preview-container')?.remove();
+  welcomeEle?.shadowRoot?.querySelector('.footer')?.remove();
   serpEle?.shadowRoot?.querySelector('cib-serp-feedback')?.remove();
   if (isMobile()) {
     welcomeEle?.shadowRoot?.querySelector('.container-item')?.remove();

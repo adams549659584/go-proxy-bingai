@@ -20,6 +20,7 @@ export const useUserStore = defineStore(
     const historyEnable = ref(true);
     const fullCookiesEnable = ref(false);
     const themeMode = ref('auto');
+    const enterpriseEnable = ref(false);
 
     const sysConfig = ref<SysConfig>();
 
@@ -70,7 +71,7 @@ export const useUserStore = defineStore(
       await fetch('/search?q=Bing+AI&showconv=1&FORM=hpcodx&ajaxhist=0&ajaxserp=0&cc=us', {
         credentials: 'include',
       })
-      if (historyEnable.value) {
+      if (historyEnable.value && !enterpriseEnable.value) {
         CIB.vm.sidePanel.isVisibleDesktop = true;
         document.querySelector('cib-serp')?.setAttribute('alignment', 'left');
         // 设置历史记录侧边栏的高度为 90vh
@@ -87,7 +88,7 @@ export const useUserStore = defineStore(
         CIB.vm.sidePanel.isVisibleDesktop = false;
         document.querySelector('cib-serp')?.setAttribute('alignment', 'center');
       }
-      // 创建会话id
+// 创建会话id
       tryCreateConversationId();
     };
 
@@ -187,13 +188,14 @@ export const useUserStore = defineStore(
       historyEnable,
       fullCookiesEnable,
       themeMode,
+      enterpriseEnable,
     };
   },
   {
     persist: {
       key: 'user-store',
       storage: localStorage,
-      paths: ['historyEnable', 'themeMode', 'fullCookiesEnable', 'cookiesStr'],
+      paths: ['historyEnable', 'themeMode', 'fullCookiesEnable', 'cookiesStr', 'enterpriseEnable'],
     },
   }
 );
