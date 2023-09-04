@@ -9,26 +9,13 @@
     ;
 }
 )(_w.onload, _w.si_PP);
-if (User_UCookieValue == null || User_UCookieValue == undefined || User_UCookieValue == '') {
-  _w.rms.js(
-    { 'A:rms:answers:Shared:BingCore.Bundle': '/rp/Pki1-YEXD6vos5MiDyyAeDq7sgs.br.js' },
-    { 'A:rms:answers:Web:SydneyFSCHelper': '/rp/2gD9ZB2_GUiKjp2vDuIhvAfFK_k.br.js' },
-    { 'A:rms:answers:VisualSystem:ConversationScope': '/rp/YyvH_4Cy-eJWBMjNigSPB7pENoc.br.js' },
-    { 'A:rms:answers:CodexBundle:cib-bundle': '/rp/P_rh3z1-a94XPvtoM6CCtPs2vjs.br.js' },
-    { 'A:rms:answers:SharedStaticAssets:speech-sdk': '/rp/6slp3E-BqFf904Cz6cCWPY1bh9E.br.js' },
-    { 'A:rms:answers:Web:SydneyWelcomeScreenBase':'/rp/_Eg7XX2el4yFXBdqXLVFaQjHxOM.br.js' },
-    { 'A:rms:answers:Web:SydneyWelcomeScreen':'/rp/MT9w5YvjxYHdcyXSS0tDquzGw2Y.br.js' },
-    { 'A:rms:answers:Web:SydneyFullScreenConv': '/rp/X75tNCeKFlgf3t1_IuCM8zL1kd0.br.js' },
+_w.rms.js(
+  { 'A:rms:answers:Shared:BingCore.Bundle': '/rp/Bwcx9lYZzDVeFshx5WQGC-o1Sas.br.js' },
+  { 'A:rms:answers:Web:SydneyFSCHelper': '/rp/h8iJ1DxS_EC8EO0uy_IB7zKwM98.br.js' },
+  { 'A:rms:answers:VisualSystem:ConversationScope': '/rp/Hiynn7BhKG6O2vgQFThQvnyzUyM.br.js' },
+  { 'A:rms:answers:CodexBundle:cib-bundle': '/rp/3CVA3HVOsO9PskCMrYTMxMDIi1U.br.js' },
+  { 'A:rms:answers:SharedStaticAssets:speech-sdk': '/rp/6slp3E-BqFf904Cz6cCWPY1bh9E.br.js' },
+  { 'A:rms:answers:Web:SydneyWelcomeScreenBase':'/rp/_Eg7XX2el4yFXBdqXLVFaQjHxOM.br.js' },
+  { 'A:rms:answers:Web:SydneyWelcomeScreen':'/rp/MT9w5YvjxYHdcyXSS0tDquzGw2Y.br.js' },
+  { 'A:rms:answers:Web:SydneyFullScreenConv': '/rp/X75tNCeKFlgf3t1_IuCM8zL1kd0.br.js' },
   );
-} else {
-  _w.rms.js(
-    { 'A:rms:answers:Shared:BingCore.Bundle': '/rp/Pki1-YEXD6vos5MiDyyAeDq7sgs.br.js' },
-    { 'A:rms:answers:Web:SydneyFSCHelper': '/rp/2gD9ZB2_GUiKjp2vDuIhvAfFK_k.br.js' },
-    { 'A:rms:answers:VisualSystem:ConversationScope': '/rp/YyvH_4Cy-eJWBMjNigSPB7pENoc.br.js' },
-    { 'A:rms:answers:CodexBundle:cib-bundle': '/rp/kRRRe6dDU6pFoBOa7IXFkqE31qI.br.js' },
-    { 'A:rms:answers:SharedStaticAssets:speech-sdk': '/rp/6slp3E-BqFf904Cz6cCWPY1bh9E.br.js' },
-    { 'A:rms:answers:Web:SydneyWelcomeScreenBase':'/rp/_Eg7XX2el4yFXBdqXLVFaQjHxOM.br.js' },
-    { 'A:rms:answers:Web:SydneyWelcomeScreen':'/rp/MT9w5YvjxYHdcyXSS0tDquzGw2Y.br.js' },
-    { 'A:rms:answers:Web:SydneyFullScreenConv': '/rp/X75tNCeKFlgf3t1_IuCM8zL1kd0.br.js' },
-  );
-}
