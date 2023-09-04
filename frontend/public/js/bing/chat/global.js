@@ -62,6 +62,12 @@ _G = {
 };
 _G.lsUrl = '/fd/ls/l?IG=' + _G.IG;
 curUrl = '/search';
+_G.XLS = "/web/xls.aspx";
+_G.XLS = "/web/xls.aspx";
+_G.XLSM = "/threshold/xls_master.aspx";
+_G.HT=new Date;
+_G.FCT=new Date;
+_G.BCT=new Date;
 function si_T(a) {
   // if (document.images) {
   //   _G.GPImg = new Image();
@@ -70,6 +76,7 @@ function si_T(a) {
   return true;
 }
 _G.CTT = '3000';
+_G.BNFN = "Default";;
 
 
 function CookieGet(name) {
