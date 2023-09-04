@@ -40,28 +40,6 @@ export const useUserStore = defineStore(
       return B.setMinutes(B.getMinutes() + CIB.config.sydney.expiryInMinutes), B;
     };
 
-    const tryCreateConversationId = async (tryCount = 0) => {
-      if (tryCount >= maxTryCreateConversationIdCount) {
-        console.log(`已重试 ${tryCount} 次，自动创建停止`);
-        return;
-      }
-      const conversationRes = await fetch('/turing/conversation/create', {
-        credentials: 'include',
-      })
-        .then((res) => res.json())
-        .catch((err) => `error`);
-      if (conversationRes?.result?.value === 'Success') {
-        console.log('成功创建会话ID : ', conversationRes.conversationId);
-        CIB.manager.conversation.updateId(conversationRes.conversationId, getConversationExpiry(), conversationRes.clientId, conversationRes.conversationSignature);
-      } else {
-        await sleep(300);
-        tryCount += 1;
-        console.log(`开始第 ${tryCount} 次重试创建会话ID`);
-        cookies.set(randIpCookieName, '', -1);
-        tryCreateConversationId(tryCount);
-      }
-    };
-
     const getUserToken = () => {
       const userCookieVal = cookies.get(userTokenCookieName) || '';
       return userCookieVal;
@@ -88,8 +66,6 @@ export const useUserStore = defineStore(
         CIB.vm.sidePanel.isVisibleDesktop = false;
         document.querySelector('cib-serp')?.setAttribute('alignment', 'center');
       }
-// 创建会话id
-      tryCreateConversationId();
     };
 
     const saveUserToken = (token: string) => {
