@@ -21,6 +21,7 @@ export const useUserStore = defineStore(
     const fullCookiesEnable = ref(false);
     const themeMode = ref('auto');
     const enterpriseEnable = ref(false);
+    const customChatNum = ref(0);
 
     const sysConfig = ref<SysConfig>();
 
@@ -165,13 +166,14 @@ export const useUserStore = defineStore(
       fullCookiesEnable,
       themeMode,
       enterpriseEnable,
+      customChatNum,
     };
   },
   {
     persist: {
       key: 'user-store',
       storage: localStorage,
-      paths: ['historyEnable', 'themeMode', 'fullCookiesEnable', 'cookiesStr', 'enterpriseEnable'],
+      paths: ['historyEnable', 'themeMode', 'fullCookiesEnable', 'cookiesStr', 'enterpriseEnable', 'customChatNum'],
     },
   }
 );

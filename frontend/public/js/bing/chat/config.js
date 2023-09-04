@@ -1097,6 +1097,15 @@ if (User_UCookieValue == null || User_UCookieValue == undefined || User_UCookieV
   _w['_sydConvConfig']['codexMUIDUser'] = true
 }
 
+const customChatNum = UserStoreGet('customChatNum')
+if (customChatNum != 0) {
+  if (User_UCookieValue == null || User_UCookieValue == undefined || User_UCookieValue == '') {
+    _w['_sydConvConfig']['maxTurnsPerConversationMuidUser'] = customChatNum
+  } else {
+    _w['_sydConvConfig']['maxTurnsPerConversation'] = customChatNum
+  }
+}
+
 
 if (UserStoreGet('enterpriseEnable')) {
   _w['_sydConvConfig']['disableWelcomeScreen'] = false

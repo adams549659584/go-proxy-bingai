@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { h, ref, onMounted } from 'vue';
-import { NDropdown, type DropdownOption, NModal, NInput, NButton, useMessage, NImage, NForm, NFormItem, NSwitch, NTag, NSelect, NConfigProvider, lightTheme, darkTheme } from 'naive-ui';
+import { NDropdown, type DropdownOption, NModal, NInput, NInputNumber, NButton, useMessage, NImage, NForm, NFormItem, NSwitch, NTag, NSelect, NConfigProvider, lightTheme, darkTheme } from 'naive-ui';
 import settingSvgUrl from '@/assets/img/setting.svg?url';
 import { usePromptStore } from '@/stores/modules/prompt';
 import { storeToRefs } from 'pinia';
@@ -29,7 +29,7 @@ const { isShowChatServiceSelectModal } = storeToRefs(chatStore);
 const userStore = useUserStore();
 const localVersion = __APP_INFO__.version;
 const lastVersion = ref('加载中...');
-const { historyEnable, themeMode, fullCookiesEnable, cookiesStr, enterpriseEnable } = storeToRefs(userStore)
+const { historyEnable, themeMode, fullCookiesEnable, cookiesStr, enterpriseEnable, customChatNum } = storeToRefs(userStore)
 let cookiesEnable = ref(false);
 let cookies = ref('');
 let history = ref(true);
@@ -39,6 +39,7 @@ let settingIconStyle = ref({
   filter: 'invert(70%)',
 })
 const enterpriseSetting = ref(false);
+const customChatNumSetting = ref(0);
 
 const GetLastVersion = async () => {
   const res = await fetch('https://api.github.com/repos/Harry-zklcdc/go-proxy-bingai/releases/latest');
@@ -159,6 +160,7 @@ const handleSelect = (key: string) => {
         history.value = historyEnable.value;
         themeModeSetting.value = themeMode.value;
         enterpriseSetting.value = enterpriseEnable.value;
+        customChatNumSetting.value = customChatNum.value;
         isShowAdvancedSettingModal.value = true;
       }
       break;
@@ -224,6 +226,9 @@ const saveSetting = () => {
 
 const saveAdvancedSetting = () => {
   historyEnable.value = history.value;
+  const tmp = enterpriseEnable.value;
+  enterpriseEnable.value = enterpriseSetting.value;
+  customChatNum.value = customChatNumSetting.value;
   if (history.value) {
     if (userStore.getUserToken()) {
       CIB.vm.sidePanel.isVisibleDesktop = true;
@@ -254,8 +259,6 @@ const saveAdvancedSetting = () => {
       settingIconStyle.value = { filter: 'invert(0%)' }
     }
   }
-  const tmp = enterpriseEnable.value;
-  enterpriseEnable.value = enterpriseSetting.value;
   if (tmp != enterpriseSetting.value) {
     window.location.reload();
   }
@@ -314,6 +317,9 @@ const saveAdvancedSetting = () => {
         </NFormItem>
         <NFormItem path="themeMode" label="主题模式">
           <NSelect v-model:value="themeModeSetting" :options="themeModeOptions" size="large" placeholder="请选择主题模式" />
+        </NFormItem>
+        <NFormItem v-show="!cookiesEnable" path="customChatNum" label="聊天次数">
+          <NInputNumber size="large" v-model:value="customChatNumSetting" min="0" style="width: 100%;"/>
         </NFormItem>
       </NForm>
       <template #action>
