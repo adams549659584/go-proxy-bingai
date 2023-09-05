@@ -225,6 +225,8 @@ declare const CIB: {
        * 获取聊天历史
        */
       enableGetChats: boolean;
+      // 允许从页面获取内容
+      enableUpdateConversationMessages: boolean;
     };
     suggestionsv2: {
       baseUrl: string;
@@ -236,6 +238,10 @@ declare const CIB: {
        */
       hostnamesToBypassSecureConnection: string[];
       expiryInMinutes: number;
+      request: {
+        sliceIds: string[];
+        optionsSets: string[];
+      }
     };
     messaging: {
       /**
@@ -249,6 +255,9 @@ declare const CIB: {
     };
     visualSearch: {
       baseUrl: string;
+    }
+    strings: {
+        webPageContextPrefix: string;
     }
   };
   manager: {
@@ -293,5 +302,6 @@ declare const CIB: {
 
   responseTone: ToneType;
 
-  changeColorScheme: (O: 0 | 1) => {}
+  changeColorScheme: (O: 0 | 1) => {};
+  registerContext: (O) => {};
 };

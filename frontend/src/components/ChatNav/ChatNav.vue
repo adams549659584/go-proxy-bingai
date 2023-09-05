@@ -29,7 +29,7 @@ const { isShowChatServiceSelectModal } = storeToRefs(chatStore);
 const userStore = useUserStore();
 const localVersion = __APP_INFO__.version;
 const lastVersion = ref('加载中...');
-const { historyEnable, themeMode, fullCookiesEnable, cookiesStr, enterpriseEnable, customChatNum } = storeToRefs(userStore)
+const { historyEnable, themeMode, fullCookiesEnable, cookiesStr, enterpriseEnable, customChatNum, sydneyEnable, sydneyPrompt } = storeToRefs(userStore)
 let cookiesEnable = ref(false);
 let cookies = ref('');
 let history = ref(true);
@@ -40,6 +40,8 @@ let settingIconStyle = ref({
 })
 const enterpriseSetting = ref(false);
 const customChatNumSetting = ref(0);
+const sydneySetting = ref(false);
+const sydneyPromptSetting = ref('');
 
 const GetLastVersion = async () => {
   const res = await fetch('https://api.github.com/repos/Harry-zklcdc/go-proxy-bingai/releases/latest');
@@ -161,6 +163,8 @@ const handleSelect = (key: string) => {
         themeModeSetting.value = themeMode.value;
         enterpriseSetting.value = enterpriseEnable.value;
         customChatNumSetting.value = customChatNum.value;
+        sydneySetting.value = sydneyEnable.value;
+        sydneyPromptSetting.value = sydneyPrompt.value;
         isShowAdvancedSettingModal.value = true;
       }
       break;
@@ -226,9 +230,12 @@ const saveSetting = () => {
 
 const saveAdvancedSetting = () => {
   historyEnable.value = history.value;
-  const tmp = enterpriseEnable.value;
+  const tmpEnterpris = enterpriseEnable.value;
   enterpriseEnable.value = enterpriseSetting.value;
   customChatNum.value = customChatNumSetting.value;
+  const tmpSydney = sydneyEnable.value;
+  sydneyEnable.value = sydneySetting.value;
+  sydneyPrompt.value = sydneyPromptSetting.value;
   if (history.value) {
     if (userStore.getUserToken()) {
       CIB.vm.sidePanel.isVisibleDesktop = true;
@@ -259,10 +266,10 @@ const saveAdvancedSetting = () => {
       settingIconStyle.value = { filter: 'invert(0%)' }
     }
   }
-  if (tmp != enterpriseSetting.value) {
+  isShowAdvancedSettingModal.value = false;
+  if (tmpEnterpris != enterpriseSetting.value || tmpSydney != sydneySetting.value) {
     window.location.reload();
   }
-  isShowAdvancedSettingModal.value = false;
 }
 </script>
 
@@ -315,6 +322,12 @@ const saveAdvancedSetting = () => {
         <NFormItem path="enterpriseEnable" label="企业版">
           <NSwitch v-model:value="enterpriseSetting" />
         </NFormItem>
+        <NFormItem path="sydneyEnable" label="越狱模式">
+          <NSwitch v-model:value="sydneySetting" />
+        </NFormItem>
+        <NFormItem path="sydneyPrompt" label="提示词">
+          <NInput size="large" v-model:value="sydneyPromptSetting" type="text" placeholder="越狱模式提示词" />
+        </NFormItem>
         <NFormItem path="themeMode" label="主题模式">
           <NSelect v-model:value="themeModeSetting" :options="themeModeOptions" size="large" placeholder="请选择主题模式" />
         </NFormItem>
@@ -323,7 +336,7 @@ const saveAdvancedSetting = () => {
         </NFormItem>
       </NForm>
       <template #action>
-        <NButton size="large" @click="isShowSettingModal = false">取消</NButton>
+        <NButton size="large" @click="isShowAdvancedSettingModal = false">取消</NButton>
         <NButton ghost size="large" type="info" @click="saveAdvancedSetting">保存</NButton>
       </template>
     </NModal>
