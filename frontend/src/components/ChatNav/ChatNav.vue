@@ -195,7 +195,7 @@ const resetCache = async () => {
   isShowClearCacheModal.value = false;
   await userStore.resetCache();
   message.success('清理完成');
-  window.location.reload();
+  window.location.href = '/web/';
 };
 
 const saveSetting = () => {
