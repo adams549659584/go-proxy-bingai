@@ -268,7 +268,7 @@ const saveAdvancedSetting = () => {
   }
   isShowAdvancedSettingModal.value = false;
   if (tmpEnterpris != enterpriseSetting.value || tmpSydney != sydneySetting.value) {
-    window.location.reload();
+    window.location.href = '/web/';
   }
 }
 </script>
