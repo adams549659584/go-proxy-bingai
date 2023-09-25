@@ -3,14 +3,14 @@ version: '3'
 services:
   go-proxy-bingai:
     # 镜像名称
-    image: adams549659584/go-proxy-bingai
+    image: zklcdc/go-proxy-bingai
     # 容器名称
     container_name: go-proxy-bingai  
     # 自启动
     restart: always
-    volumes:
-      # 将编译好的二进制文件 (linux-amd64) 放到和 docker-compose.yml 同个文件夹, 并赋予可执行权限 (`chmod +x go-proxy-bingai`)
-      - $PWD/go-proxy-bingai:/app/go-proxy-bingai
+    # volumes:
+    #   # 将编译好的二进制文件 (linux-amd64) 放到和 docker-compose.yml 同个文件夹, 并赋予可执行权限 (`chmod +x go-proxy-bingai`)
+    #   - $PWD/go-proxy-bingai:/app/go-proxy-bingai
     ports:
       - 8080:8080
     environment:

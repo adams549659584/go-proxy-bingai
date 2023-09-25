@@ -3,6 +3,7 @@ package common
 import (
 	"bytes"
 	"compress/gzip"
+	"crypto/tls"
 	"fmt"
 	"io"
 	"log"
@@ -15,7 +16,7 @@ import (
 	"time"
 
 	"github.com/andybalholm/brotli"
-	"golang.org/x/net/proxy"
+	utls "github.com/refraction-networking/utls"
 )
 
 var (
@@ -28,6 +29,7 @@ var (
 		"Accept":                         true,
 		"Accept-Encoding":                true,
 		"Accept-Language":                true,
+		"Authorization":                  true,
 		"Referer":                        true,
 		"Connection":                     true,
 		"Cookie":                         true,
@@ -42,6 +44,11 @@ var (
 		"Content-Type":                   true,
 		"Access-Control-Request-Headers": true,
 		"Access-Control-Request-Method":  true,
+		"Sec-Ms-Gec":                     true,
+		"Sec-Ms-Gec-Version":             true,
+		"X-Client-Data":                  true,
+		"X-Ms-Client-Request-Id":         true,
+		"X-Ms-Useragent":                 true,
 	}
 	DEL_LOCATION_DOMAINS = []string{
 		"https://cn.bing.com",
@@ -50,6 +57,7 @@ var (
 	USER_TOKEN_COOKIE_NAME          = "_U"
 	USER_KievRPSSecAuth_COOKIE_NAME = "KievRPSSecAuth"
 	USER_RwBf_COOKIE_NAME           = "_RwBf"
+	User_MUID_COOKIE_NAME           = "MUID"
 	RAND_COOKIE_INDEX_NAME          = "BingAI_Rand_CK"
 	RAND_IP_COOKIE_NAME             = "BingAI_Rand_IP"
 	PROXY_WEB_PREFIX_PATH           = "/web/"
@@ -92,6 +100,17 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 			randIP = GetRandomIP()
 		}
 		req.Header.Set("X-Forwarded-For", randIP)
+
+		ckUserMUID, _ := req.Cookie(User_MUID_COOKIE_NAME)
+		if ckUserMUID == nil || ckUserMUID.Value == "" {
+			if USER_MUID != "" {
+				// 添加 MUID Cookie
+				req.AddCookie(&http.Cookie{
+					Name:  User_MUID_COOKIE_NAME,
+					Value: USER_MUID,
+				})
+			}
+		}
 
 		ckUserKievRPSSecAuth, _ := req.Cookie(USER_KievRPSSecAuth_COOKIE_NAME)
 		if ckUserKievRPSSecAuth == nil || ckUserKievRPSSecAuth.Value == "" {
@@ -142,7 +161,7 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 			req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36 Edg/113.0.1774.35")
 		}
 
-		for hKey, _ := range req.Header {
+		for hKey := range req.Header {
 			if _, ok := KEEP_REQ_HEADER_MAP[hKey]; !ok {
 				req.Header.Del(hKey)
 			}
@@ -153,6 +172,12 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 	}
 	//改写返回信息
 	modifyFunc := func(res *http.Response) error {
+		cookies := res.Cookies()
+		res.Header.Set("Set-Cookie", "")
+		for _, cookie := range cookies {
+			values := strings.Split(cookie.String(), ";")
+			res.Header.Add("Set-Cookie", values[0]+"; "+values[1])
+		}
 		contentType := res.Header.Get("Content-Type")
 		if strings.Contains(contentType, "text/javascript") {
 			contentEncoding := res.Header.Get("Content-Encoding")
@@ -184,7 +209,7 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 				Value: resCKRandIndex,
 				Path:  "/",
 			}
-			res.Header.Set("Set-Cookie", ckRandIndex.String())
+			res.Header.Add("Set-Cookie", ckRandIndex.String())
 		}
 
 		// 删除 CSP
@@ -211,7 +236,7 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 			Value: randIP,
 			Path:  "/",
 		}
-		res.Header.Set("Set-Cookie", ckRandIP.String())
+		res.Header.Add("Set-Cookie", ckRandIP.String())
 
 		// 跨域
 		// if IS_DEBUG_MODE {
@@ -235,30 +260,24 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 	// 	},
 	// }
 
+	// 为 http.DefaultTransport 添加 JA3 浏览器指纹
+	transport := http.DefaultTransport.(*http.Transport).Clone()
+	transport.DisableKeepAlives = false
+	c, _ := utls.UTLSIdToSpec(utls.HelloRandomized)
+	transport.TLSClientConfig = &tls.Config{
+		InsecureSkipVerify: true,
+		MinVersion:         c.TLSVersMin,
+		MaxVersion:         c.TLSVersMax,
+		CipherSuites:       c.CipherSuites,
+		ClientSessionCache: tls.NewLRUClientSessionCache(32),
+	}
+
 	// 代理请求   请求回来的内容   报错自动调用
 	reverseProxy := &httputil.ReverseProxy{
 		Director:       director,
 		ModifyResponse: modifyFunc,
 		ErrorHandler:   errorHandler,
-	}
-
-	// socks
-	if SOCKS_URL != "" {
-		var socksAuth *proxy.Auth
-		if SOCKS_USER != "" && SOCKS_PWD != "" {
-			socksAuth = &proxy.Auth{
-				User:     SOCKS_USER,
-				Password: SOCKS_PWD,
-			}
-		}
-		s5Proxy, err := proxy.SOCKS5("tcp", SOCKS_URL, socksAuth, proxy.Direct)
-		if err != nil {
-			panic(err)
-		}
-		tr := &http.Transport{
-			Dial: s5Proxy.Dial,
-		}
-		reverseProxy.Transport = tr
+		Transport:      transport,
 	}
 
 	return reverseProxy
@@ -306,9 +325,9 @@ func replaceResBody(originalBody string, originalScheme string, originalHost str
 	}
 
 	// 对话暂时支持国内网络，而且 Vercel 还不支持 Websocket ，先不用
-	// if strings.Contains(modifiedBodyStr, BING_CHAT_DOMAIN) {
-	// 	modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, BING_CHAT_DOMAIN, originalDomain)
-	// }
+	if strings.Contains(modifiedBodyStr, BING_URL.Host) {
+		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, BING_URL.Host, originalHost)
+	}
 
 	// if strings.Contains(modifiedBodyStr, "https://www.bingapis.com") {
 	// 	modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, "https://www.bingapis.com", "https://bing.vcanbb.top")

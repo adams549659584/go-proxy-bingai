@@ -48,13 +48,13 @@ _G = {
   Mkt: 'en-US',
   RevIpCC: 'us',
   RTL: false,
-  Ver: '24',
-  IG: '0',
+  Ver: '34',
+  IG: '0DDCVI023V390V4NCV2NV902NV092V90',
   EventID: '64831dbf22ca4450a1adcdec1d613488',
   V: 'web',
   P: 'SERP',
   DA: 'PUSE01',
-  SUIH: 'b11qHN-ervoMXODKiZJQYA',
+  SUIH: 'hOWuUXDWvWmc2IDXSCIX1A',
   adc: 'b_ad',
   // logsb 启用 sendBeacon 推送日志，并在 sendBeacon 阻止
   EF: { cookss: 1, bmcov: 1, crossdomainfix: 1, bmasynctrigger: 1, bmasynctrigger3: 1, newtabsloppyclick: 1, chevroncheckmousemove: 1, logsb: 1 },
@@ -62,7 +62,13 @@ _G = {
 };
 _G.lsUrl = '/fd/ls/l?IG=' + _G.IG;
 curUrl = '/search';
-function si_T(a) {
+_G.XLS = "/web/xls.aspx";
+_G.XLS = "/web/xls.aspx";
+_G.XLSM = "/threshold/xls_master.aspx";
+_G.HT = new Date;
+_G.FCT = new Date;
+_G.BCT = new Date;
+function si_T (a) {
   // if (document.images) {
   //   _G.GPImg = new Image();
   //   _G.GPImg.src = _G.gpUrl + 'IG=' + _G.IG + '&' + a;
@@ -70,3 +76,28 @@ function si_T(a) {
   return true;
 }
 _G.CTT = '3000';
+_G.BNFN = "Default";;
+
+
+function CookieGet (name) {
+  const v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+  return v ? v[2] : null;
+}
+
+function UserStoreGet (name) {
+  const userStoreStr = localStorage.getItem('user-store');
+  if (userStoreStr) {
+    const userStore = JSON.parse(userStoreStr);
+    return userStore[name]
+  }
+  return null;
+}
+
+function randomLowercaseString(e) {    
+  e = e || 32;
+  var t = "abcdefhijkmnprstwxyz2345678",
+  a = t.length,
+  n = "";
+  for (i = 0; i < e; i++) n += t.charAt(Math.floor(Math.random() * a));
+  return n
+}
