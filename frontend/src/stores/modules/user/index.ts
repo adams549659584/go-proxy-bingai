@@ -1,7 +1,6 @@
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import cookies from '@/utils/cookies';
-import { sleep } from '@/utils/utils';
 import sysconfApi from '@/api/sysconf';
 import { ApiResultCode } from '@/api/model/ApiResult';
 import type { SysConfig } from '@/api/model/sysconf/SysConfig';
@@ -9,12 +8,10 @@ import type { SysConfig } from '@/api/model/sysconf/SysConfig';
 export const useUserStore = defineStore(
   'user-store',
   () => {
-    const maxTryCreateConversationIdCount = 10;
     const userTokenCookieName = '_U';
     const userKievRPSSecAuthCookieName = 'KievRPSSecAuth';
     const userRwBfCookieName = '_RwBf';
     const userMUIDCookieName = 'MUID';
-    const randIpCookieName = 'BingAI_Rand_IP';
     const authKeyCookieName = 'BingAI_Auth_Key';
     const cookiesStr = ref('');
     const historyEnable = ref(true);
@@ -36,11 +33,6 @@ export const useUserStore = defineStore(
         };
       }
       return res;
-    };
-
-    const getConversationExpiry = () => {
-      const B = new Date();
-      return B.setMinutes(B.getMinutes() + CIB.config.sydney.expiryInMinutes), B;
     };
 
     const getUserToken = () => {
