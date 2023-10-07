@@ -206,6 +206,10 @@ declare const CIB: {
         baseUrl: string;
       };
     };
+    bingAtWork: {
+      isBingChatForEnterpriseEnabled: boolean;
+      chatType: string;
+    }
     captcha: {
       baseUrl: string;
     }
