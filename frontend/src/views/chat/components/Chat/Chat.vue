@@ -43,7 +43,7 @@ const isShowHistory = computed(() => {
   return (CIB.vm.isMobile && CIB.vm.sidePanel.isVisibleMobile) || (!CIB.vm.isMobile && CIB.vm.sidePanel.isVisibleDesktop);
 });
 
-const { themeMode, sydneyEnable, sydneyPrompt } = storeToRefs(userStore);
+const { themeMode, sydneyEnable, sydneyPrompt, enterpriseEnable } = storeToRefs(userStore);
 
 onMounted(async () => {
   await initChat();
@@ -55,6 +55,7 @@ onMounted(async () => {
 
   isShowLoading.value = false;
   hackStyle();
+  hackEnterprise();
   hackSydney();
   initChatPrompt();
 
@@ -165,6 +166,13 @@ const hackStyle = () => {
 
 interface IActionBarElement extends HTMLElement {
   handleInputTextKey: (ev: KeyboardEvent) => void;
+}
+
+const hackEnterprise = () => {
+  if (enterpriseEnable.value) {
+    CIB.config.bingAtWork.isBingChatForEnterpriseEnabled = true;
+    CIB.config.bingAtWork.chatType = "enterprise";
+  }
 }
 
 const hackSydney = () => {
