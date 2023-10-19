@@ -22,9 +22,9 @@ import (
 var (
 	BING_SYDNEY_DOMAIN = "https://sydney.bing.com"
 	// BING_CHAT_URL, _ = url.Parse(BING_CHAT_DOMAIN + "/sydney/ChatHub")
-	BING_SYDNEY_URL, _ = url.Parse(BING_SYDNEY_DOMAIN)
-	BING_URL, _        = url.Parse("https://www.bing.com")
-	// EDGE_SVC_URL, _     = url.Parse("https://edgeservices.bing.com")
+	BING_SYDNEY_URL, _  = url.Parse(BING_SYDNEY_DOMAIN)
+	BING_URL, _         = url.Parse("https://www.bing.com")
+	EDGE_SVC_URL, _     = url.Parse("https://edgeservices.bing.com")
 	KEEP_REQ_HEADER_MAP = map[string]bool{
 		"Accept":                         true,
 		"Accept-Encoding":                true,
@@ -78,18 +78,19 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 		}
 		originalHost = req.Host
 		originalPath = req.URL.Path
+
 		// originalDomain = fmt.Sprintf("%s:%s", originalScheme, originalHost)
 
 		req.URL.Scheme = target.Scheme
 		req.URL.Host = target.Host
 		req.Host = target.Host
 
-		// originalRefer := req.Referer()
-		// if originalRefer != "" && !strings.Contains(originalRefer, originalDomain) {
-		// 	req.Header.Set("Referer", strings.ReplaceAll(originalRefer, originalDomain, BING_URL.String()))
-		// } else {
-		req.Header.Set("Referer", fmt.Sprintf("%s/search?q=Bing+AI", BING_URL.String()))
-		// }
+		fmt.Println(req.Referer())
+		if strings.Contains(req.Referer(), "web/compose.html") {
+			req.Header.Set("Referer", fmt.Sprintf("%s/edgesvc/compose", EDGE_SVC_URL.String()))
+		} else {
+			req.Header.Set("Referer", fmt.Sprintf("%s/search?q=Bing+AI", BING_URL.String()))
+		}
 
 		// 同一会话尽量保持相同的随机IP
 		ckRandIP, _ := req.Cookie(RAND_IP_COOKIE_NAME)
