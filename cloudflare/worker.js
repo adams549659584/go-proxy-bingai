@@ -203,7 +203,7 @@ export default {
       }
     }
     if (!cookie.includes('MUID=')) {
-        if (_RwBf.length !== 0) {
+        if (MUID.length !== 0) {
           cookies += '; MUID=' + _RwBf
         } else {
           cookies += '; MUID=' + randomString(256);
