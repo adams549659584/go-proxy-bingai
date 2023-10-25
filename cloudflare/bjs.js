@@ -1,3 +1,9 @@
+/*
+Author: eustas@Github
+Link: https://github.com/google/brotli/issues/120#issuecomment-325594516
+Time: 2017-08-29T04:36:00+08:00
+*/
+
 function BrotliDecodeCore(stdlib, foreign, heap) {
     "use asm";
   
