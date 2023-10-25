@@ -85,7 +85,6 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 		req.URL.Host = target.Host
 		req.Host = target.Host
 
-		fmt.Println(req.Referer())
 		if strings.Contains(req.Referer(), "web/compose.html") {
 			req.Header.Set("Referer", fmt.Sprintf("%s/edgesvc/compose", EDGE_SVC_URL.String()))
 		} else {
