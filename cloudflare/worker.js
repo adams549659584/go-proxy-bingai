@@ -210,7 +210,11 @@ export default {
     });
     newHeaders.set('host', targetUrl.host);
     newHeaders.set('origin', targetUrl.origin);
-    newHeaders.set('referer', 'https://www.bing.com/search?q=Bing+AI');
+    if (request.headers.get('referer').indexOf('web/compose.html') != -1) {
+      newHeaders.set('referer', 'https://edgeservices.bing.com/edgesvc/compose');
+    } else {
+      newHeaders.set('referer', 'https://www.bing.com/search?q=Bing+AI&showconv=1&FORM=hpcodx');
+    }
     const randIP = getRandomIP();
     // console.log('randIP : ', randIP);
     newHeaders.set('X-Forwarded-For', randIP);
