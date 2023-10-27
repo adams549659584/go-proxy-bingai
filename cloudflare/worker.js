@@ -128,9 +128,9 @@ const rewriteBody = async (res) => {
     const content_encoding = res.headers.get("Content-Encoding") || "";
     let encoding = null;
     let body = res.body;
-     if (content_type.startsWith("text/html")) {
-       body = res.body;
-     } else if (res.url.endsWith("js")) {
+    if (content_type.startsWith("text/html")) {
+      body = res.body;
+    } else if (res.url.endsWith("js")) {
       if (res.url.includes('/rp/')) {
         let decodedContent = null;
         if (content_encoding == 'br') {
@@ -214,9 +214,11 @@ export default {
       }
     });
     newHeaders.set('host', targetUrl.host);
-    newHeaders.set('origin', targetUrl.origin);
-    if (request.headers.get('referer').indexOf('web/compose.html') != -1) {
-      newHeaders.set('referer', 'https://edgeservices.bing.com/edgesvc/compose');
+    newHeaders.set('origin', BING_ORIGIN);
+    if (request.headers.has('referer')) {
+      if (request.headers.get('referer').indexOf('web/compose.html') != -1) {
+        newHeaders.set('referer', 'https://edgeservices.bing.com/edgesvc/compose');
+      }
     } else {
       newHeaders.set('referer', 'https://www.bing.com/search?q=Bing+AI&showconv=1&FORM=hpcodx');
     }
