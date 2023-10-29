@@ -3,7 +3,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "/api/{index,web,sydney,sys-config}.go",
+      "src": "/api/{index,web,sydney,sys-config,pass}.go",
       "use": "@vercel/go"
     }
   ],
