@@ -11,6 +11,7 @@ const WEB_CONFIG = {
 
 const SYDNEY_ORIGIN = 'https://sydney.bing.com';
 const BING_ORIGIN = 'https://www.bing.com';
+const PASS_ORIGIN = "https://challenge.zklcdc.xyz"
 const KEEP_REQ_HEADERS = [
   'accept',
   'accept-encoding',
@@ -200,7 +201,9 @@ export default {
       return new Response('{"code":200,"message":"success","data":{"isSysCK":false,"isAuth":true}}')
     }
     let targetUrl;
-    if (currentUrl.pathname.includes('/sydney')) {
+    if (currentUrl.pathname === '/pass') {
+      targetUrl = new URL(PASS_ORIGIN + currentUrl.pathname + currentUrl.search);
+    } else if (currentUrl.pathname.includes('/sydney')) {
       targetUrl = new URL(SYDNEY_ORIGIN + currentUrl.pathname + currentUrl.search);
     } else {
       targetUrl = new URL(BING_ORIGIN + currentUrl.pathname + currentUrl.search);
@@ -214,7 +217,11 @@ export default {
       }
     });
     newHeaders.set('host', targetUrl.host);
-    newHeaders.set('origin', BING_ORIGIN);
+    if (currentUrl.pathname === '/pass') {
+      newHeaders.set('origin', PASS_ORIGIN);
+    } else {
+      newHeaders.set('origin', BING_ORIGIN);
+    }
     if (request.headers.has('referer')) {
       if (request.headers.get('referer').indexOf('web/compose.html') != -1) {
         newHeaders.set('referer', 'https://edgeservices.bing.com/edgesvc/compose');

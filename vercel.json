@@ -13,6 +13,10 @@
       "dest": "/api/sys-config.go"
     },
     {
+      "src": "/pass",
+      "dest": "/api/pass.go"
+    },
+    {
       "src": "/sydney/.*",
       "dest": "/api/sydney.go"
     },

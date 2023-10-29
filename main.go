@@ -11,6 +11,8 @@ import (
 func main() {
 	http.HandleFunc("/sysconf", api.SysConf)
 
+	http.HandleFunc("/pass", api.Pass)
+
 	http.HandleFunc("/sydney/", api.Sydney)
 
 	http.HandleFunc("/web/", api.WebStatic)
