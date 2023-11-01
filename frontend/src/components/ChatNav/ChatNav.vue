@@ -29,7 +29,7 @@ const { isShowChatServiceSelectModal } = storeToRefs(chatStore);
 const userStore = useUserStore();
 const localVersion = __APP_INFO__.version;
 const lastVersion = ref('加载中...');
-const { historyEnable, themeMode, fullCookiesEnable, cookiesStr, enterpriseEnable, customChatNum, sydneyEnable, sydneyPrompt } = storeToRefs(userStore)
+const { historyEnable, themeMode, fullCookiesEnable, cookiesStr, enterpriseEnable, customChatNum, sydneyEnable, sydneyPrompt, passServer } = storeToRefs(userStore)
 let cookiesEnable = ref(false);
 let cookies = ref('');
 let history = ref(true);
@@ -43,6 +43,7 @@ const enterpriseSetting = ref(false);
 const customChatNumSetting = ref(0);
 const sydneySetting = ref(false);
 const sydneyPromptSetting = ref('');
+const passServerSetting = ref('');
 
 const GetLastVersion = async () => {
   const res = await fetch('https://api.github.com/repos/Harry-zklcdc/go-proxy-bingai/releases/latest');
@@ -167,6 +168,7 @@ const handleSelect = (key: string) => {
         sydneySetting.value = sydneyEnable.value;
         sydneyPromptSetting.value = sydneyPrompt.value;
         isShowAdvancedSettingModal.value = true;
+        passServerSetting.value = passServer.value;
       }
       break;
     case navType.createImage:
@@ -237,6 +239,7 @@ const saveAdvancedSetting = () => {
   const tmpSydney = sydneyEnable.value;
   sydneyEnable.value = sydneySetting.value;
   sydneyPrompt.value = sydneyPromptSetting.value;
+  passServer.value = passServerSetting.value;
   if (history.value) {
     if (userStore.getUserToken()) {
       CIB.vm.sidePanel.isVisibleDesktop = true;
@@ -281,10 +284,15 @@ const autoPassCFChallenge = async () => {
     mode: "cors", // no-cors, *cors, same-origin
     headers: {
       "Content-Type": "application/json",
-    },body: JSON.stringify({
-      "cookies": document.cookie,
+    },
+    body: JSON.stringify({
+      "url": passServer.value,
     }),
   }).then((res) => res.json())
+  .catch(() => {
+    message.error('人机验证失败, 请重试');
+    passingCFChallenge.value = false;
+  })
   if (resq['result'] != null && resq['result'] != undefined) {
     userStore.saveCookies(resq['result']['cookies']);
     cookiesStr.value = resq['result']['cookies'];
@@ -292,7 +300,7 @@ const autoPassCFChallenge = async () => {
     passingCFChallenge.value = false;
     window.location.href = '/';
   } else {
-    message.error('请重试');
+    message.error('人机验证失败, 请重试');
     passingCFChallenge.value = false;
   }
 }
@@ -352,6 +360,9 @@ const autoPassCFChallenge = async () => {
         </NFormItem>
         <NFormItem path="sydneyEnable" label="越狱模式">
           <NSwitch v-model:value="sydneySetting" />
+        </NFormItem>
+        <NFormItem path="sydneyPrompt" label="人机验证服务器">
+          <NInput size="large" v-model:value="passServerSetting" type="text" placeholder="人机验证服务器" />
         </NFormItem>
         <NFormItem path="sydneyPrompt" label="提示词">
           <NInput size="large" v-model:value="sydneyPromptSetting" type="text" placeholder="越狱模式提示词" />
