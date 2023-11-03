@@ -11,7 +11,6 @@ const WEB_CONFIG = {
 
 const SYDNEY_ORIGIN = 'https://sydney.bing.com';
 const BING_ORIGIN = 'https://www.bing.com';
-const PASS_ORIGIN = "https://challenge.zklcdc.xyz"
 const KEEP_REQ_HEADERS = [
   'accept',
   'accept-encoding',
@@ -201,9 +200,7 @@ export default {
       return new Response('{"code":200,"message":"success","data":{"isSysCK":false,"isAuth":true}}')
     }
     let targetUrl;
-    if (currentUrl.pathname === '/pass') {
-      targetUrl = new URL(PASS_ORIGIN + currentUrl.pathname + currentUrl.search);
-    } else if (currentUrl.pathname.includes('/sydney')) {
+    if (currentUrl.pathname.includes('/sydney')) {
       targetUrl = new URL(SYDNEY_ORIGIN + currentUrl.pathname + currentUrl.search);
     } else {
       targetUrl = new URL(BING_ORIGIN + currentUrl.pathname + currentUrl.search);
@@ -217,11 +214,7 @@ export default {
       }
     });
     newHeaders.set('host', targetUrl.host);
-    if (currentUrl.pathname === '/pass') {
-      newHeaders.set('origin', PASS_ORIGIN);
-    } else {
-      newHeaders.set('origin', BING_ORIGIN);
-    }
+    newHeaders.set('origin', BING_ORIGIN);
     if (request.headers.has('referer')) {
       if (request.headers.get('referer').indexOf('web/compose.html') != -1) {
         newHeaders.set('referer', 'https://edgeservices.bing.com/edgesvc/compose');
@@ -234,6 +227,19 @@ export default {
     newHeaders.set('X-Forwarded-For', randIP);
     const cookie = request.headers.get('Cookie') || '';
     let cookies = cookie;
+
+    if (currentUrl.pathname === '/pass') {
+      let res = JSON.parse(await request.text())
+      targetUrl = res['url'];
+      newHeaders.set('origin', res['url']);
+      const newReq = new Request(targetUrl, {
+        method: request.method,
+        headers: newHeaders,
+        body: '{"cookies":"'+ cookies +'"}',
+      });
+      return await fetch(newReq);
+    }
+
     if (!cookie.includes('KievRPSSecAuth=')) {
       if (KievRPSSecAuth.length !== 0) {
         cookies += '; KievRPSSecAuth=' + KievRPSSecAuth;
@@ -250,14 +256,14 @@ export default {
     }
     if (!cookie.includes('MUID=')) {
         if (MUID.length !== 0) {
-          cookies += '; MUID=' + _RwBf
+          cookies += '; MUID=' + MUID
         } else {
           cookies += '; MUID=' + randomString(256);
         }
       }
     if (!cookie.includes('_U=')) {
       if (_U.length !== 0) {
-        cookies += '; _U=' + _RwBf
+        cookies += '; _U=' + _U;
       } else {
         cookies += '; _U=' + randomString(128);
       }
