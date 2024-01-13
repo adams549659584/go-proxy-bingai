@@ -2,6 +2,7 @@ package main
 
 import (
 	"adams549659584/go-proxy-bingai/api"
+	v1 "adams549659584/go-proxy-bingai/api/v1"
 	"log"
 	"net/http"
 	"os"
@@ -9,9 +10,12 @@ import (
 )
 
 func main() {
+	http.HandleFunc("/v1/chat/completions", v1.ChatHandler)
+	http.HandleFunc("/v1/images/generations", v1.ImageHandler)
+
 	http.HandleFunc("/sysconf", api.SysConf)
 
-	http.HandleFunc("/pass", api.Pass)
+	http.HandleFunc("/pass", api.BypassHandler)
 
 	http.HandleFunc("/sydney/", api.Sydney)
 
