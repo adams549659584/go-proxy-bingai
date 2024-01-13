@@ -44,7 +44,7 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 			cookie = common.USER_TOKEN_LIST[rng.Intn(len(common.USER_TOKEN_LIST))]
 		} else {
 			if common.BypassServer != "" {
-				resp, err := api.Bypass(cookie)
+				resp, err := api.Bypass(common.BypassServer, cookie)
 				if err != nil {
 					cookie = resp.Result.Cookies
 				}

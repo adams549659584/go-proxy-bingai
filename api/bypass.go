@@ -53,7 +53,7 @@ func BypassHandler(w http.ResponseWriter, r *http.Request) {
 		request.Url = common.BypassServer
 	}
 
-	resp, err := Bypass(r.Header.Get("Cookie"))
+	resp, err := Bypass(request.Url, r.Header.Get("Cookie"))
 	if err != nil {
 		helper.CommonResult(w, http.StatusInternalServerError, err.Error(), nil)
 		return
@@ -62,7 +62,7 @@ func BypassHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write(body)
 }
 
-func Bypass(cookie string) (passResp PassResponseStruct, err error) {
+func Bypass(bypassServer, cookie string) (passResp PassResponseStruct, err error) {
 	passRequest := passRequestStruct{
 		Cookies: cookie,
 	}
@@ -74,7 +74,7 @@ func Bypass(cookie string) (passResp PassResponseStruct, err error) {
 	client := &http.Client{
 		Timeout: time.Duration(30 * time.Second),
 	}
-	req, err := http.NewRequest("POST", common.BypassServer, bytes.NewReader(passResq))
+	req, err := http.NewRequest("POST", bypassServer, bytes.NewReader(passResq))
 	if err != nil {
 		return passResp, err
 	}
