@@ -22,7 +22,7 @@ type PassResponseStruct struct {
 	Result struct {
 		Cookies    string `json:"cookies"`
 		ScreenShot string `json:"screenshot"`
-	}
+	} `json:"result"`
 	Error string `json:"error"`
 }
 
