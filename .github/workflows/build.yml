@@ -39,6 +39,7 @@ jobs:
         run: |
           GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -tags netgo -trimpath -o go-proxy-bingai main.go && tar -zcvf go-proxy-bingai-linux-amd64.tar.gz go-proxy-bingai
           GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -tags netgo -trimpath -o go-proxy-bingai main.go && tar -zcvf go-proxy-bingai-linux-arm64.tar.gz go-proxy-bingai
+          GOOS=linux GOARCH=arm GOARM=7 go build -ldflags="-s -w" -tags netgo -trimpath -o go-proxy-bingai main.go && tar -zcvf go-proxy-bingai-linux-armv7.tar.gz go-proxy-bingai
           GOOS=windows GOARCH=amd64 go build -ldflags="-s -w" -tags netgo -trimpath -o go-proxy-bingai.exe main.go && tar -zcvf go-proxy-bingai-windows-amd64.tar.gz go-proxy-bingai.exe
           GOOS=windows GOARCH=arm64 go build -ldflags="-s -w" -tags netgo -trimpath -o go-proxy-bingai.exe main.go && tar -zcvf go-proxy-bingai-windows-arm64.tar.gz go-proxy-bingai.exe
           GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w" -tags netgo -trimpath -o go-proxy-bingai main.go && tar -zcvf go-proxy-bingai-darwin-amd64.tar.gz go-proxy-bingai
@@ -50,6 +51,7 @@ jobs:
           files: |
             go-proxy-bingai-linux-amd64.tar.gz
             go-proxy-bingai-linux-arm64.tar.gz
+            go-proxy-bingai-linux-armv7.tar.gz
             go-proxy-bingai-windows-amd64.tar.gz
             go-proxy-bingai-windows-arm64.tar.gz
             go-proxy-bingai-darwin-amd64.tar.gz
@@ -100,7 +102,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64,linux/arm64,linux/armv7
           context: .
           file: ./docker/Dockerfile  
           push: true
