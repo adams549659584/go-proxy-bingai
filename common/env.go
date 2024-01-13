@@ -1,6 +1,7 @@
 package common
 
 import (
+	"net/url"
 	"os"
 	"strings"
 )
@@ -18,6 +19,10 @@ var (
 	// 访问权限密钥，可选
 	AUTH_KEY             string
 	AUTH_KEY_COOKIE_NAME = "BingAI_Auth_Key"
+
+	BypassServer  string
+	BingBaseUrl   string
+	SydneyBaseUrl string
 )
 
 func init() {
@@ -36,6 +41,18 @@ func initEnv() {
 	USER_MUID = os.Getenv("USER_MUID")
 	// _RwBf Cookie
 	USER_RwBf = os.Getenv("USER_RwBf")
+
+	BypassServer = os.Getenv("BYPASS_SERVER")
+
+	BingBaseUrl = os.Getenv("BING_BASE_URL")
+	SydneyBaseUrl = os.Getenv("SYDNEY_BASE_URL")
+	if BingBaseUrl != "" {
+		BING_URL, _ = url.Parse(BingBaseUrl)
+	}
+	if SydneyBaseUrl != "" {
+		BING_SYDNEY_DOMAIN = SydneyBaseUrl
+		BING_SYDNEY_URL, _ = url.Parse(BING_SYDNEY_DOMAIN)
+	}
 }
 
 func initUserToken() {

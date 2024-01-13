@@ -2,6 +2,7 @@ package api
 
 import (
 	"adams549659584/go-proxy-bingai/api/helper"
+	"adams549659584/go-proxy-bingai/common"
 	"bytes"
 	"encoding/json"
 	"io"
@@ -34,6 +35,14 @@ func Pass(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		helper.CommonResult(w, http.StatusInternalServerError, err.Error(), nil)
 		return
+	}
+
+	if request.Url == "" {
+		if common.BypassServer == "" {
+			helper.CommonResult(w, http.StatusInternalServerError, "BypassServer is empty", nil)
+			return
+		}
+		request.Url = common.BypassServer
 	}
 
 	var passRequest passRequestStruct
