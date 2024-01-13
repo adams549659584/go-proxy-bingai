@@ -10,7 +10,7 @@ import (
 )
 
 type passRequestStruct struct {
-	Cookie string `json:"cookie"`
+	Cookies string `json:"cookies"`
 }
 
 type requestStruct struct {
@@ -37,7 +37,7 @@ func Pass(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var passRequest passRequestStruct
-	passRequest.Cookie = r.Header.Get("Cookie")
+	passRequest.Cookies = r.Header.Get("Cookie")
 	passResq, err := json.Marshal(passRequest)
 	if err != nil {
 		helper.CommonResult(w, http.StatusInternalServerError, err.Error(), nil)
@@ -56,6 +56,7 @@ func Pass(w http.ResponseWriter, r *http.Request) {
 	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36")
 	resp, err := client.Do(req)
 	if err != nil {
+		helper.CommonResult(w, http.StatusInternalServerError, err.Error(), nil)
 		return
 	}
 	defer resp.Body.Close()
