@@ -7,6 +7,7 @@ import (
 )
 
 var (
+	PORT string
 	// is debug
 	IS_DEBUG_MODE bool
 	// user token
@@ -34,6 +35,10 @@ func init() {
 }
 
 func initEnv() {
+	PORT = os.Getenv("PORT")
+	if PORT == "" {
+		PORT = "8080"
+	}
 	// is debug
 	IS_DEBUG_MODE = os.Getenv("Go_Proxy_BingAI_Debug") != ""
 	// auth

@@ -19,8 +19,8 @@ import (
 var (
 	apikey = os.Getenv("APIKEY")
 
-	globalChat  = binglib.NewChat("")
-	globalImage = binglib.NewImage("")
+	globalChat  = binglib.NewChat("").SetBingBaseUrl("http://localhost:" + common.PORT).SetSydneyBaseUrl("ws://localhost:" + common.PORT)
+	globalImage = binglib.NewImage("").SetBingBaseUrl("http://localhost:" + common.PORT)
 )
 
 var STOPFLAG = "stop"
@@ -28,12 +28,14 @@ var STOPFLAG = "stop"
 func ChatHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
 		w.WriteHeader(http.StatusMethodNotAllowed)
+		w.Write([]byte("Method Not Allowed"))
 		return
 	}
 
 	if apikey != "" {
 		if r.Header.Get("Authorization") != "Bearer "+apikey {
 			w.WriteHeader(http.StatusUnauthorized)
+			w.Write([]byte("Unauthorized"))
 			return
 		}
 	}
@@ -65,14 +67,8 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 
 	if resq.Model != binglib.BALANCED && resq.Model != binglib.BALANCED_OFFLINE && resq.Model != binglib.CREATIVE && resq.Model != binglib.CREATIVE_OFFLINE && resq.Model != binglib.PRECISE && resq.Model != binglib.PRECISE_OFFLINE {
 		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("Model Not Found"))
 		return
-	}
-
-	if common.BingBaseUrl != "" {
-		chat.SetBingBaseUrl(strings.ReplaceAll(strings.ReplaceAll(common.BingBaseUrl, "http://", ""), "https://", ""))
-	}
-	if common.SydneyBaseUrl != "" {
-		chat.SetSydneyBaseUrl(strings.ReplaceAll(strings.ReplaceAll(common.SydneyBaseUrl, "http://", ""), "https://", ""))
 	}
 
 	err = chat.NewConversation()
@@ -194,12 +190,14 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 func ImageHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
 		w.WriteHeader(http.StatusMethodNotAllowed)
+		w.Write([]byte("Method Not Allowed"))
 		return
 	}
 
 	if apikey != "" {
 		if r.Header.Get("Authorization") != "Bearer "+apikey {
 			w.WriteHeader(http.StatusUnauthorized)
+			w.Write([]byte("Unauthorized"))
 			return
 		}
 	}
@@ -233,9 +231,6 @@ func ImageHandler(w http.ResponseWriter, r *http.Request) {
 	var resq imageRequest
 	json.Unmarshal(resqB, &resq)
 
-	if common.BingBaseUrl != "" {
-		image.SetBingBaseUrl(strings.ReplaceAll(strings.ReplaceAll(common.BingBaseUrl, "http://", ""), "https://", ""))
-	}
 	imgs, _, err := image.Image(resq.Prompt)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
