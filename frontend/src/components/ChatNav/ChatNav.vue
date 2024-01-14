@@ -239,7 +239,7 @@ const saveAdvancedSetting = () => {
   const tmpSydney = sydneyEnable.value;
   sydneyEnable.value = sydneySetting.value;
   sydneyPrompt.value = sydneyPromptSetting.value;
-  passServer.value = passServerSetting.value;
+  userStore.setPassServer(passServerSetting.value)
   if (history.value) {
     if (userStore.getUserToken()) {
       CIB.vm.sidePanel.isVisibleDesktop = true;

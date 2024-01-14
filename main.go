@@ -16,6 +16,7 @@ func main() {
 	http.HandleFunc("/sysconf", api.SysConf)
 
 	http.HandleFunc("/pass", api.BypassHandler)
+	http.HandleFunc("/turing/captcha/challenge", api.ChallengeHandler)
 
 	http.HandleFunc("/sydney/", api.Sydney)
 

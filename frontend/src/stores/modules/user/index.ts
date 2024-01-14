@@ -13,6 +13,7 @@ export const useUserStore = defineStore(
     const userRwBfCookieName = '_RwBf';
     const userMUIDCookieName = 'MUID';
     const authKeyCookieName = 'BingAI_Auth_Key';
+    const passServerCookieName = 'BingAI_Pass_Server';
     const cookiesStr = ref('');
     const historyEnable = ref(true);
     const fullCookiesEnable = ref(false);
@@ -71,6 +72,11 @@ export const useUserStore = defineStore(
     const setAuthKey = (authKey: string) => {
       cookies.set(authKeyCookieName, authKey);
     };
+
+    const setPassServer = (p: string) => {
+      cookies.set(passServerCookieName, p);
+      passServer.value = p;
+    }
 
     const clearCache = async () => {
       // del storage
@@ -149,6 +155,7 @@ export const useUserStore = defineStore(
       saveUserToken,
       resetCache,
       setAuthKey,
+      setPassServer,
       getUserKievRPSSecAuth,
       saveUserKievRPSSecAuth,
       getUserRwBf,
