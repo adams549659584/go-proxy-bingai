@@ -2,22 +2,25 @@ package v1
 
 import (
 	"adams549659584/go-proxy-bingai/api"
-	"adams549659584/go-proxy-bingai/api/helper"
 	"adams549659584/go-proxy-bingai/common"
 	"encoding/json"
 	"io"
-	"log"
 	"math/rand"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	binglib "github.com/Harry-zklcdc/bing-lib"
 	"github.com/Harry-zklcdc/bing-lib/lib/hex"
+	"github.com/Harry-zklcdc/bing-lib/lib/request"
 )
 
 var (
 	apikey = os.Getenv("APIKEY")
+
+	globalChat  = binglib.NewChat("")
+	globalImage = binglib.NewImage("")
 )
 
 var STOPFLAG = "stop"
@@ -31,10 +34,11 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 	if apikey != "" {
 		if r.Header.Get("Authorization") != "Bearer "+apikey {
 			w.WriteHeader(http.StatusUnauthorized)
-			log.Println(r.RemoteAddr, r.Method, r.URL, "401")
 			return
 		}
 	}
+
+	chat := globalChat.Clone()
 
 	cookie := r.Header.Get("Cookie")
 	if cookie == "" {
@@ -42,19 +46,17 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 			seed := time.Now().UnixNano()
 			rng := rand.New(rand.NewSource(seed))
 			cookie = common.USER_TOKEN_LIST[rng.Intn(len(common.USER_TOKEN_LIST))]
+			chat.SetCookies(cookie)
 		} else {
-			if common.BypassServer != "" {
-				resp, err := api.Bypass(common.BypassServer, cookie, "")
-				if err != nil {
-					cookie = resp.Result.Cookies
-				}
-			}
+			cookie = chat.GetCookies()
 		}
 	}
+	chat.SetCookies(cookie)
 
 	resqB, err := io.ReadAll(r.Body)
 	if err != nil {
-		helper.CommonResult(w, http.StatusInternalServerError, err.Error(), nil)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
 		return
 	}
 
@@ -62,22 +64,25 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 	json.Unmarshal(resqB, &resq)
 
 	if resq.Model != binglib.BALANCED && resq.Model != binglib.BALANCED_OFFLINE && resq.Model != binglib.CREATIVE && resq.Model != binglib.CREATIVE_OFFLINE && resq.Model != binglib.PRECISE && resq.Model != binglib.PRECISE_OFFLINE {
-		helper.CommonResult(w, http.StatusBadRequest, "Invalid model", nil)
+		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	chat := binglib.NewChat(cookie)
-	err = chat.NewConversation()
-	if err != nil {
-		helper.CommonResult(w, http.StatusInternalServerError, err.Error(), nil)
-		return
-	}
-	chat.SetStyle(resq.Model)
+
 	if common.BingBaseUrl != "" {
-		chat.SetBingBaseUrl(common.BingBaseUrl)
+		chat.SetBingBaseUrl(strings.ReplaceAll(strings.ReplaceAll(common.BingBaseUrl, "http://", ""), "https://", ""))
 	}
 	if common.SydneyBaseUrl != "" {
-		chat.SetSydneyBaseUrl(common.SydneyBaseUrl)
+		chat.SetSydneyBaseUrl(strings.ReplaceAll(strings.ReplaceAll(common.SydneyBaseUrl, "http://", ""), "https://", ""))
 	}
+
+	err = chat.NewConversation()
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		return
+	}
+
+	chat.SetStyle(resq.Model)
 
 	prompt, msg := chat.MsgComposer(resq.Messages)
 	resp := chatResponse{
@@ -96,8 +101,6 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		w.Header().Set("Content-Type", "text/event-stream")
-		w.WriteHeader(http.StatusOK)
-		flusher.Flush()
 
 		text := make(chan string)
 		go chat.ChatStream(prompt, msg, text)
@@ -119,7 +122,8 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 				resp.Choices[0].FinishReason = &STOPFLAG
 				resData, err := json.Marshal(resp)
 				if err != nil {
-					helper.CommonResult(w, http.StatusInternalServerError, err.Error(), nil)
+					w.WriteHeader(http.StatusInternalServerError)
+					w.Write([]byte(err.Error()))
 					return
 				}
 				w.Write([]byte("data: "))
@@ -128,18 +132,31 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 			}
 			resData, err := json.Marshal(resp)
 			if err != nil {
-				helper.CommonResult(w, http.StatusInternalServerError, err.Error(), nil)
+				w.WriteHeader(http.StatusInternalServerError)
+				w.Write([]byte(err.Error()))
 				return
 			}
 			w.Write([]byte("data: "))
 			w.Write(resData)
 			w.Write([]byte("\n\n"))
 			flusher.Flush()
+
+			if tmp == "User needs to solve CAPTCHA to continue." {
+				if common.BypassServer != "" {
+					go func(cookie string) {
+						t, _ := getCookie(cookie)
+						if t != "" {
+							globalChat.SetCookies(t)
+						}
+					}(globalChat.GetCookies())
+				}
+			}
 		}
 	} else {
 		text, err := chat.Chat(prompt, msg)
 		if err != nil {
-			helper.CommonResult(w, http.StatusInternalServerError, err.Error(), nil)
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(err.Error()))
 			return
 		}
 
@@ -154,45 +171,75 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 
 		resData, err := json.Marshal(resp)
 		if err != nil {
-			helper.CommonResult(w, http.StatusInternalServerError, err.Error(), nil)
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(err.Error()))
 			return
 		}
+		w.WriteHeader(http.StatusOK)
 		w.Write(resData)
+
+		if text == "User needs to solve CAPTCHA to continue." {
+			if common.BypassServer != "" {
+				go func(cookie string) {
+					t, _ := getCookie(cookie)
+					if t != "" {
+						globalChat.SetCookies(t)
+					}
+				}(globalChat.GetCookies())
+			}
+		}
 	}
 }
 
 func ImageHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
 		w.WriteHeader(http.StatusMethodNotAllowed)
-		log.Println(r.RemoteAddr, r.Method, r.URL, "500")
 		return
 	}
 
 	if apikey != "" {
 		if r.Header.Get("Authorization") != "Bearer "+apikey {
 			w.WriteHeader(http.StatusUnauthorized)
-			log.Println(r.RemoteAddr, r.Method, r.URL, "401")
 			return
 		}
 	}
 
+	image := globalImage.Clone()
+
 	cookie := r.Header.Get("Cookie")
+	if cookie == "" {
+		if len(common.USER_TOKEN_LIST) > 0 {
+			seed := time.Now().UnixNano()
+			rng := rand.New(rand.NewSource(seed))
+			cookie = common.USER_TOKEN_LIST[rng.Intn(len(common.USER_TOKEN_LIST))]
+		} else {
+			if common.BypassServer != "" {
+				t, _ := getCookie(cookie)
+				if t != "" {
+					cookie = t
+				}
+			}
+		}
+	}
+	image.SetCookies(cookie)
 
 	resqB, err := io.ReadAll(r.Body)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		log.Println(r.RemoteAddr, r.Method, r.URL, "500")
+		w.Write([]byte(err.Error()))
 		return
 	}
 
 	var resq imageRequest
 	json.Unmarshal(resqB, &resq)
 
-	image := binglib.NewImage(cookie)
+	if common.BingBaseUrl != "" {
+		image.SetBingBaseUrl(strings.ReplaceAll(strings.ReplaceAll(common.BingBaseUrl, "http://", ""), "https://", ""))
+	}
 	imgs, _, err := image.Image(resq.Prompt)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		log.Println(r.RemoteAddr, r.Method, r.URL, "500")
+		w.Write([]byte(err.Error()))
 		return
 	}
 
@@ -208,9 +255,34 @@ func ImageHandler(w http.ResponseWriter, r *http.Request) {
 	resData, err := json.Marshal(resp)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		log.Println(r.RemoteAddr, r.Method, r.URL, "500")
+		w.Write([]byte(err.Error()))
 		return
 	}
 	w.Write(resData)
-	log.Println(r.RemoteAddr, r.Method, r.URL, "200")
+}
+
+func ModelsHandler(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func getCookie(reqCookie string) (cookie string, err error) {
+	cookie = reqCookie
+	c := request.NewRequest()
+	res := c.SetUrl(common.BingBaseUrl+"/search?q=Bing+AI&showconv=1&FORM=hpcodx&ajaxhist=0&ajaxserp=0&cc=us").
+		SetHeader("User-Agent", common.User_Agent).
+		SetHeader("Cookie", cookie).Do()
+	headers := res.GetHeaders()
+	for k, v := range headers {
+		if strings.ToLower(k) == "set-cookie" {
+			for _, i := range v {
+				cookie += strings.Split(i, "; ")[0] + "; "
+			}
+		}
+	}
+	cookie = strings.TrimLeft(strings.Trim(cookie, "; "), "; ")
+	resp, err := api.Bypass(common.BypassServer, cookie, "local-gen-"+hex.NewUUID())
+	if err != nil {
+		return
+	}
+	return resp.Result.Cookies, nil
 }
