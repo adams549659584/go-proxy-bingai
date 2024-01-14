@@ -158,9 +158,9 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 
 		// m pc 画图大小不一样
 		if isMobile {
-			req.Header.Set("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 15_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.7 Mobile/15E148 Safari/605.1.15 BingSapphire/1.0.410529013")
+			req.Header.Set("User-Agent", User_Agent_Mobile)
 		} else {
-			req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36 Edg/117.0.2045.55")
+			req.Header.Set("User-Agent", User_Agent)
 		}
 
 		for hKey := range req.Header {

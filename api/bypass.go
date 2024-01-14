@@ -9,6 +9,8 @@ import (
 	"net/http"
 	"strings"
 	"time"
+
+	"github.com/Harry-zklcdc/bing-lib/lib/hex"
 )
 
 type passRequestStruct struct {
@@ -31,13 +33,11 @@ type PassResponseStruct struct {
 func BypassHandler(w http.ResponseWriter, r *http.Request) {
 	if !helper.CheckAuth(r) {
 		helper.UnauthorizedResult(w)
-		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
 
 	if r.Method != "POST" {
 		helper.CommonResult(w, http.StatusMethodNotAllowed, "Method Not Allowed", nil)
-		w.WriteHeader(http.StatusMethodNotAllowed)
 		return
 	}
 
@@ -45,30 +45,26 @@ func BypassHandler(w http.ResponseWriter, r *http.Request) {
 	resq, err := io.ReadAll(r.Body)
 	if err != nil {
 		helper.CommonResult(w, http.StatusInternalServerError, err.Error(), nil)
-		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
 	err = json.Unmarshal(resq, &request)
 	if err != nil {
 		helper.CommonResult(w, http.StatusInternalServerError, err.Error(), nil)
-		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
 	if request.Url == "" {
 		if common.BypassServer == "" {
 			helper.CommonResult(w, http.StatusInternalServerError, "BypassServer is empty", nil)
-			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 		request.Url = common.BypassServer
 	}
 
-	resp, err := Bypass(request.Url, r.Header.Get("Cookie"), "")
+	resp, err := Bypass(request.Url, r.Header.Get("Cookie"), "local-gen-"+hex.NewUUID())
 	if err != nil {
 		helper.CommonResult(w, http.StatusInternalServerError, err.Error(), nil)
-		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 	body, _ := json.Marshal(resp)
@@ -87,13 +83,11 @@ const respHtml = `
 func ChallengeHandler(w http.ResponseWriter, r *http.Request) {
 	if !helper.CheckAuth(r) {
 		helper.UnauthorizedResult(w)
-		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
 
 	if r.Method != "GET" {
 		helper.CommonResult(w, http.StatusMethodNotAllowed, "Method Not Allowed", nil)
-		w.WriteHeader(http.StatusMethodNotAllowed)
 		return
 	}
 
@@ -111,7 +105,6 @@ func ChallengeHandler(w http.ResponseWriter, r *http.Request) {
 	resp, err := Bypass(bypassServer, r.Header.Get("Cookie"), "")
 	if err != nil {
 		helper.CommonResult(w, http.StatusInternalServerError, err.Error(), nil)
-		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
@@ -122,7 +115,6 @@ func ChallengeHandler(w http.ResponseWriter, r *http.Request) {
 
 	// helper.CommonResult(w, http.StatusOK, "ok", resp)
 	w.Write([]byte(respHtml))
-	w.WriteHeader(http.StatusOK)
 }
 
 func Bypass(bypassServer, cookie, iframeid string) (passResp PassResponseStruct, err error) {
@@ -143,7 +135,7 @@ func Bypass(bypassServer, cookie, iframeid string) (passResp PassResponseStruct,
 		return passResp, err
 	}
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36")
+	req.Header.Set("User-Agent", common.User_Agent)
 	resp, err := client.Do(req)
 	if err != nil {
 		return passResp, err
