@@ -3,7 +3,11 @@
   "version": 2,
   "builds": [
     {
-      "src": "/api/{index,web,sydney,sys-config,pass}.go",
+      "src": "/api/{index,web,sydney,sys-config,bypass,challenge}.go",
+      "use": "@vercel/go"
+    },
+    {
+      "src": "/api/v1/{chat,image}.go",
       "use": "@vercel/go"
     }
   ],
@@ -14,7 +18,27 @@
     },
     {
       "src": "/pass",
-      "dest": "/api/pass.go"
+      "dest": "/api/bypass.go"
+    },
+    {
+      "src": "/turing/captcha/challenge",
+      "dest": "/api/challenge.go"
+    },
+    {
+      "src": "/v1/chat/completions",
+      "dest": "/api/v1/chat.go"
+    },
+    {
+      "src": "/api/v1/chat/completions",
+      "dest": "/api/v1/chat.go"
+    },
+    {
+      "src": "/v1/images/generations",
+      "dest": "/api/v1/image.go"
+    },
+    {
+      "src": "/api/v1/images/generations",
+      "dest": "/api/v1/image.go"
     },
     {
       "src": "/sydney/.*",

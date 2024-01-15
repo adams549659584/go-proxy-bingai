@@ -1,29 +1,22 @@
 package v1
 
 import (
-	"adams549659584/go-proxy-bingai/api"
 	"adams549659584/go-proxy-bingai/common"
 	"encoding/json"
 	"io"
 	"math/rand"
 	"net/http"
-	"os"
-	"strings"
 	"time"
 
 	binglib "github.com/Harry-zklcdc/bing-lib"
 	"github.com/Harry-zklcdc/bing-lib/lib/hex"
-	"github.com/Harry-zklcdc/bing-lib/lib/request"
 )
 
 var (
-	apikey = os.Getenv("APIKEY")
+	globalChat = binglib.NewChat("").SetBingBaseUrl("http://localhost:" + common.PORT).SetSydneyBaseUrl("ws://localhost:" + common.PORT)
 
-	globalChat  = binglib.NewChat("").SetBingBaseUrl("http://localhost:" + common.PORT).SetSydneyBaseUrl("ws://localhost:" + common.PORT)
-	globalImage = binglib.NewImage("").SetBingBaseUrl("http://localhost:" + common.PORT)
+	STOPFLAG = "stop"
 )
-
-var STOPFLAG = "stop"
 
 func ChatHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
@@ -185,99 +178,4 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-}
-
-func ImageHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "POST" {
-		w.WriteHeader(http.StatusMethodNotAllowed)
-		w.Write([]byte("Method Not Allowed"))
-		return
-	}
-
-	if apikey != "" {
-		if r.Header.Get("Authorization") != "Bearer "+apikey {
-			w.WriteHeader(http.StatusUnauthorized)
-			w.Write([]byte("Unauthorized"))
-			return
-		}
-	}
-
-	image := globalImage.Clone()
-
-	cookie := r.Header.Get("Cookie")
-	if cookie == "" {
-		if len(common.USER_TOKEN_LIST) > 0 {
-			seed := time.Now().UnixNano()
-			rng := rand.New(rand.NewSource(seed))
-			cookie = common.USER_TOKEN_LIST[rng.Intn(len(common.USER_TOKEN_LIST))]
-		} else {
-			if common.BypassServer != "" {
-				t, _ := getCookie(cookie)
-				if t != "" {
-					cookie = t
-				}
-			}
-		}
-	}
-	image.SetCookies(cookie)
-
-	resqB, err := io.ReadAll(r.Body)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
-		return
-	}
-
-	var resq imageRequest
-	json.Unmarshal(resqB, &resq)
-
-	imgs, _, err := image.Image(resq.Prompt)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
-		return
-	}
-
-	resp := imageResponse{
-		Created: time.Now().Unix(),
-	}
-	for _, img := range imgs {
-		resp.Data = append(resp.Data, imageData{
-			Url: img,
-		})
-	}
-
-	resData, err := json.Marshal(resp)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
-		return
-	}
-	w.Write(resData)
-}
-
-func ModelsHandler(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func getCookie(reqCookie string) (cookie string, err error) {
-	cookie = reqCookie
-	c := request.NewRequest()
-	res := c.SetUrl(common.BingBaseUrl+"/search?q=Bing+AI&showconv=1&FORM=hpcodx&ajaxhist=0&ajaxserp=0&cc=us").
-		SetHeader("User-Agent", common.User_Agent).
-		SetHeader("Cookie", cookie).Do()
-	headers := res.GetHeaders()
-	for k, v := range headers {
-		if strings.ToLower(k) == "set-cookie" {
-			for _, i := range v {
-				cookie += strings.Split(i, "; ")[0] + "; "
-			}
-		}
-	}
-	cookie = strings.TrimLeft(strings.Trim(cookie, "; "), "; ")
-	resp, err := api.Bypass(common.BypassServer, cookie, "local-gen-"+hex.NewUUID())
-	if err != nil {
-		return
-	}
-	return resp.Result.Cookies, nil
 }

@@ -1,6 +1,12 @@
 package v1
 
-import binglib "github.com/Harry-zklcdc/bing-lib"
+import (
+	"os"
+
+	binglib "github.com/Harry-zklcdc/bing-lib"
+)
+
+var apikey = os.Getenv("APIKEY")
 
 type chatRequest struct {
 	Messages []binglib.Message `json:"messages"`
