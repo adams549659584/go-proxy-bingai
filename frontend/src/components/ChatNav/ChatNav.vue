@@ -244,14 +244,15 @@ const saveAdvancedSetting = () => {
   sydneyPrompt.value = sydneyPromptSetting.value;
   userStore.setPassServer(passServerSetting.value)
   if (history.value) {
-    if (userStore.getUserToken()) {
-      CIB.vm.sidePanel.isVisibleDesktop = true;
-      document.querySelector('cib-serp')?.setAttribute('alignment', 'left');
+    if (userStore.getUserToken() && !enterpriseEnable.value) {
+      CIB.vm.sidePanel.panels = [{type: 'threads', label: '最近的活动'},{type: 'plugins', label: '插件'}]
+    } else {
+      CIB.vm.sidePanel.panels = [{type: 'plugins', label: '插件'}]
+      CIB.vm.sidePanel.selectedPanel = 'plugins'
     }
   } else {
-    CIB.vm.sidePanel.isVisibleDesktop = false;
-    CIB.vm.sidePanel.isVisibleMobile = false;
-    document.querySelector('cib-serp')?.setAttribute('alignment', 'center');
+    CIB.vm.sidePanel.panels = [{type: 'plugins', label: '插件'}]
+    CIB.vm.sidePanel.selectedPanel = 'plugins'
   }
   themeMode.value = themeModeSetting.value;
   if (themeModeSetting.value == 'light') {

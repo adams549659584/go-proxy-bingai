@@ -47,22 +47,15 @@ export const useUserStore = defineStore(
       await fetch('/search?q=Bing+AI&showconv=1&FORM=hpcodx&ajaxhist=0&ajaxserp=0&cc=us', {
         credentials: 'include',
       })
-      if (historyEnable.value && !enterpriseEnable.value) {
-        CIB.vm.sidePanel.isVisibleDesktop = true;
-        document.querySelector('cib-serp')?.setAttribute('alignment', 'left');
-        // 设置历史记录侧边栏的高度为 90vh
-        document.querySelector('cib-serp')?.shadowRoot?.querySelector('cib-side-panel')?.shadowRoot?.querySelector('div.scroller')?.setAttribute('style', 'height: 90vh');
-      } else {
-        CIB.vm.sidePanel.isVisibleDesktop = false;
-        document.querySelector('cib-serp')?.setAttribute('alignment', 'center');
-      }
       const token = getUserToken();
-      if (!token) {
-        // 未登录不显示历史记录
-        CIB.config.features.enableGetChats = false;
-        CIB.vm.sidePanel.isVisibleMobile = false;
-        CIB.vm.sidePanel.isVisibleDesktop = false;
-        document.querySelector('cib-serp')?.setAttribute('alignment', 'center');
+      if (historyEnable.value) {
+        if (!token || enterpriseEnable.value) {
+          CIB.vm.sidePanel.panels = [{type: 'plugins', label: '插件'}]
+          CIB.vm.sidePanel.selectedPanel = 'plugins'
+        }
+      } else {
+        CIB.vm.sidePanel.panels = [{type: 'plugins', label: '插件'}]
+        CIB.vm.sidePanel.selectedPanel = 'plugins'
       }
     };
 
