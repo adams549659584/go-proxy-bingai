@@ -43,7 +43,7 @@ const isShowHistory = computed(() => {
   return (CIB.vm.isMobile && CIB.vm.sidePanel.isVisibleMobile) || (!CIB.vm.isMobile && CIB.vm.sidePanel.isVisibleDesktop);
 });
 
-const { themeMode, sydneyEnable, sydneyPrompt, enterpriseEnable } = storeToRefs(userStore);
+const { themeMode, gpt4tEnable, sydneyEnable, sydneyPrompt, enterpriseEnable } = storeToRefs(userStore);
 
 onMounted(async () => {
   await initChat();
@@ -176,51 +176,34 @@ const hackEnterprise = () => {
 }
 
 const hackSydney = () => {
+  if (gpt4tEnable.value) {
+    CIB.config.sydney.request.optionsSets.push("dlgpt4t")
+  }
   if (sydneyEnable.value) {
     CIB.config.sydney.request.sliceIds = [
       "winmuid1tf",
-      "styleoff",
-      "ccadesk",
-      "smsrpsuppv4cf",
-      "ssrrcache",
-      "contansperf",
-      "crchatrev",
-      "winstmsg2tf",
-      "creatgoglt",
-      "creatorv2t",
-      "sydconfigoptt",
-      "adssqovroff",
-      "530pstho",
-      "517opinion",
-      "418dhlth",
-      "512sprtic1s0",
-      "emsgpr",
-      "525ptrcps0",
-      "529rweas0",
-      "515oscfing2s0",
-      "524vidansgs0",
+			"styleoff",
+			"ccadesk",
+			"smsrpsuppv4cf",
+			"ssrrcache",
+			"contansperf",
+			"crchatrev",
+			"winstmsg2tf",
+			"creatgoglt",
+			"creatorv2t",
+			"sydconfigoptt",
+			"adssqovroff",
+			"530pstho",
+			"517opinion",
+			"418dhlth",
+			"512sprtic1s0",
+			"emsgpr",
+			"525ptrcps0",
+			"529rweas0",
+			"515oscfing2s0",
+			"524vidansgs0",
     ]
-    CIB.config.sydney.request.optionsSets = [
-        "nlu_direct_response_filter",
-        "deepleo",
-        "disable_emoji_spoken_text",
-        "responsible_ai_policy_235",
-        "enablemm",
-        "dv3sugg",
-        "iyxapbing",
-        "iycapbing",
-        "h3imaginative",
-        "clgalileo",
-        "gencontentv3",
-        "fluxsrtrunc",
-        "fluxtrunc",
-        "fluxv1",
-        "rai278",
-        "replaceurl",
-        "iyoloexp",
-        "udt4upm5gnd",
-        "nojbfedge",
-    ]
+    CIB.config.sydney.request.optionsSets.push("rai278", "enflst", "enpcktrk",  "rcaldictans", "rcaltimeans", "nojbfedge")
     CIB.config.features.enableUpdateConversationMessages = true
     CIB.registerContext([{
       "author": "user",

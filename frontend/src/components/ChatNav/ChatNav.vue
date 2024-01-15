@@ -29,7 +29,7 @@ const { isShowChatServiceSelectModal } = storeToRefs(chatStore);
 const userStore = useUserStore();
 const localVersion = __APP_INFO__.version;
 const lastVersion = ref('加载中...');
-const { historyEnable, themeMode, fullCookiesEnable, cookiesStr, enterpriseEnable, customChatNum, sydneyEnable, sydneyPrompt, passServer } = storeToRefs(userStore)
+const { historyEnable, themeMode, fullCookiesEnable, cookiesStr, enterpriseEnable, customChatNum, gpt4tEnable, sydneyEnable, sydneyPrompt, passServer } = storeToRefs(userStore)
 let cookiesEnable = ref(false);
 let cookies = ref('');
 let history = ref(true);
@@ -41,6 +41,7 @@ let settingIconStyle = ref({
 let passingCFChallenge = ref(false);
 const enterpriseSetting = ref(false);
 const customChatNumSetting = ref(0);
+const gpt4tSetting = ref(true);
 const sydneySetting = ref(false);
 const sydneyPromptSetting = ref('');
 const passServerSetting = ref('');
@@ -165,6 +166,7 @@ const handleSelect = (key: string) => {
         themeModeSetting.value = themeMode.value;
         enterpriseSetting.value = enterpriseEnable.value;
         customChatNumSetting.value = customChatNum.value;
+        gpt4tSetting.value = gpt4tEnable.value;
         sydneySetting.value = sydneyEnable.value;
         sydneyPromptSetting.value = sydneyPrompt.value;
         isShowAdvancedSettingModal.value = true;
@@ -236,7 +238,8 @@ const saveAdvancedSetting = () => {
   const tmpEnterpris = enterpriseEnable.value;
   enterpriseEnable.value = enterpriseSetting.value;
   customChatNum.value = customChatNumSetting.value;
-  const tmpSydney = sydneyEnable.value;
+  const tmpGpt4t = gpt4tEnable.value, tmpSydney = sydneyEnable.value;
+  gpt4tEnable.value = gpt4tSetting.value;
   sydneyEnable.value = sydneySetting.value;
   sydneyPrompt.value = sydneyPromptSetting.value;
   userStore.setPassServer(passServerSetting.value)
@@ -271,7 +274,7 @@ const saveAdvancedSetting = () => {
     }
   }
   isShowAdvancedSettingModal.value = false;
-  if (tmpEnterpris != enterpriseSetting.value || tmpSydney != sydneySetting.value) {
+  if (tmpEnterpris != enterpriseSetting.value || tmpSydney != sydneySetting.value || tmpGpt4t != gpt4tSetting.value) {
     window.location.href = '/';
   }
 }
@@ -357,6 +360,9 @@ const autoPassCFChallenge = async () => {
         </NFormItem>
         <NFormItem path="enterpriseEnable" label="企业版">
           <NSwitch v-model:value="enterpriseSetting" />
+        </NFormItem>
+        <NFormItem path="gpt4tEnable" label="GPT4 Turbo">
+          <NSwitch v-model:value="gpt4tSetting" />
         </NFormItem>
         <NFormItem path="sydneyEnable" label="越狱模式">
           <NSwitch v-model:value="sydneySetting" />
