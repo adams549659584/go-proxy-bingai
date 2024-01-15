@@ -12,8 +12,12 @@ import (
 func main() {
 	http.HandleFunc("/v1/chat/completions", v1.ChatHandler)
 	http.HandleFunc("/v1/images/generations", v1.ImageHandler)
+	http.HandleFunc("/v1/models/", v1.ModelHandler)
+	http.HandleFunc("/v1/models", v1.ModelsHandler)
 	http.HandleFunc("/api/v1/chat/completions", v1.ChatHandler)
 	http.HandleFunc("/api/v1/images/generations", v1.ImageHandler)
+	http.HandleFunc("/api/v1/models/", v1.ModelHandler)
+	http.HandleFunc("/api/v1/models", v1.ModelsHandler)
 
 	http.HandleFunc("/sysconf", api.SysConf)
 

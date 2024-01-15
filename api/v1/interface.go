@@ -45,3 +45,15 @@ type imageResponse struct {
 type imageData struct {
 	Url string `json:"url"`
 }
+
+type modelStruct struct {
+	Id      string `json:"id"`
+	Object  string `json:"object"`
+	Created int64  `json:"created"`
+	OwnedBy string `json:"owned_by"`
+}
+
+type modelResponse struct {
+	Object string        `json:"object"`
+	Data   []modelStruct `json:"data"`
+}
