@@ -5,6 +5,8 @@ const _RwBf = '';
 const MUID = '';
 const _U = '';
 
+const BYPASS_SERVER = '';
+
 const WEB_CONFIG = {
   WORKER_URL: '', // 如无特殊需求请，保持为''
 };
@@ -66,6 +68,15 @@ const IP_RANGE = [
   ['13.80.0.0', '13.81.255.255'],        // Azure Cloud WestEurope 131070
   ['20.73.0.0', '20.73.255.255'],        // Azure Cloud WestEurope 65534
 ];
+
+const challengeResponseBody = `
+<script type="text/javascript">
+    function verificationComplete(){
+        window.parent.postMessage("verificationComplete", "*");
+	}
+    window.onload = verificationComplete;
+</script>
+`;
 
 /**
  * 随机整数 [min,max)
@@ -179,6 +190,52 @@ const home = async (pathname) => {
   return newRes;
 };
 
+/**
+ * challenge
+ * @param {Request} request
+ * @param {String} cookie
+ * @returns
+ */
+const challenge = async (request, cookie) => {
+  if (request.method != 'GET') {
+    return new Response('{"code":405,"message":"Method Not Allowed","data":null}')
+  }
+
+  const currentUrl = new URL(request.url);
+  let req = {
+    'iframeid': currentUrl.searchParams.get('iframeid'),
+    'cookies': cookie,
+  }
+  console.log(JSON.stringify(req))
+  const newReq = new Request(BYPASS_SERVER, {
+    method: 'POST',
+    body: JSON.stringify(req),
+  });
+  const res = await fetch(newReq)
+  if (res.status != 200) {
+    return new Response('{"code":500,"message":"Server Error","data":null}')
+  }
+  const resData = await res.json();
+
+  const cookies = resData.result.cookies.split('; ')
+  const newRes = new Response(challengeResponseBody);
+  for (let v of cookies) {
+    newRes.headers.append('Set-Cookie', v+'; path=/')
+  }
+  newRes.headers.set('Content-Type', 'text/html; charset=utf-8');
+  return newRes
+};
+
+/**
+ * bingapi
+ * @param {Request} request
+ * @param {String} cookie
+ * @returns
+ */
+const bingapi = async (request, cookie) => {
+  return new Response('{"code":200,"message":"TODO","data":null}')
+};
+
 export default {
   /**
    * fetch
@@ -228,18 +285,6 @@ export default {
     const cookie = request.headers.get('Cookie') || '';
     let cookies = cookie;
 
-    if (currentUrl.pathname === '/pass') {
-      let res = JSON.parse(await request.text())
-      targetUrl = res['url'];
-      newHeaders.set('origin', res['url']);
-      const newReq = new Request(targetUrl, {
-        method: request.method,
-        headers: newHeaders,
-        body: '{"cookies":"'+ cookies +'"}',
-      });
-      return await fetch(newReq);
-    }
-
     if (!cookie.includes('KievRPSSecAuth=')) {
       if (KievRPSSecAuth.length !== 0) {
         cookies += '; KievRPSSecAuth=' + KievRPSSecAuth;
@@ -268,6 +313,25 @@ export default {
         cookies += '; _U=' + randomString(128);
       }
     }
+
+    if (currentUrl.pathname === '/turing/captcha/challenge') {
+      return challenge(request, cookies);
+    }
+    if (currentUrl.pathname.indexOf('/v1') === 0 || currentUrl.pathname.indexOf('/api/v1') === 0) {
+      return bingapi(request, cookies);
+    }
+    if (currentUrl.pathname === '/pass') {
+      let res = JSON.parse(await request.text())
+      targetUrl = res['url'];
+      newHeaders.set('origin', res['url']);
+      const newReq = new Request(targetUrl, {
+        method: request.method,
+        headers: newHeaders,
+        body: '{"cookies":"'+ cookies +'","iframeid":"local-gen-'+crypto.randomUUID()+'"}',
+      });
+      return await fetch(newReq);
+    }
+
     newHeaders.set('Cookie', cookies);
     const oldUA = request.headers.get('user-agent') || '';
     const isMobile = oldUA.includes('Mobile') || oldUA.includes('Android');
