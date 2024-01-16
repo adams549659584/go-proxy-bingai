@@ -36,7 +36,7 @@ func main() {
 
 	srv := &http.Server{
 		Addr:         addr,
-		WriteTimeout: 15 * time.Second,
+		WriteTimeout: 5 * time.Minute,
 		ReadTimeout:  15 * time.Second,
 	}
 	log.Fatal(srv.ListenAndServe())
