@@ -7,12 +7,10 @@ import (
 )
 
 func ModelHandler(w http.ResponseWriter, r *http.Request) {
-	if apikey != "" {
-		if r.Header.Get("Authorization") != "Bearer "+apikey {
-			w.WriteHeader(http.StatusUnauthorized)
-			w.Write([]byte("Unauthorized"))
-			return
-		}
+	if apikey != "" && r.Header.Get("Authorization") != "Bearer "+apikey {
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte("Unauthorized"))
+		return
 	}
 
 	parts := strings.Split(r.URL.Path, "/")

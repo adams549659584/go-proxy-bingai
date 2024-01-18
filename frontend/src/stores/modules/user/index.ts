@@ -48,12 +48,7 @@ export const useUserStore = defineStore(
         credentials: 'include',
       })
       const token = getUserToken();
-      if (historyEnable.value) {
-        if (!token || enterpriseEnable.value) {
-          CIB.vm.sidePanel.panels = [{type: 'plugins', label: '插件'}]
-          CIB.vm.sidePanel.selectedPanel = 'plugins'
-        }
-      } else {
+      if (!historyEnable.value || !token || enterpriseEnable.value) {
         CIB.vm.sidePanel.panels = [{type: 'plugins', label: '插件'}]
         CIB.vm.sidePanel.selectedPanel = 'plugins'
       }

@@ -243,13 +243,8 @@ const saveAdvancedSetting = () => {
   sydneyEnable.value = sydneySetting.value;
   sydneyPrompt.value = sydneyPromptSetting.value;
   userStore.setPassServer(passServerSetting.value)
-  if (history.value) {
-    if (userStore.getUserToken() && !enterpriseEnable.value) {
-      CIB.vm.sidePanel.panels = [{type: 'threads', label: '最近的活动'},{type: 'plugins', label: '插件'}]
-    } else {
-      CIB.vm.sidePanel.panels = [{type: 'plugins', label: '插件'}]
-      CIB.vm.sidePanel.selectedPanel = 'plugins'
-    }
+  if (history.value && userStore.getUserToken() && !enterpriseEnable.value) {
+    CIB.vm.sidePanel.panels = [{type: 'threads', label: '最近的活动'},{type: 'plugins', label: '插件'}]
   } else {
     CIB.vm.sidePanel.panels = [{type: 'plugins', label: '插件'}]
     CIB.vm.sidePanel.selectedPanel = 'plugins'

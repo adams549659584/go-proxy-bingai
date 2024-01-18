@@ -22,12 +22,10 @@ func ImageHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if apikey != "" {
-		if r.Header.Get("Authorization") != "Bearer "+apikey {
-			w.WriteHeader(http.StatusUnauthorized)
-			w.Write([]byte("Unauthorized"))
-			return
-		}
+	if apikey != "" && r.Header.Get("Authorization") != "Bearer "+apikey {
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte("Unauthorized"))
+		return
 	}
 
 	image := globalImage.Clone()

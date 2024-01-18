@@ -104,25 +104,30 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 		req.Header.Set("X-Forwarded-For", randIP)
 
 		ckUserMUID, _ := req.Cookie(User_MUID_COOKIE_NAME)
-		if ckUserMUID == nil || ckUserMUID.Value == "" {
-			if USER_MUID != "" {
-				// 添加 MUID Cookie
-				req.AddCookie(&http.Cookie{
-					Name:  User_MUID_COOKIE_NAME,
-					Value: USER_MUID,
-				})
-			}
+		if (ckUserMUID == nil || ckUserMUID.Value == "") && USER_MUID != "" {
+			// 添加 MUID Cookie
+			req.AddCookie(&http.Cookie{
+				Name:  User_MUID_COOKIE_NAME,
+				Value: USER_MUID,
+			})
 		}
 
 		ckUserKievRPSSecAuth, _ := req.Cookie(USER_KievRPSSecAuth_COOKIE_NAME)
-		if ckUserKievRPSSecAuth == nil || ckUserKievRPSSecAuth.Value == "" {
-			if USER_KievRPSSecAuth != "" {
-				// 添加 KievRPSSecAuth Cookie
-				req.AddCookie(&http.Cookie{
-					Name:  USER_KievRPSSecAuth_COOKIE_NAME,
-					Value: USER_KievRPSSecAuth,
-				})
-			}
+		if (ckUserKievRPSSecAuth == nil || ckUserKievRPSSecAuth.Value == "") && USER_KievRPSSecAuth != "" {
+			// 添加 KievRPSSecAuth Cookie
+			req.AddCookie(&http.Cookie{
+				Name:  USER_KievRPSSecAuth_COOKIE_NAME,
+				Value: USER_KievRPSSecAuth,
+			})
+		}
+
+		ckUserRwBf, _ := req.Cookie(USER_RwBf_COOKIE_NAME)
+		if (ckUserRwBf == nil || ckUserRwBf.Value == "") && USER_RwBf != "" {
+			// 添加 RwBf Cookie
+			req.AddCookie(&http.Cookie{
+				Name:  USER_RwBf_COOKIE_NAME,
+				Value: USER_RwBf,
+			})
 		}
 
 		// 未登录用户
@@ -140,17 +145,6 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 			// if !strings.Contains(ua, "iPhone") || !strings.Contains(ua, "Mobile") {
 			// 	req.Header.Set("User-Agent", "iPhone Mobile "+ua)
 			// }
-		}
-
-		ckUserRwBf, _ := req.Cookie(USER_RwBf_COOKIE_NAME)
-		if ckUserRwBf == nil || ckUserRwBf.Value == "" {
-			if USER_RwBf != "" {
-				// 添加 RwBf Cookie
-				req.AddCookie(&http.Cookie{
-					Name:  USER_RwBf_COOKIE_NAME,
-					Value: USER_RwBf,
-				})
-			}
 		}
 
 		ua := req.UserAgent()

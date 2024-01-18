@@ -28,12 +28,10 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if apikey != "" {
-		if r.Header.Get("Authorization") != "Bearer "+apikey {
-			w.WriteHeader(http.StatusUnauthorized)
-			w.Write([]byte("Unauthorized"))
-			return
-		}
+	if apikey != "" && r.Header.Get("Authorization") != "Bearer "+apikey {
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte("Unauthorized"))
+		return
 	}
 
 	chat := globalChat.Clone()
@@ -133,15 +131,13 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 			w.Write([]byte("\n\n"))
 			flusher.Flush()
 
-			if tmp == "User needs to solve CAPTCHA to continue." {
-				if common.BypassServer != "" {
-					go func(cookie string) {
-						t, _ := getCookie(cookie)
-						if t != "" {
-							globalChat.SetCookies(t)
-						}
-					}(globalChat.GetCookies())
-				}
+			if tmp == "User needs to solve CAPTCHA to continue." && common.BypassServer != "" {
+				go func(cookie string) {
+					t, _ := getCookie(cookie)
+					if t != "" {
+						globalChat.SetCookies(t)
+					}
+				}(globalChat.GetCookies())
 			}
 		}
 	} else {
@@ -170,15 +166,13 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		w.Write(resData)
 
-		if text == "User needs to solve CAPTCHA to continue." {
-			if common.BypassServer != "" {
-				go func(cookie string) {
-					t, _ := getCookie(cookie)
-					if t != "" {
-						globalChat.SetCookies(t)
-					}
-				}(globalChat.GetCookies())
-			}
+		if text == "User needs to solve CAPTCHA to continue." && common.BypassServer != "" {
+			go func(cookie string) {
+				t, _ := getCookie(cookie)
+				if t != "" {
+					globalChat.SetCookies(t)
+				}
+			}(globalChat.GetCookies())
 		}
 	}
 }
