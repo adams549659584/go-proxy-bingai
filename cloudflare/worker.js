@@ -169,8 +169,15 @@ const home = async (pathname) => {
   let url;
   if (pathname.indexOf('/web/') === 0) {
     url = pathname.replace('/web/', baseUrl+'web/');
+    if (pathname == '/web/') {
+      url += 'index.html';
+    }
   } else {
-    url = baseUrl + 'web/index.html';
+    let res = new Response('', {
+      status: 302,
+    });
+    res.headers.set("location", "/web/");
+    return res;
   }
   const res = await fetch(url);
   const result = await rewriteBody(res);
