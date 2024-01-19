@@ -4,6 +4,8 @@ import (
 	"net/url"
 	"os"
 	"strings"
+
+	"github.com/Harry-zklcdc/bing-lib/lib/hex"
 )
 
 var (
@@ -49,6 +51,9 @@ func initEnv() {
 	USER_MUID = os.Getenv("USER_MUID")
 	// _RwBf Cookie
 	USER_RwBf = os.Getenv("USER_RwBf")
+	if USER_KievRPSSecAuth == "" {
+		USER_KievRPSSecAuth = hex.NewHex(128)
+	}
 
 	BypassServer = os.Getenv("BYPASS_SERVER")
 
