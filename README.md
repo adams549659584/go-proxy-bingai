@@ -70,19 +70,17 @@
 
 ## 🚧 特色简介
 
-⭐ 聊天服务器 (暂时默认 Cloudflare Workers, 请求数每天限额 100,000, 撑不了多久 , 推荐自行部署, 参考下面 [部署聊天服务器](#部署聊天服务器) ) 可在右上角 设置 => 服务选择 中切换
+✅ 提供免费云服务器一键部署
 
-⭐ 提供免费云服务器一键部署
+✅ 聊天服务器可在右上角 「设置 - 服务选择」 中切换
 
-⭐ 国内可用 （部署服务器需要直连 [Bing国际](https://www.bing.com) 不重定向 CN , 可配置 socks 连接）
+✅ 国内可用 （部署服务器需要直连 [Bing国际](https://www.bing.com) 不重定向 CN , 可配置 socks 连接）
 
-⭐ 支持现有开源 ChatGPT 提示词库
+✅ 支持现有开源 ChatGPT 提示词库
 
-⭐ 需要画图等高级功能时(需选更有创造力模式或右上角 **设置 => 图像创建** ), 可登录微软账号设置用户 Cookie 进行体验
+✅ 登录账号支持画图
 
-⭐ 遇到一切问题, 先点左下角 ![新主题](./docs/img/bing-clear.png) 试试, 不行使用刷新大法（Shift + F5 或 Ctrl + Shift + R 或者右上角设置中的一键重置）, 最终大招就清理浏览器缓存及Cookie, 比如（24小时限制、未登录提示等等）
-
-⭐ 支持 OpenAI 格式 API 调用 - [📝 Wiki文档](https://github.com/Harry-zklcdc/go-proxy-bingai/wiki/BingAPI)
+✅ 支持 OpenAI 格式 API 调用 - [📝 Wiki文档](https://github.com/Harry-zklcdc/go-proxy-bingai/wiki/BingAPI)
 
 ## 📌 效果展示
 
