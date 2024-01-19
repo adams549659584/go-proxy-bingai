@@ -188,13 +188,6 @@ declare const CIB: {
        * 选择的面板 threads / plugins
        */
       selectedPanel: string;
-      /**
-       * 面板列表
-       */
-      panels: {
-        type: string;
-        label: string;
-      }[];
     };
     /**
      * 选择对话样式

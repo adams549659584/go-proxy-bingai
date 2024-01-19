@@ -49,8 +49,12 @@ export const useUserStore = defineStore(
       })
       const token = getUserToken();
       if (!historyEnable.value || !token || enterpriseEnable.value) {
-        CIB.vm.sidePanel.panels = [{type: 'plugins', label: '插件'}]
-        CIB.vm.sidePanel.selectedPanel = 'plugins'
+        const serpEle = document.querySelector('cib-serp');
+        const sidepanel = serpEle?.shadowRoot?.querySelector('cib-conversation')?.querySelector('cib-side-panel')?.shadowRoot?.querySelector('.main')
+        const threadsHeader = sidepanel?.querySelector('.threads-header') as HTMLElement;
+        const threadsContainer = sidepanel?.querySelector('.threads-container') as HTMLElement;
+        threadsHeader.style.display = 'none'
+        threadsContainer.style.display = 'none'
       }
     };
 
