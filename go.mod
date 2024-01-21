@@ -5,7 +5,7 @@ go 1.21.4
 toolchain go1.21.6
 
 require (
-	github.com/Harry-zklcdc/bing-lib v1.2.7
+	github.com/Harry-zklcdc/bing-lib v1.2.8
 	github.com/andybalholm/brotli v1.1.0
 	github.com/refraction-networking/utls v1.6.1
 )
