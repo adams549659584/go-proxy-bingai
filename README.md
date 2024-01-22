@@ -62,7 +62,7 @@
 
 > #### 🤗 Hugging Face 部署
 >
-> [![部署到HuggingFace](https://huggingface.co/datasets/huggingface/badges/raw/main/deploy-on-spaces-md.svg)](https://huggingface.co/spaces/zklcdc/go-bingai-pass?duplicate=true&visibility=public)
+> [![部署到HuggingFace](https://huggingface.co/datasets/huggingface/badges/raw/main/deploy-on-spaces-md.svg)](https://huggingface.co/spaces/zklcdc/pass?duplicate=true&visibility=public)
 
 > #### CodeSandbox 部署
 >
