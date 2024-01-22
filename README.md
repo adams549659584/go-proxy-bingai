@@ -48,7 +48,7 @@
 
 > #### Vercel 部署
 >
-> [![Vercel 部署](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FHarry-zklcdc%2Fgo-proxy-bingai&env=BYPASS_SERVER&env=USER_KievRPSSecAuth&project-name=go-proxy-bingai&repository-name=go-proxy-bingai)
+> [![Vercel 部署](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FHarry-zklcdc%2Fgo-proxy-bingai&env=BYPASS_SERVER&project-name=go-proxy-bingai&repository-name=go-proxy-bingai)
 
 > #### Replit 部署
 >
