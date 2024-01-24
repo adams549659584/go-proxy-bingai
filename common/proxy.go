@@ -171,8 +171,12 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 		cookies := res.Cookies()
 		res.Header.Set("Set-Cookie", "")
 		for _, cookie := range cookies {
-			values := strings.Split(cookie.String(), ";")
-			res.Header.Add("Set-Cookie", values[0]+"; "+values[1])
+			if strings.Contains(cookie.String(), ";") {
+				values := strings.Split(cookie.String(), ";")
+				res.Header.Add("Set-Cookie", values[0]+"; "+values[1])
+			} else {
+				res.Header.Add("Set-Cookie", cookie.String())
+			}
 		}
 		contentType := res.Header.Get("Content-Type")
 		if strings.Contains(contentType, "text/javascript") {
