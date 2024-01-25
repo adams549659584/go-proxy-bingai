@@ -1,4 +1,45 @@
 /* eslint-disable */
+function CookieGet (name) {
+  const v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+  return v ? v[2] : null;
+}
+
+function UserStoreGet (name) {
+  const userStoreStr = localStorage.getItem('user-store');
+  if (userStoreStr) {
+    const userStore = JSON.parse(userStoreStr);
+    return userStore[name]
+  }
+  return null;
+}
+
+function randomString(e) {    
+  e = e || 32;
+  var t = "abcdefhijkmnprstwxyzABCDEFHIJKMNPRSTWXYZ0123456789",
+  a = t.length,
+  n = "";
+  for (i = 0; i < e; i++) n += t.charAt(Math.floor(Math.random() * a));
+  return n
+}
+
+function randomLowercaseString(e) {    
+  e = e || 32;
+  var t = "abcdefhijkmnprstwxyz0123456789",
+  a = t.length,
+  n = "";
+  for (i = 0; i < e; i++) n += t.charAt(Math.floor(Math.random() * a));
+  return n
+}
+
+function randomCapitalString(e) {    
+  e = e || 32;
+  var t = "ABCDEFHIJKMNPRSTWXYZ0123456789",
+  a = t.length,
+  n = "";
+  for (i = 0; i < e; i++) n += t.charAt(Math.floor(Math.random() * a));
+  return n
+}
+
 try {
   const logPathReg = new RegExp('/fd/ls/|/web/xls.aspx');
   // hack sb log
@@ -49,12 +90,12 @@ _G = {
   RevIpCC: 'us',
   RTL: false,
   Ver: '34',
-  IG: '0DDCVI023V390V4NCV2NV902NV092V90',
-  EventID: '64831dbf22ca4450a1adcdec1d613488',
+  IG: randomCapitalString(32),
+  EventID: randomLowercaseString(32),
   V: 'web',
   P: 'SERP',
   DA: 'PUSE01',
-  SUIH: 'hOWuUXDWvWmc2IDXSCIX1A',
+  SUIH: randomString(22),
   adc: 'b_ad',
   // logsb 启用 sendBeacon 推送日志，并在 sendBeacon 阻止
   EF: { cookss: 1, bmcov: 1, crossdomainfix: 1, bmasynctrigger: 1, bmasynctrigger3: 1, newtabsloppyclick: 1, chevroncheckmousemove: 1, logsb: 1 },
@@ -77,36 +118,3 @@ function si_T (a) {
 }
 _G.CTT = '3000';
 _G.BNFN = "Default";;
-
-
-function CookieGet (name) {
-  const v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
-  return v ? v[2] : null;
-}
-
-function UserStoreGet (name) {
-  const userStoreStr = localStorage.getItem('user-store');
-  if (userStoreStr) {
-    const userStore = JSON.parse(userStoreStr);
-    return userStore[name]
-  }
-  return null;
-}
-
-function randomLowercaseString(e) {    
-  e = e || 32;
-  var t = "abcdefhijkmnprstwxyz123456789",
-  a = t.length,
-  n = "";
-  for (i = 0; i < e; i++) n += t.charAt(Math.floor(Math.random() * a));
-  return n
-}
-
-function randomString(e) {    
-    e = e || 32;
-    var t = "abcdefhijkmnprstwxyzABCDEFHIJKMNPRSTWXYZ123456789",
-    a = t.length,
-    n = "";
-    for (i = 0; i < e; i++) n += t.charAt(Math.floor(Math.random() * a));
-    return n
-  }
