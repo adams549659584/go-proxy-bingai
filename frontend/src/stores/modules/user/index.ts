@@ -126,6 +126,12 @@ export const useUserStore = defineStore(
           document.cookie = keys[i].split('=')[0] + '=0; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
       }
       await clearCache();
+      if ('serviceWorker' in navigator) {
+        await navigator.serviceWorker.ready
+          .then(async (registration) => {
+            await registration.unregister()
+          });
+      }
     };
 
     const saveCookies = (cookiesRaw: string) => {
