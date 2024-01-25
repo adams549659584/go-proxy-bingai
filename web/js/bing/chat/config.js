@@ -77,12 +77,14 @@ _w['_sydConvConfig'] = {
   enableSpeechTTSLatencyLogging: true,
   enableSpeechIconDarkTheme: true,
   enableSpeechAriaLabel: true,
+  enableReadAloudMessage: true,
+  enableReadAloudOptions: true,
   enableNewTopicAutoExpand: true,
   enableThreadsAADMSASwitch: true,
   enableMaxTurnsPerConversation: true,
-// 设置已登录账号的聊天对话次数
+  // 设置已登录账号的聊天对话次数
   maxTurnsPerConversation: 30,
-// 设置未登录账号的聊天对话次数
+  // 设置未登录账号的聊天对话次数
   maxTurnsPerConversationMuidUser: 10,
   maxMessageLength: 4000,
   maxMessageLengthBalanced: 2000,
