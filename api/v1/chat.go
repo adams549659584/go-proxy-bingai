@@ -135,7 +135,7 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 
 			if tmp == "User needs to solve CAPTCHA to continue." && common.BypassServer != "" {
 				go func(cookie string) {
-					t, _ := getCookie(cookie)
+					t, _ := getCookie(cookie, chat.GetChatHub().GetConversationId(), hex.NewUUID())
 					if t != "" {
 						globalChat.SetCookies(t)
 					}
@@ -172,7 +172,7 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 
 		if text == "User needs to solve CAPTCHA to continue." && common.BypassServer != "" {
 			go func(cookie string) {
-				t, _ := getCookie(cookie)
+				t, _ := getCookie(cookie, chat.GetChatHub().GetConversationId(), hex.NewUUID())
 				if t != "" {
 					globalChat.SetCookies(t)
 				}

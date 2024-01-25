@@ -116,6 +116,7 @@ interface BingConversation {
   conversationType: string;
   hashedSignature: string;
   id: string;
+  convId: string;
   isExpired: boolean;
   messages: TextMessageModel[];
   state: string;

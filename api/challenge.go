@@ -2,17 +2,31 @@ package api
 
 import (
 	"adams549659584/go-proxy-bingai/api/helper"
-	"adams549659584/go-proxy-bingai/common"
+	"fmt"
 	"net/http"
-	"strings"
 )
 
-const respHtml = `
+const respChallengeHtml = `
 <script type="text/javascript">
-    function verificationComplete(){
-        window.parent.postMessage("verificationComplete", "*");
+    async function ChallengeComplete(){
+        let IG = window.parent._G.IG,
+			convId = window.parent.CIB.manager.conversation.id,
+			rid = window.parent.CIB.manager.conversation.messages[0].requestId,
+			iframeid = '%s';
+		await fetch('/challenge/verify?IG='+encodeURI(IG)+'&iframeid='+encodeURI(iframeid)+'&convId='+encodeURI(convId)+'&rid='+encodeURI(rid), {
+			credentials: 'include',
+		}).then((res) => {
+			if (res.ok) {
+				window.parent.postMessage("verificationComplete", "*");
+			} else {
+				window.parent.postMessage("verificationFailed", "*");
+			}
+		}).cache(() => {
+			window.parent.postMessage("verificationFailed", "*");
+		});
 	}
-    window.onload = verificationComplete;
+
+	window.onload = ChallengeComplete;
 </script>
 `
 
@@ -27,28 +41,6 @@ func ChallengeHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	reqCookies := strings.Split(r.Header.Get("Cookie"), "; ")
-	bypassServer := common.BypassServer
-	for _, cookie := range reqCookies {
-		if strings.HasPrefix(cookie, "BingAI_Pass_Server") {
-			tmp := strings.ReplaceAll(cookie, "BingAI_Pass_Server=", "")
-			if tmp != "" {
-				bypassServer = tmp
-			}
-		}
-	}
-
-	resp, err := Bypass(bypassServer, r.Header.Get("Cookie"), "")
-	if err != nil {
-		helper.CommonResult(w, http.StatusInternalServerError, err.Error(), nil)
-		return
-	}
-
-	cookies := strings.Split(resp.Result.Cookies, "; ")
-	for _, cookie := range cookies {
-		w.Header().Add("Set-Cookie", cookie+"; path=/")
-	}
-
-	// helper.CommonResult(w, http.StatusOK, "ok", resp)
-	w.Write([]byte(respHtml))
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	w.Write([]byte(fmt.Sprintf(respChallengeHtml, r.URL.Query().Get("iframeid"))))
 }

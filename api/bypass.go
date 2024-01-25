@@ -13,12 +13,16 @@ import (
 )
 
 type passRequestStruct struct {
+	IG       string `json:"IG,omitempty"`
 	Cookies  string `json:"cookies"`
 	Iframeid string `json:"iframeid,omitempty"`
+	ConvId   string `json:"convId,omitempty"`
+	RId      string `json:"rid,omitempty"`
 }
 
 type requestStruct struct {
 	Url string `json:"url"`
+	IG  string `json:"IG,omitempty"`
 }
 
 type PassResponseStruct struct {
@@ -61,7 +65,7 @@ func BypassHandler(w http.ResponseWriter, r *http.Request) {
 		request.Url = common.BypassServer
 	}
 
-	resp, err := Bypass(request.Url, r.Header.Get("Cookie"), "local-gen-"+hex.NewUUID())
+	resp, err := Bypass(request.Url, r.Header.Get("Cookie"), "local-gen-"+hex.NewUUID(), request.IG, "", "")
 	if err != nil {
 		helper.CommonResult(w, http.StatusInternalServerError, err.Error(), nil)
 		return
@@ -70,10 +74,13 @@ func BypassHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write(body)
 }
 
-func Bypass(bypassServer, cookie, iframeid string) (passResp PassResponseStruct, err error) {
+func Bypass(bypassServer, cookie, iframeid, IG, convId, rid string) (passResp PassResponseStruct, err error) {
 	passRequest := passRequestStruct{
 		Cookies:  cookie,
 		Iframeid: iframeid,
+		IG:       IG,
+		ConvId:   convId,
+		RId:      rid,
 	}
 	passResq, err := json.Marshal(passRequest)
 	if err != nil {

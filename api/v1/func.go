@@ -9,7 +9,7 @@ import (
 	"github.com/Harry-zklcdc/bing-lib/lib/request"
 )
 
-func getCookie(reqCookie string) (cookie string, err error) {
+func getCookie(reqCookie, convId, rid string) (cookie string, err error) {
 	cookie = reqCookie
 	c := request.NewRequest()
 	res := c.SetUrl(common.BingBaseUrl+"/search?q=Bing+AI&showconv=1&FORM=hpcodx&ajaxhist=0&ajaxserp=0&cc=us").
@@ -24,7 +24,7 @@ func getCookie(reqCookie string) (cookie string, err error) {
 		}
 	}
 	cookie = strings.TrimLeft(strings.Trim(cookie, "; "), "; ")
-	resp, err := api.Bypass(common.BypassServer, cookie, "local-gen-"+hex.NewUUID())
+	resp, err := api.Bypass(common.BypassServer, cookie, "local-gen-"+hex.NewUUID(), strings.ToUpper(hex.NewHex(32)), convId, rid)
 	if err != nil {
 		return
 	}

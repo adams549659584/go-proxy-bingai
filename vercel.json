@@ -3,7 +3,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "/api/{index,web,sydney,sys-config,bypass,challenge}.go",
+      "src": "/api/{index,web,sydney,sys-config,bypass,challenge,verify}.go",
       "use": "@vercel/go"
     },
     {
@@ -23,6 +23,10 @@
     {
       "src": "/turing/captcha/challenge",
       "dest": "/api/challenge.go"
+    },
+    {
+      "src": "/challenge/verify",
+      "dest": "/api/verify.go"
     },
     {
       "src": "/v1/chat/completions",

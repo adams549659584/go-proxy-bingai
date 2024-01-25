@@ -98,7 +98,7 @@ _G = {
   SUIH: randomString(22),
   adc: 'b_ad',
   // logsb 启用 sendBeacon 推送日志，并在 sendBeacon 阻止
-  EF: { cookss: 1, bmcov: 1, crossdomainfix: 1, bmasynctrigger: 1, bmasynctrigger3: 1, newtabsloppyclick: 1, chevroncheckmousemove: 1, logsb: 1 },
+  EF: { cookss: 1, bmcov: 1, crossdomainfix: 1, bmasynctrigger: 1, bmasynctrigger3: 1, getslctspt: 1, newtabsloppyclick: 1, chevroncheckmousemove: 1, sharepreview: 1, sharenewlayout: 1, cdxsugchip2: 1 },
   gpUrl: '/fd/ls/GLinkPing.aspx?',
 };
 _G.lsUrl = '/fd/ls/l?IG=' + _G.IG;

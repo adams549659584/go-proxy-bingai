@@ -23,6 +23,7 @@ func main() {
 
 	http.HandleFunc("/pass", api.BypassHandler)
 	http.HandleFunc("/turing/captcha/challenge", api.ChallengeHandler)
+	http.HandleFunc("/challenge/verify", api.VerifyHandler)
 
 	http.HandleFunc("/sydney/", api.Sydney)
 
