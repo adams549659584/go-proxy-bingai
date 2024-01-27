@@ -29,6 +29,7 @@ func ImageHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	image := globalImage.Clone()
+	image.SetXFF(common.GetRandomIP())
 
 	cookie := r.Header.Get("Cookie")
 	if cookie == "" {

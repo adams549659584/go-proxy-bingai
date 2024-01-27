@@ -35,6 +35,7 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	chat := globalChat.Clone()
+	chat.SetXFF(common.GetRandomIP())
 
 	cookie := r.Header.Get("Cookie")
 	if cookie == "" {
