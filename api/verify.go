@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+
+	binglib "github.com/Harry-zklcdc/bing-lib"
 )
 
 func VerifyHandler(w http.ResponseWriter, r *http.Request) {
@@ -35,7 +37,7 @@ func VerifyHandler(w http.ResponseWriter, r *http.Request) {
 	IG, _ := url.QueryUnescape(queryRaw.Get("IG"))
 	convId, _ := url.QueryUnescape(queryRaw.Get("convId"))
 	rid, _ := url.QueryUnescape(queryRaw.Get("rid"))
-	resp, err := Bypass(bypassServer, r.Header.Get("Cookie"), iframeid, IG, convId, rid)
+	resp, err := binglib.Bypass(bypassServer, r.Header.Get("Cookie"), iframeid, IG, convId, rid)
 	if err != nil {
 		helper.CommonResult(w, http.StatusInternalServerError, err.Error(), nil)
 		return

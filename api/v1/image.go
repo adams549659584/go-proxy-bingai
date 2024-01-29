@@ -12,7 +12,7 @@ import (
 )
 
 var (
-	globalImage = binglib.NewImage("").SetBingBaseUrl("http://localhost:" + common.PORT)
+	globalImage *binglib.Image
 )
 
 func ImageHandler(w http.ResponseWriter, r *http.Request) {

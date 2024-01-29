@@ -13,7 +13,7 @@ import (
 )
 
 var (
-	globalChat = binglib.NewChat("").SetBingBaseUrl("http://localhost:" + common.PORT).SetSydneyBaseUrl("ws://localhost:" + common.PORT)
+	globalChat *binglib.Chat
 
 	chatMODELS = []string{binglib.BALANCED, binglib.BALANCED_OFFLINE, binglib.CREATIVE, binglib.CREATIVE_OFFLINE, binglib.PRECISE, binglib.PRECISE_OFFLINE,
 		binglib.BALANCED_G4T, binglib.BALANCED_G4T_OFFLINE, binglib.CREATIVE_G4T, binglib.CREATIVE_G4T_OFFLINE, binglib.PRECISE_G4T, binglib.PRECISE_G4T_OFFLINE}
