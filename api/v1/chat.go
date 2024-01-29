@@ -22,6 +22,13 @@ var (
 )
 
 func ChatHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "OPTIONS" {
+		w.Header().Add("Allow", "POST")
+		w.Header().Add("Access-Control-Allow-Method", "POST")
+		w.Header().Add("Access-Control-Allow-Header", "Content-Type, Authorization")
+		return
+	}
+
 	if r.Method != "POST" {
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		w.Write([]byte("Method Not Allowed"))
