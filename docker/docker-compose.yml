@@ -11,8 +11,8 @@ services:
       - BYPASS_SERVER=http://172.17.0.1:7860
       # - BING_BASE_URL=https://www.bing.com
       # - SYDNEY_BASE_URL=https://sydney.bing.com
-      # - HTTP_PROXY=http://172.17.0.1:8080
-      # - HTTPS_PROXY=http://172.17.0.1:8080
+      # - HTTP_PROXY=http://172.17.0.1:18080
+      # - HTTPS_PROXY=http://172.17.0.1:18080
       # - Go_Proxy_BingAI_USER_TOKEN_1=xxx
       # - Go_Proxy_BingAI_USER_TOKEN_2=xxx
       # - USER_KievRPSSecAuth=xxx
@@ -25,7 +25,7 @@ services:
     container_name: go-bingai-pass
     restart: always
     environment:
-      - PROXY_SERVER=http://172.17.0.1:8080
+      # - PROXY_SERVER=http://172.17.0.1:18080
       - PASS_TIMEOUT=3
       - HEADLESS=false
     ports:
