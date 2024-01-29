@@ -69,15 +69,6 @@ const IP_RANGE = [
   ['20.73.0.0', '20.73.255.255'],        // Azure Cloud WestEurope 65534
 ];
 
-const challengeResponseBody = `
-<script type="text/javascript">
-    function verificationComplete(){
-        window.parent.postMessage("verificationComplete", "*");
-	}
-    window.onload = verificationComplete;
-</script>
-`;
-
 /**
  * 随机整数 [min,max)
  * @param {number} min
@@ -197,23 +188,66 @@ const home = async (pathname) => {
   return newRes;
 };
 
+const challengeResponseBody = `
+<script type="text/javascript">
+  async function ChallengeComplete(){
+    let IG = window.parent._G.IG,
+    convId = window.parent.CIB.manager.conversation.id,
+    rid = window.parent.CIB.manager.conversation.messages[0].requestId,
+    iframeid = '{{%s}}';
+		await fetch('/challenge/verify?IG='+encodeURI(IG)+'&iframeid='+encodeURI(iframeid)+'&convId='+encodeURI(convId)+'&rid='+encodeURI(rid), {
+			credentials: 'include',
+		}).then((res) => {
+			if (res.ok) {
+				window.parent.postMessage("verificationComplete", "*");
+			} else {
+				window.parent.postMessage("verificationFailed", "*");
+			}
+		}).cache(() => {
+			window.parent.postMessage("verificationFailed", "*");
+		});
+	}
+
+	window.onload = ChallengeComplete;
+</script>
+`;
+
 /**
  * challenge
  * @param {Request} request
  * @param {String} cookie
  * @returns
  */
-const challenge = async (request, cookie) => {
+const challenge = async (request) => {
+  if (request.method != 'GET') {
+    return new Response('{"code":405,"message":"Method Not Allowed","data":null}')
+  }
+
+  const currentUrl = new URL(request.url);
+  const newRes = new Response(challengeResponseBody.replaceAll('{{%s}}', currentUrl.searchParams.get('iframeid')));
+  newRes.headers.set('Content-Type', 'text/html; charset=utf-8');
+  return newRes
+};
+
+/**
+ * verify
+ * @param {Request} request
+ * @param {String} cookie
+ * @returns
+ */
+const verify = async (request, cookie) => {
   if (request.method != 'GET') {
     return new Response('{"code":405,"message":"Method Not Allowed","data":null}')
   }
 
   const currentUrl = new URL(request.url);
   let req = {
+    'IG': currentUrl.searchParams.get('IG'),
     'iframeid': currentUrl.searchParams.get('iframeid'),
     'cookies': cookie,
+    'convId': currentUrl.searchParams.get('convId'),
+    'rid': currentUrl.searchParams.get('rid'),
   }
-  console.log(JSON.stringify(req))
   const newReq = new Request(BYPASS_SERVER, {
     method: 'POST',
     body: JSON.stringify(req),
@@ -320,7 +354,10 @@ export default {
     }
 
     if (currentUrl.pathname === '/turing/captcha/challenge') {
-      return challenge(request, cookies);
+      return challenge(request);
+    }
+    if (currentUrl.pathname === '/challenge/verify') {
+      return verify(request, cookies);
     }
     if (currentUrl.pathname.indexOf('/v1') === 0 || currentUrl.pathname.indexOf('/api/v1') === 0) {
       return bingapi(request, cookies);
