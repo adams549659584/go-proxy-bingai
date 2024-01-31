@@ -13,6 +13,7 @@ const WEB_CONFIG = {
 
 const SYDNEY_ORIGIN = 'https://sydney.bing.com';
 const BING_ORIGIN = 'https://www.bing.com';
+const DESIGNER_ORIGIN = 'https://designer.microsoft.com';
 const KEEP_REQ_HEADERS = [
   'accept',
   'accept-encoding',
@@ -126,28 +127,29 @@ const randomString = (e) => {
 }
 
 const rewriteBody = async (res) => {
-    const content_type = res.headers.get("Content-Type") || "";
-    const content_encoding = res.headers.get("Content-Encoding") || "";
-    let encoding = null;
-    let body = res.body;
-    if (content_type.startsWith("text/html")) {
-      body = res.body;
-    } else if (res.url.endsWith("js")) {
-      if (res.url.includes('/rp/')) {
-        let decodedContent = null;
-        if (content_encoding == 'br') {
-          decodedContent = new TextDecoder("utf-8").decode(brotli_decode(new Int8Array(await res.clone().arrayBuffer())));
-          encoding = 'gzip';
-        } else {
-          decodedContent = new TextDecoder("utf-8").decode(new Int8Array(await res.clone().arrayBuffer()));
-        }
-        if (decodedContent) {
-          // @ts-ignore
-          body = decodedContent.replaceAll("www.bing.com", WEB_CONFIG.WORKER_URL.replace("http://", "").replace("https://", ""));
-        }
+  const content_type = res.headers.get("Content-Type") || "";
+  const content_encoding = res.headers.get("Content-Encoding") || "";
+  let encoding = null;
+  let body = res.body;
+  if (content_type.startsWith("text/html")) {
+    body = res.body;
+  } else if (res.url.endsWith("js")) {
+    if (res.url.includes('/rp/')) {
+      let decodedContent = null;
+      if (content_encoding == 'br') {
+        decodedContent = new TextDecoder("utf-8").decode(brotli_decode(new Int8Array(await res.clone().arrayBuffer())));
+        encoding = 'gzip';
+      } else {
+        decodedContent = new TextDecoder("utf-8").decode(new Int8Array(await res.clone().arrayBuffer()));
+      }
+      if (decodedContent) {
+        // @ts-ignore
+        body = decodedContent.replaceAll("www.bing.com", WEB_CONFIG.WORKER_URL.replace("http://", "").replace("https://", ""));
+        body = body.replaceAll("designer.microsoft.com", WEB_CONFIG.WORKER_URL.replace("http://", "").replace("https://", "")+'/designer');
       }
     }
-   return {body, encoding};
+  }
+  return {body, encoding};
 }
 
 /**
@@ -215,7 +217,6 @@ const challengeResponseBody = `
 /**
  * challenge
  * @param {Request} request
- * @param {String} cookie
  * @returns
  */
 const challenge = async (request) => {
@@ -300,7 +301,10 @@ export default {
     let targetUrl;
     if (currentUrl.pathname.includes('/sydney')) {
       targetUrl = new URL(SYDNEY_ORIGIN + currentUrl.pathname + currentUrl.search);
-    } else {
+    } else if (currentUrl.pathname.includes('/designer/')) {
+      targetUrl = new URL(DESIGNER_ORIGIN + currentUrl.pathname.replaceAll('/designer/', '/') + currentUrl.search);
+      console.log(targetUrl)
+    } else{
       targetUrl = new URL(BING_ORIGIN + currentUrl.pathname + currentUrl.search);
     }
 
