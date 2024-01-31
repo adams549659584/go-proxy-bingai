@@ -259,11 +259,11 @@ const verify = async (request, cookie) => {
   const resData = await res.json();
 
   const cookies = resData.result.cookies.split('; ')
-  const newRes = new Response(challengeResponseBody);
+  const newRes = new Response(JSON.stringify(resData));
   for (let v of cookies) {
     newRes.headers.append('Set-Cookie', v+'; path=/')
   }
-  newRes.headers.set('Content-Type', 'text/html; charset=utf-8');
+  newRes.headers.set('Content-Type', 'application/json; charset=utf-8');
   return newRes
 };
 
