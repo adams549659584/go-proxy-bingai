@@ -6,6 +6,7 @@ import (
 	"io"
 	"math/rand"
 	"net/http"
+	"strings"
 	"time"
 
 	binglib "github.com/Harry-zklcdc/bing-lib"
@@ -186,6 +187,10 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 				}
 			}(globalChat.GetCookies())
 		}
+	}
+
+	if cookie != chat.GetCookies() && !strings.Contains(cookie, common.USER_TOKEN_COOKIE_NAME) {
+		globalChat.SetCookies(chat.GetCookies())
 	}
 }
 
