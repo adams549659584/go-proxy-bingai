@@ -341,22 +341,16 @@ export default {
     if (!cookie.includes('_RwBf=')) {
       if (_RwBf.length !== 0) {
         cookies += '; _RwBf=' + _RwBf
-      } else {
-        cookies += '; _RwBf=' + randomString(256);
       }
     }
     if (!cookie.includes('MUID=')) {
         if (MUID.length !== 0) {
           cookies += '; MUID=' + MUID
-        } else {
-          cookies += '; MUID=' + randomString(256);
         }
       }
     if (!cookie.includes('_U=')) {
       if (_U.length !== 0) {
         cookies += '; _U=' + _U;
-      } else {
-        cookies += '; _U=' + randomString(128);
       }
     }
 
