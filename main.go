@@ -25,6 +25,7 @@ func main() {
 	http.HandleFunc("/turing/captcha/challenge", api.ChallengeHandler)
 	http.HandleFunc("/challenge/verify", api.VerifyHandler)
 
+	http.HandleFunc("/edgesvc/", api.Edgesvc)
 	http.HandleFunc("/designer/", api.Designer)
 	http.HandleFunc("/sydney/", api.Sydney)
 

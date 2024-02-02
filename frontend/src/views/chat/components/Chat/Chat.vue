@@ -95,14 +95,6 @@ const initChatService = () => {
     }
     chatStore.checkAllSydneyConfig();
   }
-  CIB.config.captcha.baseUrl = location.origin;
-  CIB.config.bing.baseUrl = location.origin;
-  CIB.config.bing.signIn.baseUrl = location.origin;
-  CIB.config.answers.baseUrl = location.origin;
-  CIB.config.answers.secondTurnScreenshotBaseUrl = location.origin;
-  CIB.config.contentCreator.baseUrl = location.origin;
-  CIB.config.visualSearch.baseUrl = location.origin;
-  CIB.config.suggestionsv2.baseUrl = location.origin;
 };
 
 const initSysConfig = async () => {

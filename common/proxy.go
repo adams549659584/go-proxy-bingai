@@ -89,6 +89,9 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 		if strings.Contains(req.Referer(), "web/compose.html") {
 			req.Header.Set("Referer", fmt.Sprintf("%s/edgesvc/compose", EDGE_SVC_URL.String()))
 			req.Header.Set("Origin", EDGE_SVC_URL.String())
+		} else if strings.Contains(originalPath, "/edgesvc/") {
+			req.Header.Set("Referer", fmt.Sprintf("%s/search?q=Bing+AI", BING_URL.String()))
+			req.Header.Set("Origin", EDGE_SVC_URL.String())
 		} else if strings.Contains(originalPath, "/designer/") {
 			req.URL.Path = strings.ReplaceAll(req.URL.Path, "/designer/", "/")
 			req.Header.Set("Referer", fmt.Sprintf("%s/search?q=Bing+AI", BING_URL.String()))
@@ -321,12 +324,14 @@ func replaceResBody(originalBody string, originalScheme string, originalHost str
 	if originalScheme == "https" {
 		if strings.Contains(modifiedBodyStr, BING_URL.Host) {
 			modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, BING_URL.Host, originalHost)
+			modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, EDGE_SVC_URL.Host, originalHost)
 			modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_URL.Host, originalHost+"/designer")
 		}
 	} else {
 		originalDomain := fmt.Sprintf("%s://%s", originalScheme, originalHost)
 		if strings.Contains(modifiedBodyStr, BING_URL.String()) {
 			modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, BING_URL.String(), originalDomain)
+			modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, EDGE_SVC_URL.Host, originalDomain)
 			modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_URL.String(), originalDomain+"/designer")
 		}
 	}
