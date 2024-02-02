@@ -207,7 +207,7 @@ const challengeResponseBody = `
 			} else {
 				window.parent.postMessage("verificationFailed", "*");
 			}
-		}).cache(() => {
+		}).catch(() => {
 			window.parent.postMessage("verificationFailed", "*");
 		});
 	}
