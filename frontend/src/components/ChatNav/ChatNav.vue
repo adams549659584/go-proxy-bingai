@@ -417,7 +417,7 @@ const autoPassCFChallenge = async () => {
         <NFormItem path="token" label="原开源地址">
           <NButton text tag="a" href="https://github.com/adams549659584/go-proxy-bingai" target="_blank" type="success">adams549659584/go-proxy-bingai</NButton>
         </NFormItem>
-    </NForm>
+      </NForm>
     <template #action>
       <NButton ghost size="large" @click="isShowSetAboutModal = false" type="info">确定</NButton>
     </template>
