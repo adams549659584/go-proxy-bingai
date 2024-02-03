@@ -189,7 +189,7 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	if cookie != chat.GetCookies() && !strings.Contains(cookie, common.USER_TOKEN_COOKIE_NAME) {
+	if cookie != chat.GetCookies() && !strings.Contains(chat.GetCookies(), common.USER_TOKEN_COOKIE_NAME) {
 		globalChat.SetCookies(chat.GetCookies())
 	}
 }
