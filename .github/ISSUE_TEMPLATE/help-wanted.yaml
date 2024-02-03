@@ -4,6 +4,14 @@ title: "[Help] 🤔 "
 labels:
   - help wanted
 body:
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Confirmations
+      description: 请确认以下选项。
+      options:
+        - label: 我确认我已经仔细阅读了 [Wiki](https://github.com/Harry-zklcdc/go-proxy-bingai/wiki), 并且已经搜索了已有的 issue, 并没有类似问题。
+          required: true
   - type: textarea
     attributes:
       label: Describe the help wanted
@@ -25,15 +33,44 @@ body:
   - type: textarea
     attributes:
       label: Screenshots
-      description: 请尽量详细地提供相关截图，可以是聊天记录、控制台日志和服务端日志、数据包内容等。
-  - type: textarea
+      description: 请尽量详细地提供相关截图，可以是部署教程链接、聊天记录、控制台日志和服务端日志、数据包内容等。
+  - type: dropdown
+    id: deploy
     attributes:
-      label: Versions
-      description: 请填写相应的版本号。
-      value: |
-        - OS: <!-- e.g. Windows 10 -->
-        - Browser & Version: <!-- e.g. Chrome 115 -->
-        - GoProxiBing Version: <!-- e.g. 1.9.0 -->
+      label: Deploy
+      description: 请指明您的部署方式。
+      options:
+        - "HuggingFace"
+        - "CodeSandbox"
+        - "Vercel"
+        - "Cloudflare Worker"
+        - "Docker"
+        - "Binary"
+        - "Others"
+    validations:
+      required: true
+  - type: input
+    id: OS
+    attributes:
+      label: OS & Version
+      description: 访问的系统及版本号
+      placeholder: ex. Windows 11 / macOS 14.3 / Ubuntu 22.04
+    validations:
+      required: true
+  - type: input
+    id: Browser
+    attributes:
+      label: Browser & Version
+      description: 浏览器及版本号
+      placeholder: ex. Chrome 121.0.6167.85
+    validations:
+      required: true
+  - type: input
+    id: GoProxiBingAI
+    attributes:
+      label: GoProxiBingAI Version
+      description: BingAI 本体版本
+      placeholder: ex. v1.19.10
     validations:
       required: true
   - type: textarea
