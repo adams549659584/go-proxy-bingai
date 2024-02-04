@@ -1,6 +1,6 @@
 {
   "name": "go-proxy-bingai",
-  "version": "1.19.10",
+  "version": "1.19.11",
   "private": true,
   "scripts": {
     "dev": "vite",
