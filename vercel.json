@@ -3,11 +3,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "/api/{index,web,sydney,edgesvc,sys-config,bypass,challenge,verify}.go",
-      "use": "@vercel/go"
-    },
-    {
-      "src": "/api/designer/{designer,designer-app,designer-app-edog,designer-cdn,designer-document,designer-mediasuggestion,designer-userassets,designer-rtc}.go",
+      "src": "/api/{index,web,sydney,edgesvc,designer,sys-config,bypass,challenge,verify}.go",
       "use": "@vercel/go"
     },
     {
@@ -50,35 +46,7 @@
     },
     {
       "src": "/designer/.*",
-      "dest": "/api/designer/designer.go"
-    },
-    {
-      "src": "/designer-app/.*",
-      "dest": "/api/designer/designer-app.go"
-    },
-    {
-      "src": "/designer-app-edog/.*",
-      "dest": "/api/designer/designer-app-edog.go"
-    },
-    {
-      "src": "/designer-cdn/.*",
-      "dest": "/api/designer/designer-cdn.go"
-    },
-    {
-      "src": "/designer-document/.*",
-      "dest": "/api/designer/designer-document.go"
-    },
-    {
-      "src": "/designer-mediasuggestion/.*",
-      "dest": "/api/designer/designer-mediasuggestion.go"
-    },
-    {
-      "src": "/designer-userassets/.*",
-      "dest": "/api/designer/designer-userassets.go"
-    },
-    {
-      "src": "/designer-rtc/.*",
-      "dest": "/api/designer/designer-rtc.go"
+      "dest": "/api/designer.go"
     },
     {
       "src": "/edgesvc/.*",

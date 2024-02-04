@@ -96,44 +96,13 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 		if strings.Contains(req.Referer(), "web/compose.html") {
 			req.Header.Set("Referer", fmt.Sprintf("%s/edgesvc/compose", EDGE_SVC_URL.String()))
 			req.Header.Set("Origin", EDGE_SVC_URL.String())
-		} else if strings.Contains(originalPath, "/edgesvc/") {
-			req.Header.Set("Referer", fmt.Sprintf("%s/search?q=Bing+AI", BING_URL.String()))
-			req.Header.Set("Origin", EDGE_SVC_URL.String())
-		} else if strings.Contains(originalPath, "/designer/") {
-			req.URL.Path = strings.ReplaceAll(req.URL.Path, "/designer/", "/")
-			req.Header.Set("Referer", fmt.Sprintf("%s/search?q=Bing+AI", BING_URL.String()))
-			req.Header.Set("Origin", DISIGNER_URL.String())
-		} else if strings.Contains(originalPath, "/designer-cdn/") {
-			req.URL.Path = strings.ReplaceAll(req.URL.Path, "/designer-cdn/", "/")
-			req.Header.Set("Referer", fmt.Sprintf("%s/search?q=Bing+AI", BING_URL.String()))
-			req.Header.Set("Origin", DISIGNER_CDN_URL.String())
-		} else if strings.Contains(originalPath, "/designer-app/") {
-			req.URL.Path = strings.ReplaceAll(req.URL.Path, "/designer-app/", "/")
-			req.Header.Set("Referer", fmt.Sprintf("%s/search?q=Bing+AI", BING_URL.String()))
-			req.Header.Set("Origin", DISIGNER_APP_URL.String())
-		} else if strings.Contains(originalPath, "/designer-app-edog/") {
-			req.URL.Path = strings.ReplaceAll(req.URL.Path, "/designer-app-edog/", "/")
-			req.Header.Set("Referer", fmt.Sprintf("%s/search?q=Bing+AI", BING_URL.String()))
-			req.Header.Set("Origin", DISIGNER_APP_EDOG_URL.String())
-		} else if strings.Contains(originalPath, "/designer-document/") {
-			req.URL.Path = strings.ReplaceAll(req.URL.Path, "/designer-document/", "/")
-			req.Header.Set("Referer", fmt.Sprintf("%s/search?q=Bing+AI", BING_URL.String()))
-			req.Header.Set("Origin", DISIGNER_DOCUMENT_URL.String())
-		} else if strings.Contains(originalPath, "/designer-userassets/") {
-			req.URL.Path = strings.ReplaceAll(req.URL.Path, "/designer-userassets/", "/")
-			req.Header.Set("Referer", fmt.Sprintf("%s/search?q=Bing+AI", BING_URL.String()))
-			req.Header.Set("Origin", DISIGNER_USERASSETS_URL.String())
-		} else if strings.Contains(originalPath, "/designer-rtc/") {
-			req.URL.Path = strings.ReplaceAll(req.URL.Path, "/designer-rtc/", "/")
-			req.Header.Set("Referer", fmt.Sprintf("%s/search?q=Bing+AI", BING_URL.String()))
-			req.Header.Set("Origin", DISIGNER_RTC_URL.String())
-		} else if strings.Contains(originalPath, "/designer-mediasuggestion/") {
-			req.URL.Path = strings.ReplaceAll(req.URL.Path, "/designer-mediasuggestion/", "/")
-			req.Header.Set("Referer", fmt.Sprintf("%s/search?q=Bing+AI", BING_URL.String()))
-			req.Header.Set("Origin", DISIGNER_MEDIASUGGESTION_URL.String())
-		} else {
+		} else if strings.Contains(originalPath, "/sydney/") {
 			req.Header.Set("Referer", fmt.Sprintf("%s/search?q=Bing+AI", BING_URL.String()))
 			req.Header.Set("Origin", BING_URL.String())
+			req.Header.Set("Host", BING_SYDNEY_URL.Host)
+		} else {
+			req.Header.Set("Referer", fmt.Sprintf("%s/search?q=Bing+AI", BING_URL.String()))
+			req.Header.Set("Origin", target.String())
 		}
 
 		// 同一会话尽量保持相同的随机IP
@@ -359,25 +328,25 @@ func replaceResBody(originalBody string, originalScheme string, originalHost str
 	if originalScheme == "https" {
 		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, BING_URL.Host, originalHost)
 		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, EDGE_SVC_URL.Host, originalHost)
-		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_CDN_URL.Host, originalHost+"/designer-cdn")
-		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_APP_EDOG_URL.Host, originalHost+"/designer-app-edog")
-		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_DOCUMENT_URL.Host, originalHost+"/designer-document")
-		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_USERASSETS_URL.Host, originalHost+"/designer-userassets")
-		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_MEDIASUGGESTION_URL.Host, originalHost+"/designer-mediasuggestion")
-		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_RTC_URL.Host, originalHost+"/designer-rtc")
-		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_APP_URL.Host, originalHost+"/designer-app")
+		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_CDN_URL.Host, originalHost+"/designer/cdn")
+		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_APP_EDOG_URL.Host, originalHost+"/designer/app-edog")
+		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_DOCUMENT_URL.Host, originalHost+"/designer/document")
+		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_USERASSETS_URL.Host, originalHost+"/designer/userassets")
+		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_MEDIASUGGESTION_URL.Host, originalHost+"/designer/mediasuggestion")
+		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_RTC_URL.Host, originalHost+"/designer/rtc")
+		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_APP_URL.Host, originalHost+"/designer/app")
 		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_URL.Host, originalHost+"/designer")
 	} else {
 		originalDomain := fmt.Sprintf("%s://%s", originalScheme, originalHost)
 		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, BING_URL.String(), originalDomain)
 		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, EDGE_SVC_URL.Host, originalHost)
-		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_CDN_URL.String(), originalDomain+"/designer-cdn")
-		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_APP_EDOG_URL.String(), originalDomain+"/designer-app-edog")
-		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_DOCUMENT_URL.String(), originalDomain+"/designer-document")
-		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_USERASSETS_URL.String(), originalDomain+"/designer-userassets")
-		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_MEDIASUGGESTION_URL.String(), originalDomain+"/designer-mediasuggestion")
-		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_RTC_URL.String(), originalDomain+"/designer-rtc")
-		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_APP_URL.String(), originalDomain+"/designer-app")
+		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_CDN_URL.String(), originalDomain+"/designer/cdn")
+		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_APP_EDOG_URL.String(), originalDomain+"/designer/app-edog")
+		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_DOCUMENT_URL.String(), originalDomain+"/designer/document")
+		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_USERASSETS_URL.String(), originalDomain+"/designer/userassets")
+		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_MEDIASUGGESTION_URL.String(), originalDomain+"/designer/mediasuggestion")
+		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_RTC_URL.String(), originalDomain+"/designer/rtc")
+		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_APP_URL.String(), originalDomain+"/designer/app")
 		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_URL.String(), originalDomain+"/designer")
 	}
 

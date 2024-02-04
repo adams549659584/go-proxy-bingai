@@ -2,7 +2,6 @@ package main
 
 import (
 	"adams549659584/go-proxy-bingai/api"
-	"adams549659584/go-proxy-bingai/api/designer"
 	v1 "adams549659584/go-proxy-bingai/api/v1"
 	"adams549659584/go-proxy-bingai/common"
 	"log"
@@ -26,14 +25,7 @@ func main() {
 	http.HandleFunc("/turing/captcha/challenge", api.ChallengeHandler)
 	http.HandleFunc("/challenge/verify", api.VerifyHandler)
 
-	http.HandleFunc("/designer/", designer.Designer)
-	http.HandleFunc("/designer-app/", designer.DesignerApp)
-	http.HandleFunc("/designer-app-edog/", designer.DesignerAppEdog)
-	http.HandleFunc("/designer-cdn/", designer.DesignerCDN)
-	http.HandleFunc("/designer-document/", designer.DesignerDocument)
-	http.HandleFunc("/designer-userassets/", designer.DesignerUserassets)
-	http.HandleFunc("/designer-mediasuggestion/", designer.DesignerMediasuggestion)
-	http.HandleFunc("/designer-rtc/", designer.DesignerRTC)
+	http.HandleFunc("/designer/", api.Designer)
 
 	http.HandleFunc("/edgesvc/", api.Edgesvc)
 	http.HandleFunc("/sydney/", api.Sydney)
