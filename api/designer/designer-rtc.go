@@ -1,4 +1,4 @@
-package api
+package designer
 
 import (
 	"adams549659584/go-proxy-bingai/api/helper"
@@ -6,10 +6,10 @@ import (
 	"net/http"
 )
 
-func Designer(w http.ResponseWriter, r *http.Request) {
+func DesignerRTC(w http.ResponseWriter, r *http.Request) {
 	if !helper.CheckAuth(r) {
 		helper.UnauthorizedResult(w)
 		return
 	}
-	common.NewSingleHostReverseProxy(common.DISIGNER_URL).ServeHTTP(w, r)
+	common.NewSingleHostReverseProxy(common.DISIGNER_RTC_URL).ServeHTTP(w, r)
 }

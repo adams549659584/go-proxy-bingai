@@ -15,6 +15,13 @@ const SYDNEY_ORIGIN = 'https://sydney.bing.com';
 const BING_ORIGIN = 'https://www.bing.com';
 const EDGE_ORIGIN = 'https://edgeservices.bing.com';
 const DESIGNER_ORIGIN = 'https://designer.microsoft.com';
+const DESIGNER_CDN_ORIGIN = 'https://cdn.designerapp.osi.office.net';
+const DESIGNER_APP_ORIGIN = 'https://designerapp.officeapps.live.com';
+const DESIGNER_APP_EDOG_ORIGIN = 'https://designerapp.edog.officeapps.live.com';
+const DESIGNER_DOCUMENT_ORIGIN = 'https://document.designerapp.officeapps.live.com';
+const DESIGNER_USERASSETS_ORIGIN = 'https://userassets.designerapp.officeapps.live.com';
+const DESIGNER_MEDIASUGGESTION_ORIGIN = 'https://mediasuggestion.designerapp.officeapps.live.com';
+const DESIGNER_RTC_ORIGIN = 'https://rtc.designerapp.officeapps.live.com';
 const KEEP_REQ_HEADERS = [
   'accept',
   'accept-encoding',
@@ -133,22 +140,46 @@ const rewriteBody = async (res) => {
   let encoding = null;
   let body = res.body;
   if (content_type.startsWith("text/html")) {
-    body = res.body;
+    let decodedContent = null;
+    if (content_encoding == 'br') {
+      decodedContent = new TextDecoder("utf-8").decode(brotli_decode(new Int8Array(await res.clone().arrayBuffer())));
+      encoding = 'gzip';
+    } else {
+      decodedContent = new TextDecoder("utf-8").decode(new Int8Array(await res.clone().arrayBuffer()));
+    }
+    if (decodedContent) {
+      // @ts-ignore
+      body = decodedContent.replaceAll(BING_ORIGIN.replace("http://", "").replace("https://", ""), WEB_CONFIG.WORKER_URL.replace("http://", "").replace("https://", ""));
+      body = body.replaceAll(EDGE_ORIGIN.replace("http://", "").replace("https://", ""), WEB_CONFIG.WORKER_URL.replace("http://", "").replace("https://", ""));
+      body = body.replaceAll(DESIGNER_CDN_ORIGIN.replace("http://", "").replace("https://", ""), WEB_CONFIG.WORKER_URL.replace("http://", "").replace("https://", "")+'/designer-cdn');
+      body = body.replaceAll(DESIGNER_APP_EDOG_ORIGIN.replace("http://", "").replace("https://", ""), WEB_CONFIG.WORKER_URL.replace("http://", "").replace("https://", "")+'/designer-app-edog');
+      body = body.replaceAll(DESIGNER_DOCUMENT_ORIGIN.replace("http://", "").replace("https://", ""), WEB_CONFIG.WORKER_URL.replace("http://", "").replace("https://", "")+'/designer-document');
+      body = body.replaceAll(DESIGNER_USERASSETS_ORIGIN.replace("http://", "").replace("https://", ""), WEB_CONFIG.WORKER_URL.replace("http://", "").replace("https://", "")+'/designer-userassets');
+      body = body.replaceAll(DESIGNER_MEDIASUGGESTION_ORIGIN.replace("http://", "").replace("https://", ""), WEB_CONFIG.WORKER_URL.replace("http://", "").replace("https://", "")+'/designer-mediasuggestion');
+      body = body.replaceAll(DESIGNER_RTC_ORIGIN.replace("http://", "").replace("https://", ""), WEB_CONFIG.WORKER_URL.replace("http://", "").replace("https://", "")+'/designer-rtc');
+      body = body.replaceAll(DESIGNER_APP_ORIGIN.replace("http://", "").replace("https://", ""), WEB_CONFIG.WORKER_URL.replace("http://", "").replace("https://", "")+'/designer-app');
+      body = body.replaceAll(DESIGNER_ORIGIN.replace("http://", "").replace("https://", ""), WEB_CONFIG.WORKER_URL.replace("http://", "").replace("https://", "")+'/designer');
+    }
   } else if (res.url.endsWith("js")) {
-    if (res.url.includes('/rp/')) {
-      let decodedContent = null;
-      if (content_encoding == 'br') {
-        decodedContent = new TextDecoder("utf-8").decode(brotli_decode(new Int8Array(await res.clone().arrayBuffer())));
-        encoding = 'gzip';
-      } else {
-        decodedContent = new TextDecoder("utf-8").decode(new Int8Array(await res.clone().arrayBuffer()));
-      }
-      if (decodedContent) {
-        // @ts-ignore
-        body = decodedContent.replaceAll(BING_ORIGIN.replace("http://", "").replace("https://", ""), WEB_CONFIG.WORKER_URL.replace("http://", "").replace("https://", ""));
-        body = body.replaceAll(EDGE_ORIGIN.replace("http://", "").replace("https://", ""), WEB_CONFIG.WORKER_URL.replace("http://", "").replace("https://", ""));
-        body = body.replaceAll(DESIGNER_ORIGIN.replace("http://", "").replace("https://", ""), WEB_CONFIG.WORKER_URL.replace("http://", "").replace("https://", "")+'/designer');
-      }
+    let decodedContent = null;
+    if (content_encoding == 'br') {
+      decodedContent = new TextDecoder("utf-8").decode(brotli_decode(new Int8Array(await res.clone().arrayBuffer())));
+      encoding = 'gzip';
+    } else {
+      decodedContent = new TextDecoder("utf-8").decode(new Int8Array(await res.clone().arrayBuffer()));
+    }
+    if (decodedContent) {
+      // @ts-ignore
+      body = decodedContent.replaceAll(BING_ORIGIN.replace("http://", "").replace("https://", ""), WEB_CONFIG.WORKER_URL.replace("http://", "").replace("https://", ""));
+      body = body.replaceAll(EDGE_ORIGIN.replace("http://", "").replace("https://", ""), WEB_CONFIG.WORKER_URL.replace("http://", "").replace("https://", ""));
+      body = body.replaceAll(DESIGNER_CDN_ORIGIN.replace("http://", "").replace("https://", ""), WEB_CONFIG.WORKER_URL.replace("http://", "").replace("https://", "")+'/designer-cdn');
+      body = body.replaceAll(DESIGNER_APP_EDOG_ORIGIN.replace("http://", "").replace("https://", ""), WEB_CONFIG.WORKER_URL.replace("http://", "").replace("https://", "")+'/designer-app-edog');
+      body = body.replaceAll(DESIGNER_DOCUMENT_ORIGIN.replace("http://", "").replace("https://", ""), WEB_CONFIG.WORKER_URL.replace("http://", "").replace("https://", "")+'/designer-document');
+      body = body.replaceAll(DESIGNER_USERASSETS_ORIGIN.replace("http://", "").replace("https://", ""), WEB_CONFIG.WORKER_URL.replace("http://", "").replace("https://", "")+'/designer-userassets');
+      body = body.replaceAll(DESIGNER_MEDIASUGGESTION_ORIGIN.replace("http://", "").replace("https://", ""), WEB_CONFIG.WORKER_URL.replace("http://", "").replace("https://", "")+'/designer-mediasuggestion');
+      body = body.replaceAll(DESIGNER_RTC_ORIGIN.replace("http://", "").replace("https://", ""), WEB_CONFIG.WORKER_URL.replace("http://", "").replace("https://", "")+'/designer-rtc');
+      body = body.replaceAll(DESIGNER_APP_ORIGIN.replace("http://", "").replace("https://", ""), WEB_CONFIG.WORKER_URL.replace("http://", "").replace("https://", "")+'/designer-app');
+      body = body.replaceAll(DESIGNER_ORIGIN.replace("http://", "").replace("https://", ""), WEB_CONFIG.WORKER_URL.replace("http://", "").replace("https://", "")+'/designer');
     }
   }
   return {body, encoding};
@@ -307,7 +338,21 @@ export default {
       targetUrl = new URL(EDGE_ORIGIN + currentUrl.pathname + currentUrl.search);
     } else if (currentUrl.pathname.includes('/designer/')) {
       targetUrl = new URL(DESIGNER_ORIGIN + currentUrl.pathname.replaceAll('/designer/', '/') + currentUrl.search);
-    } else{
+    } else if (currentUrl.pathname.includes('/designer-cdn/')) {
+      targetUrl = new URL(DESIGNER_CDN_ORIGIN + currentUrl.pathname.replaceAll('/designer-cdn/', '/') + currentUrl.search);
+    } else if (currentUrl.pathname.includes('/designer-app/')) {
+      targetUrl = new URL(DESIGNER_APP_ORIGIN + currentUrl.pathname.replaceAll('/designer-app/', '/') + currentUrl.search);
+    } else if (currentUrl.pathname.includes('/designer-app-edog/')) {
+      targetUrl = new URL(DESIGNER_APP_EDOG_ORIGIN + currentUrl.pathname.replaceAll('/designer-app-edog/', '/') + currentUrl.search);
+    } else if (currentUrl.pathname.includes('/designer-document/')) {
+      targetUrl = new URL(DESIGNER_DOCUMENT_ORIGIN + currentUrl.pathname.replaceAll('/designer-document/', '/') + currentUrl.search);
+    } else if (currentUrl.pathname.includes('/designer-userassets/')) {
+      targetUrl = new URL(DESIGNER_USERASSETS_ORIGIN + currentUrl.pathname.replaceAll('/designer-userassets/', '/') + currentUrl.search);
+    } else if (currentUrl.pathname.includes('/designer-mediasuggestion/')) {
+      targetUrl = new URL(DESIGNER_MEDIASUGGESTION_ORIGIN + currentUrl.pathname.replaceAll('/designer-mediasuggestion/', '/') + currentUrl.search);
+    } else if (currentUrl.pathname.includes('/designer-rtc/')) {
+      targetUrl = new URL(DESIGNER_RTC_ORIGIN + currentUrl.pathname.replaceAll('/designer-rtc/', '/') + currentUrl.search);
+    } else {
       targetUrl = new URL(BING_ORIGIN + currentUrl.pathname + currentUrl.search);
     }
 

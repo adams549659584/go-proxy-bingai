@@ -22,11 +22,18 @@ import (
 var (
 	BING_SYDNEY_DOMAIN = "https://sydney.bing.com"
 	// BING_CHAT_URL, _ = url.Parse(BING_CHAT_DOMAIN + "/sydney/ChatHub")
-	BING_SYDNEY_URL, _  = url.Parse(BING_SYDNEY_DOMAIN)
-	BING_URL, _         = url.Parse("https://www.bing.com")
-	EDGE_SVC_URL, _     = url.Parse("https://edgeservices.bing.com")
-	DISIGNER_URL, _     = url.Parse("https://designer.microsoft.com")
-	KEEP_REQ_HEADER_MAP = map[string]bool{
+	BING_SYDNEY_URL, _              = url.Parse(BING_SYDNEY_DOMAIN)
+	BING_URL, _                     = url.Parse("https://www.bing.com")
+	EDGE_SVC_URL, _                 = url.Parse("https://edgeservices.bing.com")
+	DISIGNER_URL, _                 = url.Parse("https://designer.microsoft.com")
+	DISIGNER_CDN_URL, _             = url.Parse("https://cdn.designerapp.osi.office.net")
+	DISIGNER_APP_URL, _             = url.Parse("https://designerapp.officeapps.live.com")
+	DISIGNER_APP_EDOG_URL, _        = url.Parse("https://designerapp.edog.officeapps.live.com")
+	DISIGNER_DOCUMENT_URL, _        = url.Parse("https://document.designerapp.officeapps.live.com")
+	DISIGNER_USERASSETS_URL, _      = url.Parse("https://userassets.designerapp.officeapps.live.com")
+	DISIGNER_MEDIASUGGESTION_URL, _ = url.Parse("https://mediasuggestion.designerapp.officeapps.live.com")
+	DISIGNER_RTC_URL, _             = url.Parse("https://rtc.designerapp.officeapps.live.com")
+	KEEP_REQ_HEADER_MAP             = map[string]bool{
 		"Accept":                         true,
 		"Accept-Encoding":                true,
 		"Accept-Language":                true,
@@ -96,6 +103,34 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 			req.URL.Path = strings.ReplaceAll(req.URL.Path, "/designer/", "/")
 			req.Header.Set("Referer", fmt.Sprintf("%s/search?q=Bing+AI", BING_URL.String()))
 			req.Header.Set("Origin", DISIGNER_URL.String())
+		} else if strings.Contains(originalPath, "/designer-cdn/") {
+			req.URL.Path = strings.ReplaceAll(req.URL.Path, "/designer-cdn/", "/")
+			req.Header.Set("Referer", fmt.Sprintf("%s/search?q=Bing+AI", BING_URL.String()))
+			req.Header.Set("Origin", DISIGNER_CDN_URL.String())
+		} else if strings.Contains(originalPath, "/designer-app/") {
+			req.URL.Path = strings.ReplaceAll(req.URL.Path, "/designer-app/", "/")
+			req.Header.Set("Referer", fmt.Sprintf("%s/search?q=Bing+AI", BING_URL.String()))
+			req.Header.Set("Origin", DISIGNER_APP_URL.String())
+		} else if strings.Contains(originalPath, "/designer-app-edog/") {
+			req.URL.Path = strings.ReplaceAll(req.URL.Path, "/designer-app-edog/", "/")
+			req.Header.Set("Referer", fmt.Sprintf("%s/search?q=Bing+AI", BING_URL.String()))
+			req.Header.Set("Origin", DISIGNER_APP_EDOG_URL.String())
+		} else if strings.Contains(originalPath, "/designer-document/") {
+			req.URL.Path = strings.ReplaceAll(req.URL.Path, "/designer-document/", "/")
+			req.Header.Set("Referer", fmt.Sprintf("%s/search?q=Bing+AI", BING_URL.String()))
+			req.Header.Set("Origin", DISIGNER_DOCUMENT_URL.String())
+		} else if strings.Contains(originalPath, "/designer-userassets/") {
+			req.URL.Path = strings.ReplaceAll(req.URL.Path, "/designer-userassets/", "/")
+			req.Header.Set("Referer", fmt.Sprintf("%s/search?q=Bing+AI", BING_URL.String()))
+			req.Header.Set("Origin", DISIGNER_USERASSETS_URL.String())
+		} else if strings.Contains(originalPath, "/designer-rtc/") {
+			req.URL.Path = strings.ReplaceAll(req.URL.Path, "/designer-rtc/", "/")
+			req.Header.Set("Referer", fmt.Sprintf("%s/search?q=Bing+AI", BING_URL.String()))
+			req.Header.Set("Origin", DISIGNER_RTC_URL.String())
+		} else if strings.Contains(originalPath, "/designer-mediasuggestion/") {
+			req.URL.Path = strings.ReplaceAll(req.URL.Path, "/designer-mediasuggestion/", "/")
+			req.Header.Set("Referer", fmt.Sprintf("%s/search?q=Bing+AI", BING_URL.String()))
+			req.Header.Set("Origin", DISIGNER_MEDIASUGGESTION_URL.String())
 		} else {
 			req.Header.Set("Referer", fmt.Sprintf("%s/search?q=Bing+AI", BING_URL.String()))
 			req.Header.Set("Origin", BING_URL.String())
@@ -187,7 +222,7 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 			}
 		}
 		contentType := res.Header.Get("Content-Type")
-		if strings.Contains(contentType, "text/javascript") {
+		if strings.Contains(contentType, "text/javascript") || strings.Contains(contentType, "application/javascript") || strings.Contains(contentType, "text/html") {
 			contentEncoding := res.Header.Get("Content-Encoding")
 			switch contentEncoding {
 			case "gzip":
@@ -322,23 +357,28 @@ func replaceResBody(originalBody string, originalScheme string, originalHost str
 	modifiedBodyStr := originalBody
 
 	if originalScheme == "https" {
-		if strings.Contains(modifiedBodyStr, BING_URL.Host) {
-			modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, BING_URL.Host, originalHost)
-			modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, EDGE_SVC_URL.Host, originalHost)
-			modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_URL.Host, originalHost+"/designer")
-		}
+		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, BING_URL.Host, originalHost)
+		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, EDGE_SVC_URL.Host, originalHost)
+		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_CDN_URL.Host, originalHost+"/designer-cdn")
+		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_APP_EDOG_URL.Host, originalHost+"/designer-app-edog")
+		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_DOCUMENT_URL.Host, originalHost+"/designer-document")
+		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_USERASSETS_URL.Host, originalHost+"/designer-userassets")
+		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_MEDIASUGGESTION_URL.Host, originalHost+"/designer-mediasuggestion")
+		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_RTC_URL.Host, originalHost+"/designer-rtc")
+		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_APP_URL.Host, originalHost+"/designer-app")
+		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_URL.Host, originalHost+"/designer")
 	} else {
 		originalDomain := fmt.Sprintf("%s://%s", originalScheme, originalHost)
-		if strings.Contains(modifiedBodyStr, BING_URL.String()) {
-			modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, BING_URL.String(), originalDomain)
-			modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, EDGE_SVC_URL.Host, originalDomain)
-			modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_URL.String(), originalDomain+"/designer")
-		}
-	}
-
-	// 对话暂时支持国内网络，而且 Vercel 还不支持 Websocket ，先不用
-	if strings.Contains(modifiedBodyStr, BING_URL.Host) {
-		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, BING_URL.Host, originalHost)
+		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, BING_URL.String(), originalDomain)
+		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, EDGE_SVC_URL.Host, originalHost)
+		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_CDN_URL.String(), originalDomain+"/designer-cdn")
+		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_APP_EDOG_URL.String(), originalDomain+"/designer-app-edog")
+		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_DOCUMENT_URL.String(), originalDomain+"/designer-document")
+		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_USERASSETS_URL.String(), originalDomain+"/designer-userassets")
+		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_MEDIASUGGESTION_URL.String(), originalDomain+"/designer-mediasuggestion")
+		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_RTC_URL.String(), originalDomain+"/designer-rtc")
+		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_APP_URL.String(), originalDomain+"/designer-app")
+		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_URL.String(), originalDomain+"/designer")
 	}
 
 	// if strings.Contains(modifiedBodyStr, "https://www.bingapis.com") {
