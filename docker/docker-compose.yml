@@ -16,7 +16,6 @@ services:
       # - Go_Proxy_BingAI_USER_TOKEN_1=xxx
       # - Go_Proxy_BingAI_USER_TOKEN_2=xxx
       # - USER_KievRPSSecAuth=xxx
-      # - USER_RwBf=xxx
       # - USER_MUID=xxx
       # - APIKEY=sk-xxx
 

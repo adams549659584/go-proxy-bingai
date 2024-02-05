@@ -1,7 +1,6 @@
 import { brotli_decode } from "./bjs.js"
 // 同查找 _U 一样, 查找 KievRPSSecAuth 的值并替换下方的xxx
 const KievRPSSecAuth = '';
-const _RwBf = '';
 const MUID = '';
 const _U = '';
 
@@ -381,11 +380,6 @@ export default {
         cookies += '; KievRPSSecAuth=' + KievRPSSecAuth;
       } else {
         cookies += '; KievRPSSecAuth=' + randomString(512);
-      }
-    }
-    if (!cookie.includes('_RwBf=')) {
-      if (_RwBf.length !== 0) {
-        cookies += '; _RwBf=' + _RwBf
       }
     }
     if (!cookie.includes('MUID=')) {

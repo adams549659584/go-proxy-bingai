@@ -10,7 +10,6 @@ export const useUserStore = defineStore(
   () => {
     const userTokenCookieName = '_U';
     const userKievRPSSecAuthCookieName = 'KievRPSSecAuth';
-    const userRwBfCookieName = '_RwBf';
     const userMUIDCookieName = 'MUID';
     const authKeyCookieName = 'BingAI_Auth_Key';
     const passServerCookieName = 'BingAI_Pass_Server';
@@ -109,15 +108,6 @@ export const useUserStore = defineStore(
       cookies.set(userKievRPSSecAuthCookieName, token, 7 * 24 * 60, '/');
     };
 
-    const getUserRwBf = () => {
-      const userCookieVal = cookies.get(userRwBfCookieName) || '';
-      return userCookieVal;
-    };
-
-    const saveUserRwBf = (token: string) => {
-      cookies.set(userRwBfCookieName, token, 7 * 24 * 60, '/');
-    };
-
     const getUserMUID = () => {
       const userCookieVal = cookies.get(userMUIDCookieName) || '';
       return userCookieVal;
@@ -165,8 +155,6 @@ export const useUserStore = defineStore(
       setPassServer,
       getUserKievRPSSecAuth,
       saveUserKievRPSSecAuth,
-      getUserRwBf,
-      saveUserRwBf,
       getUserMUID,
       saveUserMUID,
       saveCookies,

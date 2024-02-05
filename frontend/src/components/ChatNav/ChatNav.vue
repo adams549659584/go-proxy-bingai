@@ -17,7 +17,6 @@ const isShowAdvancedSettingModal = ref(false);
 const isShowSetAboutModal = ref(false);
 const userToken = ref('');
 const userKievRPSSecAuth = ref('');
-const userRwBf = ref('');
 const userMUID = ref('');
 const message = useMessage();
 const promptStore = usePromptStore();
@@ -167,7 +166,6 @@ const handleSelect = (key: string) => {
       {
         userToken.value = userStore.getUserToken();
         userKievRPSSecAuth.value = userStore.getUserKievRPSSecAuth();
-        userRwBf.value = userStore.getUserRwBf();
         userMUID.value = userStore.getUserMUID();
         history.value = historyEnable.value;
         cookiesEnable.value = fullCookiesEnable.value;
@@ -233,11 +231,6 @@ const saveSetting = () => {
       message.warning('请先填入用户 KievRPSSecAuth Cookie');
     } else {
       userStore.saveUserKievRPSSecAuth(userKievRPSSecAuth.value);
-    }
-    if (!userRwBf.value) {
-      message.warning('请先填入用户 _RwBf Cookie');
-    } else {
-      userStore.saveUserRwBf(userRwBf.value);
     }
     if (!userMUID.value) {
       message.warning('请先填入用户 MUID Cookie');
@@ -367,9 +360,6 @@ const autoPassCFChallenge = async () => {
         </NFormItem>
         <NFormItem v-show="!cookiesEnable" path="token" label="KievRPSSecAuth">
           <NInput size="large" v-model:value="userKievRPSSecAuth" type="text" placeholder="用户 Cookie ,仅需要 KievRPSSecAuth 的值" />
-        </NFormItem>
-        <NFormItem v-show="!cookiesEnable" path="token" label="_RwBf">
-          <NInput size="large" v-model:value="userRwBf" type="text" placeholder="用户 Cookie ,仅需要 _RwBf 的值" />
         </NFormItem>
         <NFormItem v-show="!cookiesEnable" path="token" label="MUID">
           <NInput size="large" v-model:value="userMUID" type="text" placeholder="用户 Cookie ,仅需要 MUID 的值" />

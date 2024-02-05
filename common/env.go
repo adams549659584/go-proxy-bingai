@@ -17,7 +17,6 @@ var (
 	USER_TOKEN_LIST            []string
 	// USer Cookie
 	USER_KievRPSSecAuth string
-	USER_RwBf           string
 	USER_MUID           string
 	// 访问权限密钥，可选
 	AUTH_KEY             string
@@ -49,8 +48,6 @@ func initEnv() {
 	USER_KievRPSSecAuth = os.Getenv("USER_KievRPSSecAuth")
 	// MUID Cookie
 	USER_MUID = os.Getenv("USER_MUID")
-	// _RwBf Cookie
-	USER_RwBf = os.Getenv("USER_RwBf")
 	if USER_KievRPSSecAuth == "" {
 		USER_KievRPSSecAuth = hex.NewHex(128)
 	}

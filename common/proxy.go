@@ -64,7 +64,6 @@ var (
 	}
 	USER_TOKEN_COOKIE_NAME          = "_U"
 	USER_KievRPSSecAuth_COOKIE_NAME = "KievRPSSecAuth"
-	USER_RwBf_COOKIE_NAME           = "_RwBf"
 	User_MUID_COOKIE_NAME           = "MUID"
 	RAND_COOKIE_INDEX_NAME          = "BingAI_Rand_CK"
 	RAND_IP_COOKIE_NAME             = "BingAI_Rand_IP"
@@ -130,15 +129,6 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 			req.AddCookie(&http.Cookie{
 				Name:  USER_KievRPSSecAuth_COOKIE_NAME,
 				Value: USER_KievRPSSecAuth,
-			})
-		}
-
-		ckUserRwBf, _ := req.Cookie(USER_RwBf_COOKIE_NAME)
-		if (ckUserRwBf == nil || ckUserRwBf.Value == "") && USER_RwBf != "" {
-			// 添加 RwBf Cookie
-			req.AddCookie(&http.Cookie{
-				Name:  USER_RwBf_COOKIE_NAME,
-				Value: USER_RwBf,
 			})
 		}
 
