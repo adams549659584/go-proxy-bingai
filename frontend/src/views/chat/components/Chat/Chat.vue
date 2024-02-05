@@ -200,7 +200,7 @@ const hackSydney = () => {
 			"515oscfing2s0",
 			"524vidansgs0",
     ]
-    CIB.config.sydney.request.optionsSets.push("rai278", "enflst", "enpcktrk",  "rcaldictans", "rcaltimeans", "nojbfedge")
+    CIB.config.sydney.request.optionsSets.push("rai278", "nojbfedge")
     CIB.config.features.enableUpdateConversationMessages = true
     CIB.registerContext([{
       "author": "user",
