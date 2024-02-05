@@ -22,4 +22,8 @@
   .b_wlcmTile h1 {
     margin: 5px; 
   }
+
+  .b_wlcmCont {
+    display: initial;
+  }
 }
