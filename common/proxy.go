@@ -207,12 +207,15 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 		}
 
 		// 修改响应 cookie 域
-		// resCookies := res.Header.Values("Set-Cookie")
-		// if len(resCookies) > 0 {
-		// 	for i, v := range resCookies {
-		// 		resCookies[i] = strings.ReplaceAll(strings.ReplaceAll(v, ".bing.com", originalHost), "bing.com", originalHost)
-		// 	}
-		// }
+		resCookies := res.Header.Values("Set-Cookie")
+		if len(resCookies) > 0 {
+			res.Header.Del("Set-Cookie")
+			for _, v := range resCookies {
+				if v != "" {
+					res.Header.Add("Set-Cookie", strings.Split(v, "; ")[0]+"; Path=/")
+				}
+			}
+		}
 
 		// 设置服务器 cookie 对应索引
 		if resCKRandIndex != "" {
