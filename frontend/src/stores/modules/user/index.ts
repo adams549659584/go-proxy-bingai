@@ -18,6 +18,7 @@ export const useUserStore = defineStore(
     const historyEnable = ref(true);
     const fullCookiesEnable = ref(false);
     const themeMode = ref('auto');
+    const uiVersion = ref('v3');
     const enterpriseEnable = ref(false);
     const customChatNum = ref(0);
     const gpt4tEnable = ref(true);
@@ -51,10 +52,17 @@ export const useUserStore = defineStore(
       if (!historyEnable.value || !token || enterpriseEnable.value) {
         const serpEle = document.querySelector('cib-serp');
         const sidepanel = serpEle?.shadowRoot?.querySelector('cib-conversation')?.querySelector('cib-side-panel')?.shadowRoot?.querySelector('.main')
-        const threadsHeader = sidepanel?.querySelector('.threads-header') as HTMLElement;
-        const threadsContainer = sidepanel?.querySelector('.threads-container') as HTMLElement;
-        threadsHeader.style.display = 'none'
-        threadsContainer.style.display = 'none'
+        if (uiVersion.value === 'v2') {
+          const threadsHeader = sidepanel?.querySelector('.threads-header') as HTMLElement;
+          const threadsContainer = sidepanel?.querySelector('.threads-container') as HTMLElement;
+          threadsHeader.style.display = 'none'
+          threadsContainer.style.display = 'none'
+        } else {
+          CIB.vm.sidePanel.panels = [
+            { type: 'plugins', label: '插件' }
+          ]
+          CIB.vm.sidePanel.selectedPanel = 'plugins'
+        }
       }
     };
 
@@ -166,6 +174,7 @@ export const useUserStore = defineStore(
       historyEnable,
       fullCookiesEnable,
       themeMode,
+      uiVersion,
       enterpriseEnable,
       customChatNum,
       gpt4tEnable,
@@ -178,7 +187,7 @@ export const useUserStore = defineStore(
     persist: {
       key: 'user-store',
       storage: localStorage,
-      paths: ['historyEnable', 'themeMode', 'fullCookiesEnable', 'cookiesStr', 'enterpriseEnable', 'customChatNum', 'gpt4tEnable', 'sydneyEnable', 'sydneyPrompt', 'passServer'],
+      paths: ['historyEnable', 'themeMode', 'uiVersion', 'fullCookiesEnable', 'cookiesStr', 'enterpriseEnable', 'customChatNum', 'gpt4tEnable', 'sydneyEnable', 'sydneyPrompt', 'passServer'],
     },
   }
 );

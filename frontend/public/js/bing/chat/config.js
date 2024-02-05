@@ -1150,6 +1150,29 @@ if (customChatNum != 0) {
   }
 }
 
+const uiVersion = UserStoreGet('uiVersion')
+if (uiVersion == 'v1') {
+  _w['_sydConvConfig']['disableWelcomeScreen'] = false
+  _w['_sydConvConfig']['enableWelcomeScreenV2'] = false
+  _w['_sydConvConfig']['enableWelcomeScreenV3'] = false
+  _w['_sydConvConfig']['enableGoldilocks'] = false
+  _w['_sydConvConfig']['enableFreeSydney'] = false
+  _w['_sydConvConfig']['enableDesignerGPT'] = false
+} else if (uiVersion == 'v3') {
+  _w['_sydConvConfig']['disableWelcomeScreen'] = true
+  _w['_sydConvConfig']['enableWelcomeScreenV2'] = false
+  _w['_sydConvConfig']['enableWelcomeScreenV3'] = true
+  _w['_sydConvConfig']['enableGoldilocks'] = true
+  _w['_sydConvConfig']['enableFreeSydney'] = false
+  _w['_sydConvConfig']['enableDesignerGPT'] = false
+} else {
+  _w['_sydConvConfig']['disableWelcomeScreen'] = true
+  _w['_sydConvConfig']['enableWelcomeScreenV2'] = true
+  _w['_sydConvConfig']['enableWelcomeScreenV3'] = false
+  _w['_sydConvConfig']['enableGoldilocks'] = false
+  _w['_sydConvConfig']['enableFreeSydney'] = true
+  _w['_sydConvConfig']['enableDesignerGPT'] = true
+}
 
 if (UserStoreGet('enterpriseEnable')) {
   _w['_sydConvConfig']['disableWelcomeScreen'] = false

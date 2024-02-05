@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { h, ref, onMounted } from 'vue';
-import { NDropdown, type DropdownOption, NModal, NInput, NInputNumber, NButton, useMessage, NImage, NForm, NFormItem, NSwitch, NTag, NSelect, NConfigProvider, lightTheme, darkTheme } from 'naive-ui';
+import { NDropdown, type DropdownOption, NModal, NInput, NInputNumber, NButton, NGrid, NGridItem, useMessage, NImage, NForm, NFormItem, NSwitch, NTag, NSelect, NConfigProvider, lightTheme, darkTheme } from 'naive-ui';
 import settingSvgUrl from '@/assets/img/setting.svg?url';
 import { usePromptStore } from '@/stores/modules/prompt';
 import { storeToRefs } from 'pinia';
@@ -29,11 +29,12 @@ const { isShowChatServiceSelectModal } = storeToRefs(chatStore);
 const userStore = useUserStore();
 const localVersion = __APP_INFO__.version;
 const lastVersion = ref('加载中...');
-const { historyEnable, themeMode, fullCookiesEnable, cookiesStr, enterpriseEnable, customChatNum, gpt4tEnable, sydneyEnable, sydneyPrompt, passServer } = storeToRefs(userStore)
+const { historyEnable, themeMode, uiVersion, fullCookiesEnable, cookiesStr, enterpriseEnable, customChatNum, gpt4tEnable, sydneyEnable, sydneyPrompt, passServer } = storeToRefs(userStore)
 let cookiesEnable = ref(false);
 let cookies = ref('');
 let history = ref(true);
 let themeModeSetting = ref('auto');
+let uiVersionSetting = ref('v3');
 let theme = ref(lightTheme);
 let settingIconStyle = ref({
   filter: 'invert(70%)',
@@ -112,6 +113,21 @@ const themeModeOptions = ref([
   }
 ]);
 
+const uiVersionOptions = ref([
+  {
+    label: 'V1',
+    value: 'v1',
+  },
+  {
+    label: 'V2',
+    value: 'v2',
+  },
+  {
+    label: 'V3',
+    value: 'v3',
+  }
+]);
+
 onMounted(() => {
   if (themeMode.value == 'light') {
     theme.value = lightTheme;
@@ -156,7 +172,6 @@ const handleSelect = (key: string) => {
         history.value = historyEnable.value;
         cookiesEnable.value = fullCookiesEnable.value;
         if (cookiesEnable.value) { cookies.value = cookiesStr.value; }
-        themeModeSetting.value = themeMode.value;
         isShowSettingModal.value = true;
       }
       break;
@@ -164,6 +179,7 @@ const handleSelect = (key: string) => {
       {
         history.value = historyEnable.value;
         themeModeSetting.value = themeMode.value;
+        uiVersionSetting.value = uiVersion.value;
         enterpriseSetting.value = enterpriseEnable.value;
         customChatNumSetting.value = customChatNum.value;
         gpt4tSetting.value = gpt4tEnable.value;
@@ -238,10 +254,11 @@ const saveAdvancedSetting = () => {
   const tmpEnterpris = enterpriseEnable.value;
   enterpriseEnable.value = enterpriseSetting.value;
   customChatNum.value = customChatNumSetting.value;
-  const tmpGpt4t = gpt4tEnable.value, tmpSydney = sydneyEnable.value;
+  const tmpGpt4t = gpt4tEnable.value, tmpSydney = sydneyEnable.value, tmpuiVersion = uiVersion.value;
   gpt4tEnable.value = gpt4tSetting.value;
   sydneyEnable.value = sydneySetting.value;
   sydneyPrompt.value = sydneyPromptSetting.value;
+  uiVersion.value = uiVersionSetting.value;
   userStore.setPassServer(passServerSetting.value)
 
   const serpEle = document.querySelector('cib-serp');
@@ -249,11 +266,25 @@ const saveAdvancedSetting = () => {
   const threadsHeader = sidepanel?.querySelector('.threads-header') as HTMLElement;
   const threadsContainer = sidepanel?.querySelector('.threads-container') as HTMLElement;
   if (history.value && userStore.getUserToken() && !enterpriseEnable.value) {
-    threadsHeader.style.display = 'flex'
-    threadsContainer.style.display = 'block'
+    if (tmpuiVersion === 'v2') {
+      threadsHeader.style.display = 'flex'
+      threadsContainer.style.display = 'block'
+    } else {
+      CIB.vm.sidePanel.panels = [
+        { type: 'threads', label: '最近的活动' },
+        { type: 'plugins', label: '插件' }
+      ]
+    }
   } else {
-    threadsHeader.style.display = 'none'
-    threadsContainer.style.display = 'none'
+    if (tmpuiVersion === 'v2') {
+      threadsHeader.style.display = 'none'
+      threadsContainer.style.display = 'none'
+    } else {
+      CIB.vm.sidePanel.panels = [
+        { type: 'plugins', label: '插件' }
+      ]
+      CIB.vm.sidePanel.selectedPanel = 'plugins'
+    }
   }
 
   themeMode.value = themeModeSetting.value;
@@ -277,7 +308,7 @@ const saveAdvancedSetting = () => {
     }
   }
   isShowAdvancedSettingModal.value = false;
-  if (tmpEnterpris != enterpriseSetting.value || tmpSydney != sydneySetting.value || tmpGpt4t != gpt4tSetting.value) {
+  if (tmpEnterpris != enterpriseSetting.value || tmpSydney != sydneySetting.value || tmpGpt4t != gpt4tSetting.value || tmpuiVersion != uiVersionSetting.value) {
     window.location.href = '/';
   }
 }
@@ -358,23 +389,36 @@ const autoPassCFChallenge = async () => {
       </template>
       <NForm ref="formRef" label-placement="left" label-width="auto" require-mark-placement="right-hanging"
         style="margin-top: 16px;">
-        <NFormItem path="history" label="历史记录">
-          <NSwitch v-model:value="history" />
-        </NFormItem>
-        <NFormItem path="enterpriseEnable" label="企业版">
-          <NSwitch v-model:value="enterpriseSetting" />
-        </NFormItem>
-        <NFormItem path="gpt4tEnable" label="GPT4 Turbo">
-          <NSwitch v-model:value="gpt4tSetting" />
-        </NFormItem>
-        <NFormItem path="sydneyEnable" label="越狱模式">
-          <NSwitch v-model:value="sydneySetting" />
-        </NFormItem>
+        <NGrid x-gap="0" :cols="2">
+          <NGridItem>
+            <NFormItem path="history" label="历史记录">
+              <NSwitch v-model:value="history" />
+            </NFormItem>
+          </NGridItem>
+          <NGridItem>
+             <NFormItem path="enterpriseEnable" label="企业版">
+              <NSwitch v-model:value="enterpriseSetting" />
+            </NFormItem>
+          </NGridItem>
+          <NGridItem>
+             <NFormItem path="gpt4tEnable" label="GPT4 Turbo">
+              <NSwitch v-model:value="gpt4tSetting" />
+            </NFormItem>
+          </NGridItem>
+          <NGridItem>
+             <NFormItem path="sydneyEnable" label="越狱模式">
+              <NSwitch v-model:value="sydneySetting" />
+            </NFormItem>
+          </NGridItem>
+        </NGrid>
         <NFormItem path="sydneyPrompt" label="人机验证服务器">
           <NInput size="large" v-model:value="passServerSetting" type="text" placeholder="人机验证服务器" />
         </NFormItem>
         <NFormItem path="sydneyPrompt" label="提示词">
           <NInput size="large" v-model:value="sydneyPromptSetting" type="text" placeholder="越狱模式提示词" />
+        </NFormItem>
+        <NFormItem path="themeMode" label="UI 版本">
+          <NSelect v-model:value="uiVersionSetting" :options="uiVersionOptions" size="large" placeholder="请选择 UI 版本" />
         </NFormItem>
         <NFormItem path="themeMode" label="主题模式">
           <NSelect v-model:value="themeModeSetting" :options="themeModeOptions" size="large" placeholder="请选择主题模式" />

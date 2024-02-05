@@ -189,6 +189,13 @@ declare const CIB: {
        */
       isVisibleDesktop: boolean;
       /**
+       * 面板类型
+       */
+      panels: {
+        type: string;
+        label: string;
+      }[];
+      /**
        * 选择的面板 threads / plugins
        */
       selectedPanel: string;

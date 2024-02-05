@@ -7,15 +7,3 @@
 .scroller>.scroller-positioner>.content {
   padding-top: 0 !important;
 }
-
-@media screen and (max-width: 1536px) {
-  :host([side-panel]) {
-    --side-panel-width: 280px;
-  }
-}
-
-@media screen and (max-width: 767px) {
-  :host([side-panel]) {
-    --side-panel-width: 0;
-  }
-}
