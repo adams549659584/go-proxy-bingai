@@ -51,6 +51,9 @@ onMounted(async () => {
   // CIB.vm.isMobile = isMobile();
   // show conversion
   SydneyFullScreenConv.initWithWaitlistUpdate({ cookLoc: {} }, 10);
+  await sj_evt.bind("chs_init", () => {
+    ChatHomeScreen.init("/turing/api/suggestions/v2/zeroinputstarter")
+  }, 1)
   initSysConfig();
 
   isShowLoading.value = false;

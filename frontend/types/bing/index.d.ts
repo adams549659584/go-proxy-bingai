@@ -5,6 +5,9 @@ declare const sj_evt: {
 declare const SydneyFullScreenConv: {
   initWithWaitlistUpdate: (n: object, t: number) => void;
 };
+declare const ChatHomeScreen: {
+  init: (n: string) => void;
+};
 
 /**
  * 更有创造力 | 更平衡 | 更精确
