@@ -3,5 +3,10 @@
   "setupTasks": [],
 
   // These tasks can be run from CodeSandbox. Running one will open a log in the app.
-  "tasks": {}
+  "tasks": {
+    "cloudflared": {
+      "name": "cloudflared",
+      "command": "/app/cloudflared tunnel --no-autoupdate run --token $CF_ZERO_TRUST_TOKEN"
+    }
+  }
 }
