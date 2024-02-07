@@ -66,7 +66,7 @@
 
 > #### CodeSandbox 部署
 >
-> [![Edit BingAI](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/p/github/Harry-zklcdc/go-bingai-pass/main?import=true)
+> [![Edit BingAI](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/p/devbox/github/Harry-zklcdc/go-bingai-pass/tree/main?import=true)
 
 ## 🚧 特色简介
 
