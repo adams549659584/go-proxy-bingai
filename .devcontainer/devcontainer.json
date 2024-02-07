@@ -1,0 +1,4 @@
+{
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "go-proxy-bingai",
+}
