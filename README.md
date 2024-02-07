@@ -36,10 +36,6 @@
 
 ### BingAI + 人机验证服务器
 
-> #### 🤗 Hugging Face 部署
->
-> [![部署到HuggingFace](https://huggingface.co/datasets/huggingface/badges/raw/main/deploy-on-spaces-md.svg)](https://huggingface.co/spaces/Harry-zklcdc/go-proxy-bingai?duplicate=true&visibility=public)
-
 > #### CodeSandbox 部署
 >
 > [![Edit BingAI](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/p/devbox/github/Harry-zklcdc/go-proxy-bingai/tree/master?import=true)
@@ -59,10 +55,6 @@
 > [![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://github.com/Harry-zklcdc/go-proxy-bingai/wiki/Cloudflare-Worker-%E9%83%A8%E7%BD%B2)
 
 ### 人机验证服务器
-
-> #### 🤗 Hugging Face 部署
->
-> [![部署到HuggingFace](https://huggingface.co/datasets/huggingface/badges/raw/main/deploy-on-spaces-md.svg)](https://huggingface.co/spaces/zklcdc/pass?duplicate=true&visibility=public)
 
 > #### CodeSandbox 部署
 >
