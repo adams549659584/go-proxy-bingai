@@ -25,6 +25,6 @@ USER $GBP_USER
 ENV PORT=7860
 ENV BYPASS_SERVER=http://localhost:8080
 
-EXPOSE 7860
+EXPOSE 7860 8080 9005
 
 CMD /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisor.conf
