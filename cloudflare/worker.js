@@ -274,6 +274,18 @@ const verify = async (request, cookie) => {
     return new Response('{"code":405,"message":"Method Not Allowed","data":null}')
   }
 
+  let reqCookies = request.headers.get('Cookie').split('; ');
+  let bypassServer = BYPASS_SERVER;
+  for (let i = 0; i < reqCookies.length; i++) {
+      let cookie = reqCookies[i];
+      if (cookie.startsWith('BingAI_Pass_Server')) {
+          let tmp = cookie.replace('BingAI_Pass_Server=', '');
+          if (tmp !== '') {
+              bypassServer = tmp;
+          }
+      }
+  }
+
   const currentUrl = new URL(request.url);
   let req = {
     'IG': currentUrl.searchParams.get('IG'),
@@ -282,7 +294,7 @@ const verify = async (request, cookie) => {
     'convId': currentUrl.searchParams.get('convId'),
     'rid': currentUrl.searchParams.get('rid'),
   }
-  const newReq = new Request(BYPASS_SERVER, {
+  const newReq = new Request(bypassServer, {
     method: 'POST',
     body: JSON.stringify(req),
   });
