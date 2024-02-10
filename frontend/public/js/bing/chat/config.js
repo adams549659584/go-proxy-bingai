@@ -217,6 +217,7 @@ _w['_sydConvConfig'] = {
   fileMaxCountForGptCreator: 5,
   fileMaxCountForChat: true,
   enableUserMessageCopy: true,
+  enableCopilotFullScreenUX: true,
   enableDeferredImageCreatorCard: true,
   enableFaviconsV2: true,
   enableFaviconChatCopilotIcon: true,

@@ -4,6 +4,7 @@ import cookies from '@/utils/cookies';
 import sysconfApi from '@/api/sysconf';
 import { ApiResultCode } from '@/api/model/ApiResult';
 import type { SysConfig } from '@/api/model/sysconf/SysConfig';
+import { isMobile } from '@/utils/utils';
 
 export const useUserStore = defineStore(
   'user-store',
@@ -49,19 +50,21 @@ export const useUserStore = defineStore(
         credentials: 'include',
       })
       const token = getUserToken();
-      if (!historyEnable.value || !token || enterpriseEnable.value) {
-        const serpEle = document.querySelector('cib-serp');
-        const sidepanel = serpEle?.shadowRoot?.querySelector('cib-conversation')?.querySelector('cib-side-panel')?.shadowRoot?.querySelector('.main')
-        if (uiVersion.value === 'v2') {
-          const threadsHeader = sidepanel?.querySelector('.threads-header') as HTMLElement;
-          const threadsContainer = sidepanel?.querySelector('.threads-container') as HTMLElement;
-          threadsHeader.style.display = 'none'
-          threadsContainer.style.display = 'none'
-        } else {
-          CIB.vm.sidePanel.panels = [
-            { type: 'plugins', label: '插件' }
-          ]
-          CIB.vm.sidePanel.selectedPanel = 'plugins'
+      if (!isMobile()) {
+        if (!historyEnable.value || !token || enterpriseEnable.value) {
+          const serpEle = document.querySelector('cib-serp');
+          const sidepanel = serpEle?.shadowRoot?.querySelector('cib-conversation')?.querySelector('cib-side-panel')?.shadowRoot?.querySelector('.main')
+          if (uiVersion.value === 'v2') {
+            const threadsHeader = sidepanel?.querySelector('.threads-header') as HTMLElement;
+            const threadsContainer = sidepanel?.querySelector('.threads-container') as HTMLElement;
+            threadsHeader.style.display = 'none'
+            threadsContainer.style.display = 'none'
+          } else {
+            CIB.vm.sidePanel.panels = [
+              { type: 'plugins', label: '插件' }
+            ]
+            CIB.vm.sidePanel.selectedPanel = 'plugins'
+          }
         }
       }
     };

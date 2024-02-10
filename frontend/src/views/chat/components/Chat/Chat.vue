@@ -51,6 +51,10 @@ onMounted(async () => {
   // CIB.vm.isMobile = isMobile();
   // show conversion
   await SydneyFullScreenConv.initWithWaitlistUpdate({ cookLoc: {} }, 10);
+  if (isMobile()) {
+    const serpEle = document.querySelector('cib-serp');
+    serpEle?.setAttribute('mobile', '');
+  }
   if (uiVersion.value === 'v3') {
     await sj_evt.bind('chs_init', () => {
       ChatHomeScreen.init('/turing/api/suggestions/v2/zeroinputstarter');
@@ -77,6 +81,10 @@ onMounted(async () => {
     }
   }
 });
+
+const sleep = async (ms: number) => {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 const hackDevMode = () => {
   if (import.meta.env.DEV) {
@@ -134,9 +142,12 @@ const initChat = async () => {
   });
 };
 
-const hackStyle = () => {
+const hackStyle = async() => {
   if (location.hostname === 'localhost') {
     CIB.config.sydney.hostnamesToBypassSecureConnection = CIB.config.sydney.hostnamesToBypassSecureConnection.filter((x) => x !== location.hostname);
+  }
+  if (isMobile()) {
+    await sleep(25);
   }
   const serpEle = document.querySelector('cib-serp');
   const conversationEle = serpEle?.shadowRoot?.querySelector('cib-conversation') as HTMLElement;
