@@ -167,7 +167,10 @@ _w['_sydConvConfig'] = {
   disable2TSearchHistory: true,
   enableSydBeacon: true,
   enableVisualSearch: true,
+  enableNativeCameraInput: true,
   eifpiab: true,
+  evscamprd: true,
+  vscamprdname: 'FileUploadCameraProvider',
   efhof: true,
   visualSearchSubscriptionId: 'Bing.Chat.Multimodal',
   disablePassBotGreetingInContext: true,
@@ -224,6 +227,7 @@ _w['_sydConvConfig'] = {
   enableUserIpAddress: true,
   enableNewChatIconInActionBar: true,
   enableActionBarV2: true,
+  enableAccentedIconsOnMobileABV2: true,
   speechSurface: 'desktop',
   enableKatexScroll: true,
   padding2TMobile: 80,
@@ -1135,6 +1139,248 @@ function ge_cl(n, t) {
   }
   return []
 };
+var SydneyCameraProviderFactory; (function(n) {
+  n.registeredCameraProvidersMap = {
+    FileUploadCameraProvider: 'FileUploadCameraProvider',
+    SydneyMobileWebCameraProvider: 'SydneyMobileWebCameraProvider',
+    SydneyNativeCameraProvider: 'SydneyNativeCameraProvider',
+    SydneyEdgeNativeCameraProvider: 'SydneyEdgeNativeCameraProvider'
+  };
+  n.create = function(t) {
+    n.registeredCameraProvidersMap[t] && _w[t] && _w[t].create()
+  }
+})(SydneyCameraProviderFactory || (SydneyCameraProviderFactory = {}));
+var SydneyCameraProviderBase; (function(n) {
+  var i, t; (function(n) {
+    n.Pending = 'pending';
+    n.Granted = 'granted';
+    n.Denied = 'denied'
+  })(i = n.CameraPermissionStatus || (n.CameraPermissionStatus = {}));
+  t = function() {
+    function n() {}
+    return n.prototype.registerResultCallback = function(n) {
+      this.onResultCallback = n
+    },
+    n
+  } ();
+  n.CameraProviderBase = t
+})(SydneyCameraProviderBase || (SydneyCameraProviderBase = {}));
+var __extends = this && this.__extends ||
+function() {
+  var n = function(t, i) {
+    return n = Object.setPrototypeOf || {
+      __proto__: []
+    }
+    instanceof Array &&
+    function(n, t) {
+      n.__proto__ = t
+    } ||
+    function(n, t) {
+      for (var i in t) Object.prototype.hasOwnProperty.call(t, i) && (n[i] = t[i])
+    },
+    n(t, i)
+  };
+  return function(t, i) {
+    function r() {
+      this.constructor = t
+    }
+    if (typeof i != 'function' && i !== null) throw new TypeError('Class extends value ' + String(i) + ' is not a constructor or null');
+    n(t, i);
+    t.prototype = i === null ? Object.create(i) : (r.prototype = i.prototype, new r)
+  }
+} (),
+__awaiter = this && this.__awaiter ||
+function(n, t, i, r) {
+  function u(n) {
+    return n instanceof i ? n: new i(function(t) {
+      t(n)
+    })
+  }
+  return new(i || (i = Promise))(function(i, f) {
+    function o(n) {
+      try {
+        e(r.next(n))
+      } catch(t) {
+        f(t)
+      }
+    }
+    function s(n) {
+      try {
+        e(r['throw'](n))
+      } catch(t) {
+        f(t)
+      }
+    }
+    function e(n) {
+      n.done ? i(n.value) : u(n.value).then(o, s)
+    }
+    e((r = r.apply(n, t || [])).next())
+  })
+},
+__generator = this && this.__generator ||
+function(n, t) {
+  function o(n) {
+    return function(t) {
+      return s([n, t])
+    }
+  }
+  function s(o) {
+    if (e) throw new TypeError('Generator is already executing.');
+    while (f && (f = 0, o[0] && (r = 0)), r) try {
+      if (e = 1, u && (i = o[0] & 2 ? u['return'] : o[0] ? u['throw'] || ((i = u['return']) && i.call(u), 0) : u.next) && !(i = i.call(u, o[1])).done) return i; (u = 0, i) && (o = [o[0] & 2, i.value]);
+      switch (o[0]) {
+      case 0:
+      case 1:
+        i = o;
+        break;
+      case 4:
+        return r.label++,
+        {
+          value: o[1],
+          done: !1
+        };
+      case 5:
+        r.label++;
+        u = o[1];
+        o = [0];
+        continue;
+      case 7:
+        o = r.ops.pop();
+        r.trys.pop();
+        continue;
+      default:
+        if (! (i = r.trys, i = i.length > 0 && i[i.length - 1]) && (o[0] === 6 || o[0] === 2)) {
+          r = 0;
+          continue
+        }
+        if (o[0] === 3 && (!i || o[1] > i[0] && o[1] < i[3])) {
+          r.label = o[1];
+          break
+        }
+        if (o[0] === 6 && r.label < i[1]) {
+          r.label = i[1];
+          i = o;
+          break
+        }
+        if (i && r.label < i[2]) {
+          r.label = i[2];
+          r.ops.push(o);
+          break
+        }
+        i[2] && r.ops.pop();
+        r.trys.pop();
+        continue
+      }
+      o = t.call(n, r)
+    } catch(s) {
+      o = [6, s];
+      u = 0
+    } finally {
+      e = i = 0
+    }
+    if (o[0] & 5) throw o[1];
+    return {
+      value: o[0] ? o[1] : void 0,
+      done: !0
+    }
+  }
+  var r = {
+    label: 0,
+    sent: function() {
+      if (i[0] & 1) throw i[1];
+      return i[1]
+    },
+    trys: [],
+    ops: []
+  },
+  e,
+  u,
+  i,
+  f;
+  return f = {
+    next: o(0),
+    'throw': o(1),
+    'return': o(2)
+  },
+  typeof Symbol == 'function' && (f[Symbol.iterator] = function() {
+    return this
+  }),
+  f
+},
+FileUploadCameraProvider; (function(n) {
+  function t() {
+    return __awaiter(this, void 0, void 0,
+    function() {
+      return __generator(this,
+      function() {
+        return [2, SydneyCameraProviderBase.CameraPermissionStatus.Granted]
+      })
+    })
+  }
+  function r() {
+    var n = {
+      initializeCamera: i.initialize,
+      permissionProvider: t
+    };
+    CIB.config.visualSearch.nativeCameraProvider = n;
+    CIB.config.features.enableNativeCameraInput = !0
+  }
+  var i = function(n) {
+    function t() {
+      var t = n.call(this) || this,
+      i;
+      return t.inputElement = null,
+      t.handleFileUpload = function(n) {
+        var r, u, i = n.target,
+        f = (r = i === null || i === void 0 ? void 0 : i.files) === null || r === void 0 ? void 0 : r[0],
+        e;
+        if (f && ((u = f.type) === null || u === void 0 ? void 0 : u.includes('image'))) {
+          try {
+            e = new FileReader;
+            e.onload = t.handleUploadResult;
+            e.readAsDataURL(f)
+          } catch(n) {}
+          i.value = ''
+        }
+      },
+      t.handleUploadResult = function(n) {
+        var i, u = (i = n === null || n === void 0 ? void 0 : n.target) === null || i === void 0 ? void 0 : i.result,
+        r;
+        if (t.onResultCallback) {
+          r = {
+            success: !1,
+            result: null
+          };
+          typeof u == 'string' && (r = {
+            success: !0,
+            result: u
+          });
+          t.onResultCallback(r)
+        }
+      },
+      i = _d.createElement('input'),
+      i.type = 'file',
+      i.accept = 'image/gif, image/jpeg, image/png, image/webp',
+      i.style.display = 'none',
+      _d.body.appendChild(i),
+      t.inputElement = i,
+      t.inputElement.onchange = t.handleFileUpload,
+      t
+    }
+    return __extends(t, n),
+    t.initialize = function() {
+      return new t
+    },
+    t.prototype.unSubscribe = function() {
+      var n; (n = this.inputElement) === null || n === void 0 ? void 0 : n.remove()
+    },
+    t.prototype.requestCameraUpload = function() {
+      var n; (n = this.inputElement) === null || n === void 0 ? void 0 : n.click()
+    },
+    t
+  } (SydneyCameraProviderBase.CameraProviderBase);
+  n.create = r
+})(FileUploadCameraProvider || (FileUploadCameraProvider = {}));
 
 // 设置未登录用户的 codexMUIDUser 为 true
 const User_UCookieValue = CookieGet('_U')
