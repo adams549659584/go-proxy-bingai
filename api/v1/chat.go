@@ -23,6 +23,10 @@ var (
 )
 
 func ChatHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Add("Access-Control-Allow-Origin", "*")
+	w.Header().Add("Access-Control-Allow-Methods", "*")
+	w.Header().Add("Access-Control-Allow-Headers", "*")
+
 	if r.Method == "OPTIONS" {
 		w.Header().Add("Allow", "POST")
 		w.Header().Add("Access-Control-Allow-Method", "POST")

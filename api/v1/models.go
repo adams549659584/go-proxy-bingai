@@ -6,6 +6,10 @@ import (
 )
 
 func ModelsHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Add("Access-Control-Allow-Origin", "*")
+	w.Header().Add("Access-Control-Allow-Methods", "*")
+	w.Header().Add("Access-Control-Allow-Headers", "*")
+
 	if apikey != "" {
 		if r.Header.Get("Authorization") != "Bearer "+apikey {
 			w.WriteHeader(http.StatusUnauthorized)
