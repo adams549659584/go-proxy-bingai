@@ -9,6 +9,20 @@ declare const ChatHomeScreen: {
   init: (n: string) => void;
 };
 
+declare const _G: {
+  IG: string;
+  S: string;
+  SP: Array<number>;
+  TIP: string;
+  TIPC: string;
+  SB: boolean;
+}
+
+declare const base58Encode: (n: string) => string;
+declare const base58Decode: (n: string) => string;
+declare const aesEncrypt: (n: string, t: string) => string;
+declare const aesDecrypt: (n: string, t: string) => string;
+
 /**
  * 更有创造力 | 更平衡 | 更精确
  */

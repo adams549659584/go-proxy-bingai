@@ -19,6 +19,7 @@ func CommonResult(w http.ResponseWriter, code int, msg string, data interface{})
 		Data:    data,
 	}
 	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(code)
 	err := json.NewEncoder(w).Encode(res)
 	if err != nil {
 		return err

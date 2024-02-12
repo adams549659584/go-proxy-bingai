@@ -14,6 +14,7 @@ import (
 type requestStruct struct {
 	Url string `json:"url"`
 	IG  string `json:"IG,omitempty"`
+	T   string `json:"T,omitempty"`
 }
 
 func BypassHandler(w http.ResponseWriter, r *http.Request) {
@@ -48,9 +49,18 @@ func BypassHandler(w http.ResponseWriter, r *http.Request) {
 		request.Url = common.BypassServer
 	}
 
-	resp, err := binglib.Bypass(request.Url, r.Header.Get("Cookie"), "local-gen-"+hex.NewUUID(), request.IG, "", "")
+	resp, status, err := binglib.Bypass(request.Url, r.Header.Get("Cookie"), "local-gen-"+hex.NewUUID(), request.IG, "", "", request.T)
 	if err != nil {
-		helper.CommonResult(w, http.StatusInternalServerError, err.Error(), nil)
+		helper.ErrorResult(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	if status != http.StatusOK {
+		respBytes, err := json.Marshal(resp)
+		if err != nil {
+			helper.ErrorResult(w, http.StatusInternalServerError, err.Error())
+			return
+		}
+		helper.ErrorResult(w, status, string(respBytes))
 		return
 	}
 	body, _ := json.Marshal(resp)

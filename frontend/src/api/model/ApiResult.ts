@@ -14,4 +14,9 @@ export enum ApiResultCode {
    * 未授权
    */
   Unauthorized = 401,
+
+  /**
+   * 无效的请求
+   */
+  UnLegal = 451,
 }

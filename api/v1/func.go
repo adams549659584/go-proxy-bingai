@@ -3,9 +3,11 @@ package v1
 import (
 	"adams549659584/go-proxy-bingai/common"
 	"log"
+	"net/http"
 	"strings"
 
 	binglib "github.com/Harry-zklcdc/bing-lib"
+	"github.com/Harry-zklcdc/bing-lib/lib/aes"
 	"github.com/Harry-zklcdc/bing-lib/lib/hex"
 	"github.com/Harry-zklcdc/bing-lib/lib/request"
 )
@@ -34,8 +36,13 @@ func getCookie(reqCookie, convId, rid string) (cookie string, err error) {
 		}
 	}
 	cookie = strings.TrimLeft(strings.Trim(cookie, "; "), "; ")
-	resp, err := binglib.Bypass(common.BypassServer, reqCookie, "local-gen-"+hex.NewUUID(), strings.ToUpper(hex.NewHex(32)), convId, rid)
+	IG := strings.ToUpper(hex.NewHex(32))
+	T, err := aes.Encrypt(common.AUTHOR, IG)
 	if err != nil {
+		return
+	}
+	resp, status, err := binglib.Bypass(common.BypassServer, reqCookie, "local-gen-"+hex.NewUUID(), IG, convId, rid, T)
+	if err != nil || status != http.StatusOK {
 		return
 	}
 	return resp.Result.Cookies + "; _U=" + hex.NewHex(128), nil

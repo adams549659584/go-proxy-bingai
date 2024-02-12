@@ -12,6 +12,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "crypto-js": "^4.2.0",
     "naive-ui": "^2.34.4",
     "pinia": "^2.0.36",
     "pinia-plugin-persistedstate": "^3.1.0",
@@ -22,6 +23,7 @@
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.2.0",
     "@tsconfig/node18": "^2.0.1",
+    "@types/crypto-js": "^4.2.2",
     "@types/node": "^18.16.8",
     "@vitejs/plugin-vue": "^4.2.3",
     "@vue/eslint-config-prettier": "^7.1.0",

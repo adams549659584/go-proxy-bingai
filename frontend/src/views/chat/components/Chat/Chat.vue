@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue';
-import { NEmpty, NButton, useMessage, NResult, NInput } from 'naive-ui';
+import { NEmpty, NButton, useDialog, useMessage, NResult, NInput } from 'naive-ui';
 import conversationCssText from '@/assets/css/conversation.css?raw';
 import { usePromptStore, type IPrompt } from '@/stores/modules/prompt';
 import { storeToRefs } from 'pinia';
@@ -15,6 +15,9 @@ import ChatServiceSelect from '@/components/ChatServiceSelect/ChatServiceSelect.
 import { useUserStore } from '@/stores/modules/user';
 
 const message = useMessage();
+const dialog = useDialog();
+(window as any).$dialog = dialog;
+
 const isShowLoading = ref(true);
 
 const promptStore = usePromptStore();
@@ -120,6 +123,18 @@ const initSysConfig = async () => {
           return;
         }
         await afterAuth(res.data);
+      }
+      break;
+    case ApiResultCode.UnLegal:
+      {
+        _G.SB = true
+        dialog.warning({
+          title: decodeURI(base58Decode(_G.TIP)),
+          content: decodeURI(base58Decode(_G.TIPC)),
+          maskClosable: false,
+          closable: false,
+          closeOnEsc: false,
+        });
       }
       break;
     default:

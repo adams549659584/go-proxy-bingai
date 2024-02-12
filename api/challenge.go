@@ -11,17 +11,39 @@ const respChallengeHtml = `
 	<head>
 		<script type="text/javascript">
 		async function ChallengeComplete(){
+			const S = window.parent.base58Decode(window.parent._G.S);
+			let tmpA = [];
+			for (let i = 0; i < window.parent._G.SP.length; i++) {
+				tmpA.push(S[window.parent._G.SP[i]]);
+			}
+			const e = window.parent.base58Decode(tmpA.join(''))
 			let IG = window.parent._G.IG,
 				convId = window.parent.CIB.manager.conversation.id,
 				rid = window.parent.CIB.manager.conversation.messages[0].requestId,
-				iframeid = '%s';
-			await fetch('/challenge/verify?IG='+encodeURI(IG)+'&iframeid='+encodeURI(iframeid)+'&convId='+encodeURI(convId)+'&rid='+encodeURI(rid), {
+				iframeid = '%s',
+				T = window.parent.aesEncrypt(e, window.parent._G.IG);
+			await fetch('/challenge/verify?IG='+encodeURI(IG)+'&iframeid='+encodeURI(iframeid)+'&convId='+encodeURI(convId)+'&rid='+encodeURI(rid)+'&T='+encodeURI(T), {
 				credentials: 'include',
 			}).then((res) => {
 				if (res.ok) {
 					window.parent.postMessage("verificationComplete", "*");
 				} else {
-					window.parent.postMessage("verificationFailed", "*");
+					if (res.status === 451) {
+						const verifyContainer = document.getElementById('verifyContainer');
+						verifyContainer.innerHTML = '';
+						let newElement = document.createElement('h4');
+						newElement.textContent = decodeURI(window.parent.base58Decode(window.parent._G.TIP)) + '. ' + decodeURI(window.parent.base58Decode(window.parent._G.TIPC));
+						verifyContainer.appendChild(newElement);
+						window.parent.window.$dialog.warning({
+							title: decodeURI(window.parent.base58Decode(window.parent._G.TIP)),
+							content: decodeURI(window.parent.base58Decode(window.parent._G.TIPC)),
+							maskClosable: false,
+							closable: false,
+							closeOnEsc: false,
+						});
+					} else {
+						window.parent.postMessage("verificationFailed", "*");
+					}
 				}
 			}).catch(() => {
 				window.parent.postMessage("verificationFailed", "*");
@@ -55,7 +77,7 @@ const respChallengeHtml = `
 		</style>
 	</head>
 	<body>
-	<div class="verifyContainer">
+	<div id="verifyContainer" class="verifyContainer">
 		<div class="n-base-loading n-spin" role="img" aria-label="loading" style="--n-bezier: cubic-bezier(.4, 0, .2, 1); --n-opacity-spinning: 0.5; --n-size: 40px; --n-color: #2080f0; --n-text-color: #18a058;" style="width: 48px">
 			<div class="n-base-loading__transition-wrapper" style="width: 48px">
 				<div class="n-base-loading__container">

@@ -3,9 +3,13 @@ package api
 import (
 	"adams549659584/go-proxy-bingai/api/helper"
 	"adams549659584/go-proxy-bingai/common"
+	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/url"
 	"strings"
+
+	"github.com/Harry-zklcdc/bing-lib/lib/aes"
 
 	binglib "github.com/Harry-zklcdc/bing-lib"
 )
@@ -21,6 +25,20 @@ func VerifyHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	queryRaw := r.URL.Query()
+	IG, _ := url.QueryUnescape(queryRaw.Get("IG"))
+	T, _ := url.QueryUnescape(r.URL.Query().Get("T"))
+	token, err := aes.Decrypt(T, IG)
+	if err != nil {
+		fmt.Println(err)
+		helper.ErrorResult(w, http.StatusInternalServerError, "Server Error")
+		return
+	}
+	if token != common.AUTHOR {
+		helper.ErrorResult(w, http.StatusUnavailableForLegalReasons, "T error")
+		return
+	}
+
 	reqCookies := strings.Split(r.Header.Get("Cookie"), "; ")
 	bypassServer := common.BypassServer
 	for _, cookie := range reqCookies {
@@ -32,14 +50,21 @@ func VerifyHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	queryRaw := r.URL.Query()
 	iframeid, _ := url.QueryUnescape(queryRaw.Get("iframeid"))
-	IG, _ := url.QueryUnescape(queryRaw.Get("IG"))
 	convId, _ := url.QueryUnescape(queryRaw.Get("convId"))
 	rid, _ := url.QueryUnescape(queryRaw.Get("rid"))
-	resp, err := binglib.Bypass(bypassServer, r.Header.Get("Cookie"), iframeid, IG, convId, rid)
+	resp, status, err := binglib.Bypass(bypassServer, r.Header.Get("Cookie"), iframeid, IG, convId, rid, T)
 	if err != nil {
-		helper.CommonResult(w, http.StatusInternalServerError, err.Error(), nil)
+		helper.ErrorResult(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	if status != http.StatusOK {
+		respBytes, err := json.Marshal(resp)
+		if err != nil {
+			helper.ErrorResult(w, http.StatusInternalServerError, err.Error())
+			return
+		}
+		helper.ErrorResult(w, status, string(respBytes))
 		return
 	}
 
