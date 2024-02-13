@@ -3,17 +3,11 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile
+      no_cache: true
     environment:
       - HEADLESS=false
       - PASS_TIMEOUT=5
     ports:
-      - 7860:7860
       - 8080:8080
+      - 45678:45678
       - 9005:9005
-
-  cloudflared:
-    build: 
-      context: .
-      dockerfile: Dockerfile-cloudflared
-    container_name: cloudflared
-    command: /usr/bin/cloudflared tunnel --no-autoupdate run --token $CF_ZERO_TRUST_TOKEN

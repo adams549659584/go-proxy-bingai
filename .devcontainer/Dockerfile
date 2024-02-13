@@ -1,30 +1,15 @@
-FROM zklcdc/go-bingai-pass:latest
+FROM zklcdc/go-proxy-bingai:latest-with-pass
 
-ENV GBP_USER ${GBP_USER:-gbp}
-ENV GBP_USER_ID ${GBP_USER_ID:-1000}
-
-WORKDIR /app
-
-USER root
-
-RUN apt-get update && apt-get install -y --no-install-recommends curl
-
-RUN curl -L https://github.com/Harry-zklcdc/go-proxy-bingai/releases/latest/download/go-proxy-bingai-linux-amd64.tar.gz -o go-proxy-bingai-linux-amd64.tar.gz && \
+RUN wget https://github.com/Harry-zklcdc/go-proxy-bingai/releases/latest/download/go-proxy-bingai-linux-amd64.tar.gz -O go-proxy-bingai-linux-amd64.tar.gz && \
     tar -zxvf go-proxy-bingai-linux-amd64.tar.gz && \
     chmod +x go-proxy-bingai
 
-RUN apt-get remove -y curl && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* && \
-    rm go-proxy-bingai-linux-amd64.tar.gz
+RUN wget https://github.com/Harry-zklcdc/go-bingai-pass/releases/latest/download/go-bingai-pass-linux-amd64.tar.gz -O go-bingai-pass-linux-amd64.tar.gz && \
+    tar -zxvf go-bingai-pass-linux-amd64.tar.gz && \
+    chmod +x go-bingai-pass
+
+RUN rm go-bingai-pass-linux-amd64.tar.gz go-proxy-bingai-linux-amd64.tar.gz
 
 COPY supervisor.conf /etc/supervisor/conf.d/supervisor.conf
 
-USER $GBP_USER
-
-ENV PORT=7860
-ENV BYPASS_SERVER=http://localhost:8080
-
-EXPOSE 7860 8080 9005
-
-CMD /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisor.conf
+EXPOSE 8080 45678 9005

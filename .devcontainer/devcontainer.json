@@ -1,6 +1,6 @@
 {
   "name": "Go Proxy BingAI",
   "dockerComposeFile": "docker-compose.yml",
-  "service": "cloudflared",
-  "workspaceFolder": "/workspace"
+  "service": "go-proxy-bingai",
+  "workspaceFolder": "/app"
 }

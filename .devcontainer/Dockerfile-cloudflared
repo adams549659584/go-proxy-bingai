@@ -1,4 +1,0 @@
-FROM cloudflare/cloudflared:latest AS cloudflared
-FROM ubuntu:latest
-
-COPY --from=cloudflared /usr/local/bin/cloudflared /usr/bin/cloudflared
