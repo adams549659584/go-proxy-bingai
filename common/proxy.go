@@ -214,7 +214,7 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 			res.Header.Del("Set-Cookie")
 			for _, v := range resCookies {
 				if v != "" {
-					res.Header.Add("Set-Cookie", strings.Split(v, "; ")[0]+"; Path=/")
+					res.Header.Add("Set-Cookie", strings.Split(v, "; ")[0]+"; path=/")
 				}
 			}
 		}
