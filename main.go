@@ -4,6 +4,7 @@ import (
 	"adams549659584/go-proxy-bingai/api"
 	v1 "adams549659584/go-proxy-bingai/api/v1"
 	"adams549659584/go-proxy-bingai/common"
+	"adams549659584/go-proxy-bingai/web"
 	"log"
 	"net/http"
 	"time"
@@ -30,7 +31,11 @@ func main() {
 	http.HandleFunc("/edgesvc/", api.Edgesvc)
 	http.HandleFunc("/sydney/", api.Sydney)
 
-	http.HandleFunc("/web/", api.WebStatic)
+	if common.IS_DEBUG_MODE {
+		http.HandleFunc("/web/", web.DebugWebHandler)
+	} else {
+		http.HandleFunc("/web/", api.WebStatic)
+	}
 
 	http.HandleFunc("/", api.Index)
 

@@ -70,6 +70,8 @@ var (
 	RAND_IP_COOKIE_NAME             = "BingAI_Rand_IP"
 	PROXY_WEB_PREFIX_PATH           = "/web/"
 	PROXY_WEB_PAGE_PATH             = PROXY_WEB_PREFIX_PATH + "index.html"
+
+	DEBUG_PROXY_WEB, _ = url.Parse("http://localhost:4000")
 )
 
 func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {

@@ -5,6 +5,7 @@ import (
 	"embed"
 	"io/fs"
 	"net/http"
+	"net/http/httputil"
 	"path/filepath"
 )
 
@@ -57,4 +58,16 @@ func GetWebFS() http.FileSystem {
 	} else {
 		return http.FS(webFS)
 	}
+}
+
+func DebugWebHandler(w http.ResponseWriter, r *http.Request) {
+	reverseProxy := &httputil.ReverseProxy{
+		Director: func(req *http.Request) {
+			req.URL.Scheme = common.DEBUG_PROXY_WEB.Scheme
+			req.URL.Host = common.DEBUG_PROXY_WEB.Host
+			req.Host = common.DEBUG_PROXY_WEB.Host
+			req.Header.Set("Origin", common.DEBUG_PROXY_WEB.String())
+		},
+	}
+	reverseProxy.ServeHTTP(w, r)
 }
