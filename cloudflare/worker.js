@@ -237,7 +237,7 @@ const challengeResponseBody = `
 			let IG = window.parent._G.IG,
 				convId = window.parent.CIB.manager.conversation.id,
 				rid = window.parent.CIB.manager.conversation.messages[0].requestId,
-				iframeid = '%s',
+				iframeid = '{{%s}}',
 				T = window.parent.aesEncrypt(e, window.parent._G.IG);
 			await fetch('/challenge/verify?IG='+encodeURI(IG)+'&iframeid='+encodeURI(iframeid)+'&convId='+encodeURI(convId)+'&rid='+encodeURI(rid)+'&T='+encodeURI(T), {
 				credentials: 'include',
