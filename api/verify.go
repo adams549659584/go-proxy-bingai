@@ -4,7 +4,6 @@ import (
 	"adams549659584/go-proxy-bingai/api/helper"
 	"adams549659584/go-proxy-bingai/common"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"net/url"
 	"strings"
@@ -13,6 +12,8 @@ import (
 
 	binglib "github.com/Harry-zklcdc/bing-lib"
 )
+
+var removeCookieName = []string{common.USER_TOKEN_COOKIE_NAME, common.USER_KievRPSSecAuth_COOKIE_NAME, common.USER_RwBf_COOKIE_NAME, common.PASS_SERVER_COOKIE_NAME, common.RAND_COOKIE_INDEX_NAME}
 
 func VerifyHandler(w http.ResponseWriter, r *http.Request) {
 	if !helper.CheckAuth(r) {
@@ -30,7 +31,6 @@ func VerifyHandler(w http.ResponseWriter, r *http.Request) {
 	T, _ := url.QueryUnescape(r.URL.Query().Get("T"))
 	token, err := aes.Decrypt(T, IG)
 	if err != nil {
-		fmt.Println(err)
 		helper.ErrorResult(w, http.StatusInternalServerError, "Server Error")
 		return
 	}
@@ -39,21 +39,27 @@ func VerifyHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	reqCookies := strings.Split(r.Header.Get("Cookie"), "; ")
 	bypassServer := common.BypassServer
-	for _, cookie := range reqCookies {
-		if strings.HasPrefix(cookie, "BingAI_Pass_Server") {
-			tmp := strings.ReplaceAll(cookie, "BingAI_Pass_Server=", "")
-			if tmp != "" {
-				bypassServer = tmp
-			}
+
+	header := http.Header{}
+	header.Add("Cookie", r.Header.Get("Cookie"))
+	req := &http.Request{
+		Header: header,
+	}
+	if cookie, err := req.Cookie(common.PASS_SERVER_COOKIE_NAME); err == nil {
+		bypassServer = cookie.Value
+	}
+	reqCookies := []string{}
+	for _, cookie := range req.Cookies() {
+		if !common.IsInArray(removeCookieName, cookie.Name) {
+			reqCookies = append(reqCookies, cookie.String())
 		}
 	}
 
 	iframeid, _ := url.QueryUnescape(queryRaw.Get("iframeid"))
 	convId, _ := url.QueryUnescape(queryRaw.Get("convId"))
 	rid, _ := url.QueryUnescape(queryRaw.Get("rid"))
-	resp, status, err := binglib.Bypass(bypassServer, r.Header.Get("Cookie"), iframeid, IG, convId, rid, T)
+	resp, status, err := binglib.Bypass(bypassServer, strings.Join(reqCookies, "; "), iframeid, IG, convId, rid, T)
 	if err != nil {
 		helper.ErrorResult(w, http.StatusInternalServerError, err.Error())
 		return
@@ -70,7 +76,9 @@ func VerifyHandler(w http.ResponseWriter, r *http.Request) {
 
 	cookies := strings.Split(resp.Result.Cookies, "; ")
 	for _, cookie := range cookies {
-		w.Header().Add("Set-Cookie", cookie+"; path=/")
+		if !common.IsInArray(removeCookieName, strings.Split(cookie, "=")[0]) {
+			w.Header().Add("Set-Cookie", cookie+"; path=/")
+		}
 	}
 
 	helper.CommonResult(w, http.StatusOK, "ok", resp)

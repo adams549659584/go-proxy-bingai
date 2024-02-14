@@ -68,6 +68,7 @@ var (
 	USER_RwBf_COOKIE_NAME           = "_RwBf"
 	RAND_COOKIE_INDEX_NAME          = "BingAI_Rand_CK"
 	RAND_IP_COOKIE_NAME             = "BingAI_Rand_IP"
+	PASS_SERVER_COOKIE_NAME         = "BingAI_Pass_Server"
 	PROXY_WEB_PREFIX_PATH           = "/web/"
 	PROXY_WEB_PAGE_PATH             = PROXY_WEB_PREFIX_PATH + "index.html"
 

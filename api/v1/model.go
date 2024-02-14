@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"adams549659584/go-proxy-bingai/common"
 	"encoding/json"
 	"net/http"
 	"strings"
@@ -25,7 +26,7 @@ func ModelHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if modelId != "dall-e-3" && !isInArray(chatMODELS, modelId) {
+	if modelId != "dall-e-3" && !common.IsInArray(chatMODELS, modelId) {
 		w.WriteHeader(http.StatusNotFound)
 		w.Write([]byte("Not Found"))
 		return
