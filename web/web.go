@@ -53,11 +53,7 @@ func initWebPathMapByFS() error {
 }
 
 func GetWebFS() http.FileSystem {
-	if common.IS_DEBUG_MODE {
-		return http.Dir("web")
-	} else {
-		return http.FS(webFS)
-	}
+	return http.FS(webFS)
 }
 
 func DebugWebHandler(w http.ResponseWriter, r *http.Request) {
