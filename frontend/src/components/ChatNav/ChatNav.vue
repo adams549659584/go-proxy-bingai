@@ -324,6 +324,12 @@ const saveAdvancedSetting = () => {
 
 const autoPassCFChallenge = async () => {
   passingCFChallenge.value = true;
+  const S = base58Decode(_G.S);
+  let tmpA = [];
+  for (let i = 0; i < _G.SP.length; i++) {
+    tmpA.push(S[_G.SP[i]]);
+  }
+  const e = base58Decode(tmpA.join(''));
   let resq = await fetch('/pass', {
     credentials: 'include',
     method: "POST", // *GET, POST, PUT, DELETE, etc.
@@ -332,7 +338,8 @@ const autoPassCFChallenge = async () => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      "url": passServer.value,
+      "IG": _G.IG,
+      "T": aesEncrypt(e, _G.IG),
     }),
   }).then((res) => res.json())
   .catch(() => {

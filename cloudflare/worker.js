@@ -343,6 +343,7 @@ const verify = async (request, cookie) => {
           let tmp = cookie.replace('BingAI_Pass_Server=', '');
           if (tmp !== '') {
               bypassServer = tmp;
+              break;
           }
       }
   }
@@ -372,10 +373,51 @@ const verify = async (request, cookie) => {
   const cookies = resData.result.cookies.split('; ')
   const newRes = new Response(JSON.stringify(resData));
   for (let v of cookies) {
-    newRes.headers.append('Set-Cookie', v+'; path=/')
+    newRes.headers.append('Set-Cookie', v+'; path=/');
   }
   newRes.headers.set('Content-Type', 'application/json; charset=utf-8');
-  return newRes
+  return newRes;
+};
+
+/**
+ * pass
+ * @param {Request} request
+ * @param {String} cookie
+ * @returns
+ */
+const pass = async (request, cookie) => {
+  if (request.method != 'POST') {
+    return new Response('{"code":405,"message":"Method Not Allowed","data":null}', { status: 405 });
+  }
+
+  let resqBody = JSON.parse(await request.text());
+
+  let reqCookies = request.headers.get('Cookie').split('; ');
+  let bypassServer = BYPASS_SERVER;
+  for (let i = 0; i < reqCookies.length; i++) {
+      let cookie = reqCookies[i];
+      if (cookie.startsWith('BingAI_Pass_Server')) {
+          let tmp = cookie.replace('BingAI_Pass_Server=', '');
+          if (tmp !== '') {
+              bypassServer = tmp;
+              break;
+          }
+      }
+  }
+
+  let req = {
+    'IG': resqBody['IG'],
+    'iframeid': "local-gen-"+crypto.randomUUID(),
+    'cookies': cookie,
+    'convId': '',
+    'rid': '',
+    'T': resqBody['T'],
+  }
+  const newReq = new Request(bypassServer, {
+    method: 'POST',
+    body: JSON.stringify(req),
+  });
+  return await fetch(newReq);
 };
 
 /**
@@ -486,15 +528,7 @@ export default {
       return bingapi(request, cookies);
     }
     if (currentUrl.pathname === '/pass') {
-      let res = JSON.parse(await request.text())
-      targetUrl = res['url'];
-      newHeaders.set('origin', res['url']);
-      const newReq = new Request(targetUrl, {
-        method: request.method,
-        headers: newHeaders,
-        body: '{"cookies":"'+ cookies +'","iframeid":"local-gen-'+crypto.randomUUID()+'"}',
-      });
-      return await fetch(newReq);
+      return pass(request, cookies);
     }
 
     newHeaders.set('Cookie', cookies);
