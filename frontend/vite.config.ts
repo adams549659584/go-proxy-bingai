@@ -71,7 +71,7 @@ export default defineConfig(({ command, mode }) => {
         '^/(?!web)': {
           ws: true,
           target: env.VITE_BASE_API_URL,
-          changeOrigin: true,
+          changeOrigin: false,
         },
       },
     },
