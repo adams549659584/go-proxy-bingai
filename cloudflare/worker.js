@@ -7,6 +7,8 @@ const _U = '';
 
 const BYPASS_SERVER = '';
 
+const NIGHTLY = false;
+
 const WEB_CONFIG = {
   WORKER_URL: '', // 如无特殊需求请，保持为''
 };
@@ -191,7 +193,12 @@ const rewriteBody = async (res) => {
  * @returns
  */
 const home = async (pathname) => {
-  const baseUrl = 'https://raw.githubusercontent.com/Harry-zklcdc/go-proxy-bingai/master/';
+  let baseUrl;
+  if (NIGHTLY) {
+    baseUrl = 'https://raw.githubusercontent.com/Harry-zklcdc/go-proxy-bingai/nightly/';
+  } else {
+    baseUrl = 'https://raw.githubusercontent.com/Harry-zklcdc/go-proxy-bingai/master/';
+  }
   let url;
   if (pathname.indexOf('/web/') === 0) {
     url = pathname.replace('/web/', baseUrl+'web/');
