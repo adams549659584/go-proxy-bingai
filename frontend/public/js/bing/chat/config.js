@@ -48,7 +48,7 @@ _w['_sydConvConfig'] = {
   lat: '78.4156',
   long: '-101.4458',
   language: 'Chinese (China)',
-  userMailId: randomString(Math.round(Math.random()*16))+'@'+randomLowercaseString(randomString(Math.round(Math.random()*12)))+'.com',
+  userMailId: randomString(Math.round(Math.random()*16))+'@'+randomLowercaseString(Math.round(Math.random()*12))+'.com',
   username: randomString(Math.round(Math.random()*16)),
   userIpAddress: CookieGet('BingAI_Rand_IP'),
   isMSAAuthenticated: true,
