@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"time"
 
 	binglib "github.com/Harry-zklcdc/bing-lib"
 	"github.com/Harry-zklcdc/bing-lib/lib/aes"
@@ -14,6 +15,7 @@ import (
 
 func init() {
 	go func() {
+		time.Sleep(200 * time.Millisecond)
 		t, _ := getCookie("", "", "")
 		log.Println("BingAPI Ready!")
 		globalChat = binglib.NewChat(t).SetBingBaseUrl("http://localhost:" + common.PORT).SetSydneyBaseUrl("ws://localhost:" + common.PORT).SetBypassServer(common.BypassServer)
