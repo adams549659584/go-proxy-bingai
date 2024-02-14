@@ -1,0 +1,182 @@
+name: Build Go-Proxy-BingAI Nightly
+on:
+  schedule:
+    - cron: '0 18 * * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 'stable'
+          check-latest: true
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.17.0
+
+      - name: Setup timezone
+        uses: zcong1993/setup-timezone@master
+        with:
+          timezone: Asia/Shanghai
+
+      - name: Delete Old Release & Tag
+        uses: dev-drprasad/delete-tag-and-release@v1.0
+        with:
+          tag_name: nightly
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          delete_release: true
+
+      - name: Set Variables
+        run: |
+          echo "BODY=Released on $(date +%Y-%m-%d)" >> $GITHUB_ENV
+          DATE=$(date +%Y.%m.%d)
+          sed -i "s/\"version\": \".*\"/\"version\": \"$DATE-nightly\"/g" frontend/package.json
+
+      - name: Build Frontend
+        run: |
+          rm -r web/* && git checkout web/web.go
+          cd frontend
+          npm install
+          npm run build
+          cd ..
+
+      - name: Commit nightly webFile
+        run: |
+          git checkout -b nightly
+          git config --global user.email "zklcdc@qq.com"
+          git config --global user.name "Harry-zklcdc"
+          git add web/*
+          git commit -m "[Upgrade] 🚀 Upload nightly webFile"
+          git tag -a nightly -m "Released on $(date +%Y-%m-%d)"
+          git push -f origin HEAD:nightly
+          git push --tags
+
+      - name: Build binary
+        run: |
+          GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -tags netgo -trimpath -o go-proxy-bingai main.go && tar -zcvf go-proxy-bingai-linux-amd64.tar.gz go-proxy-bingai
+          GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -tags netgo -trimpath -o go-proxy-bingai main.go && tar -zcvf go-proxy-bingai-linux-arm64.tar.gz go-proxy-bingai
+          GOOS=linux GOARCH=arm GOARM=7 go build -ldflags="-s -w" -tags netgo -trimpath -o go-proxy-bingai main.go && tar -zcvf go-proxy-bingai-linux-armv7.tar.gz go-proxy-bingai
+          GOOS=windows GOARCH=amd64 go build -ldflags="-s -w" -tags netgo -trimpath -o go-proxy-bingai.exe main.go && tar -zcvf go-proxy-bingai-windows-amd64.tar.gz go-proxy-bingai.exe
+          GOOS=windows GOARCH=arm64 go build -ldflags="-s -w" -tags netgo -trimpath -o go-proxy-bingai.exe main.go && tar -zcvf go-proxy-bingai-windows-arm64.tar.gz go-proxy-bingai.exe
+          GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w" -tags netgo -trimpath -o go-proxy-bingai main.go && tar -zcvf go-proxy-bingai-darwin-amd64.tar.gz go-proxy-bingai
+          GOOS=darwin GOARCH=arm64 go build -ldflags="-s -w" -tags netgo -trimpath -o go-proxy-bingai main.go && tar -zcvf go-proxy-bingai-darwin-arm64.tar.gz go-proxy-bingai
+
+      - name: Create Release and Upload Release Asset
+        uses: softprops/action-gh-release@v1
+        with:
+          prerelease: true
+          name: nightly
+          tag_name: nightly
+          body: ${{ env.BODY }}
+          generate_release_notes: true
+          files: |
+            go-proxy-bingai-linux-amd64.tar.gz
+            go-proxy-bingai-linux-arm64.tar.gz
+            go-proxy-bingai-linux-armv7.tar.gz
+            go-proxy-bingai-windows-amd64.tar.gz
+            go-proxy-bingai-windows-arm64.tar.gz
+            go-proxy-bingai-darwin-amd64.tar.gz
+            go-proxy-bingai-darwin-arm64.tar.gz
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: web
+          retention-days: 3
+
+  docker-build:
+    name: docker-build
+    needs: [build]
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup timezone
+        uses: zcong1993/setup-timezone@master
+        with:
+          timezone: Asia/Shanghai
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Delete Old Frontend File
+        run: |
+          rm -r web/*
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: dist
+          path: web
+
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          platforms: linux/amd64,linux/arm64,linux/arm/v7
+          context: .
+          file: ./docker/Dockerfile  
+          push: true
+          tags: |
+            docker.io/zklcdc/go-proxy-bingai:nightly
+
+      - name: Delete artifact
+        uses: geekyeggo/delete-artifact@v2
+        with:
+          name: |
+            dist
+
+  docker-build-with-pass:
+    name: docker-build-nightly-with-pass
+    needs: [build]
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup timezone
+        uses: zcong1993/setup-timezone@master
+        with:
+          timezone: Asia/Shanghai
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          platforms: linux/amd64
+          context: .
+          file: ./docker/Dockerfile-nightly-with-pass
+          push: true
+          tags: |
+            docker.io/zklcdc/go-proxy-bingai:nightly-with-pass
