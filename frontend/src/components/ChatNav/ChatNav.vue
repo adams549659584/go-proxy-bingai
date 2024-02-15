@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { h, ref, onMounted } from 'vue';
-import { NDropdown, type DropdownOption, NModal, NInput, NInputNumber, NButton, NGrid, NGridItem, useMessage, NImage, NForm, NFormItem, NSwitch, NTag, NSelect, NConfigProvider, lightTheme, darkTheme } from 'naive-ui';
+import { NDropdown, type DropdownOption, NModal, NInput, NInputNumber, NButton, NGrid, NGridItem, useMessage, NImage, NForm, NFormItem, NSwitch, NTag, NSelect, NConfigProvider, NSpin, NP, NA, lightTheme, darkTheme } from 'naive-ui';
 import settingSvgUrl from '@/assets/img/setting.svg?url';
 import { usePromptStore } from '@/stores/modules/prompt';
 import { storeToRefs } from 'pinia';
@@ -15,6 +15,8 @@ const isShowMore = ref(false);
 const isShowSettingModal = ref(false);
 const isShowAdvancedSettingModal = ref(false);
 const isShowSetAboutModal = ref(false);
+const isShowLoginModal = ref(false);
+const isShowIframe = ref(false);
 const userToken = ref('');
 const userKievRPSSecAuth = ref('');
 const userMUID = ref('');
@@ -55,6 +57,7 @@ const GetLastVersion = async () => {
 };
 
 const navType = {
+  login: 'login',
   github: 'github',
   chatService: 'chatService',
   promptStore: 'promptStore',
@@ -66,6 +69,10 @@ const navType = {
   about: 'about',
 };
 const navConfigs = [
+  {
+    key: navType.login,
+    label: '登录账号',
+  },
   {
     key: navType.setting,
     label: '设置',
@@ -147,12 +154,21 @@ onMounted(() => {
   }
 })
 
+const sleep = async (ms: number) => {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 const renderDropdownLabel = (option: DropdownOption) => {
   return h(ChatNavItem as Component, { navConfig: option });
 };
 
-const handleSelect = (key: string) => {
+const handleSelect = async (key: string) => {
   switch (key) {
+    case navType.login:
+      {
+        isShowLoginModal.value = true;
+      }
+      break;
     case navType.chatService:
       {
         isShowChatServiceSelectModal.value = true;
@@ -322,6 +338,37 @@ const saveAdvancedSetting = () => {
   }
 }
 
+const newWindow = () => {
+  window.open("/fd/auth/signin?action=interactive&provider=windows_live_id&return_url=https%3a%2f%2fwww.bing.com%2fchat%3fq%3dBing%2bAI%26FORM%3dhpcodx%26wlsso%3d1%26wlexpsignin%3d1&src=EXPLICIT&sig=001DD71D5A386F753B1FC3055B306E8F", "_blank");
+}
+
+const loginHandel = async ()=> {
+  isShowIframe.value = true;
+  window.addEventListener('message', function (e) {
+    const d = e.data
+    if (d.cookies != "" && d.cookies != null && d.cookies != undefined) {
+      userStore.saveCookies(d.cookies);
+      cookiesStr.value = d.cookies;
+      message.success('登录成功');
+      isShowLoginModal.value = false;
+      window.location.href = '/';
+    }
+  })
+  await sleep(1500)
+  const iframe = document.getElementById('login');
+  console.log(iframe)
+  const S = base58Decode(_G.S);
+  let tmpA = [];
+  for (let i = 0; i < _G.SP.length; i++) {
+    tmpA.push(S[_G.SP[i]]);
+  }
+  const e = base58Decode(tmpA.join(''));
+  iframe.contentWindow.postMessage({
+    IG: _G.IG,
+    T: await aesEncrypt(e, _G.IG),
+  }, '*');
+}
+
 const autoPassCFChallenge = async () => {
   passingCFChallenge.value = true;
   const S = base58Decode(_G.S);
@@ -339,7 +386,7 @@ const autoPassCFChallenge = async () => {
     },
     body: JSON.stringify({
       "IG": _G.IG,
-      "T": aesEncrypt(e, _G.IG),
+      "T": await aesEncrypt(e, _G.IG),
     }),
   }).then((res) => res.json())
   .catch(() => {
@@ -367,6 +414,27 @@ const autoPassCFChallenge = async () => {
     <NDropdown v-else class="select-none" trigger="hover" :options="navConfigs" :render-label="renderDropdownLabel" @select="handleSelect">
       <NImage class="fixed top-6 right-6 cursor-pointer z-50" :src="settingSvgUrl" alt="设置菜单" :preview-disabled="true" :style="settingIconStyle"></NImage>
     </NDropdown>
+    <NModal v-model:show="isShowLoginModal" preset="dialog" :show-icon="false">
+      <template #header>
+        <div class="text-3xl py-2">登录账号</div>
+      </template>
+      <div v-if="!isShowIframe" style="margin-top:12px; margin-bottom:24px">
+        <NP>
+          使用此功能前, 请先安装<NA href="https://www.tampermonkey.net/">油猴插件</NA>, 并安装<NA href="https://gist.github.com/Harry-zklcdc/2bfed48b5690efb0891263df85ce2537/raw/0969dd65000e5c1b4f8ba1d3b10fc0b31ac2ae18/go-proxy-bingai.user.js">此脚本</NA>
+          <br>
+          请点击下面「打开登录页面」按钮, 在新打开登录页面中登录账号, 登录成功后点击确定
+        </NP>
+      </div>
+      <div v-else>
+        <NSpin size="large" description="获取 Cookie 中, 请稍后..." style="margin: 0 auto; width: 100%" />
+        <iframe id="login" src="https://www.bing.com/" style="border: none; width: 0; height: 0" />
+      </div>
+      <template #action>
+        <NButton size="large" type="info" @click="newWindow">打开登录页面</NButton>
+        <NButton size="large" @click="isShowLoginModal = false">取消</NButton>
+        <NButton ghost size="large" type="info" @click="loginHandel">确定</NButton>
+      </template>
+    </NModal>
     <NModal v-model:show="isShowSettingModal" preset="dialog" :show-icon="false">
       <template #header>
         <div class="text-3xl py-2">设置</div>
