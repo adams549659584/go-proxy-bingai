@@ -50,6 +50,7 @@ const sydneySetting = ref(false);
 const sydneyPromptSetting = ref('');
 const passServerSetting = ref('');
 const author = ref('');
+const getCookieTip = ref('获取 Cookie 中, 请稍后...');
 
 const GetLastVersion = async () => {
   const res = await fetch('https://api.github.com/repos/Harry-zklcdc/go-proxy-bingai/releases/latest');
@@ -194,6 +195,7 @@ const settingMenu = (key: string) => {
     case 'login':
       {
         isShowLoginModal.value = true;
+        isShowIframe.value = false;
       }
       break;
     case 'chatService':
@@ -347,6 +349,7 @@ const newWindow = () => {
 
 const loginHandel = async ()=> {
   isShowIframe.value = true;
+  getCookieTip.value = '获取 Cookie 中, 请稍后...';
   window.addEventListener('message', function (e) {
     const d = e.data
     if (d.cookies != "" && d.cookies != null && d.cookies != undefined) {
@@ -357,9 +360,9 @@ const loginHandel = async ()=> {
       window.location.href = '/';
     }
   })
-  await sleep(1500)
+  await sleep(1500);
+  getCookieTimeoutHandel();
   const iframe = document.getElementById('login');
-  console.log(iframe)
   const S = base58Decode(_G.S);
   let tmpA = [];
   for (let i = 0; i < _G.SP.length; i++) {
@@ -370,6 +373,11 @@ const loginHandel = async ()=> {
     IG: _G.IG,
     T: await aesEncrypt(e, _G.IG),
   }, '*');
+}
+
+const getCookieTimeoutHandel = async() => {
+  await sleep(3000)
+  getCookieTip.value = '获取 Cookie 时间过长, 请检查油猴插件及脚本是否安装正确';
 }
 
 const autoPassCFChallenge = async () => {
@@ -429,7 +437,7 @@ const autoPassCFChallenge = async () => {
         </NP>
       </div>
       <div v-else>
-        <NSpin size="large" description="获取 Cookie 中, 请稍后..." style="margin: 0 auto; width: 100%" />
+        <NSpin size="large" :description="getCookieTip" style="margin: 0 auto; width: 100%" />
         <iframe id="login" src="https://www.bing.com/" style="border: none; width: 0; height: 0" />
       </div>
       <template #action>
