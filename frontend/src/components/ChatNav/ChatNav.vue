@@ -431,7 +431,7 @@ const autoPassCFChallenge = async () => {
       </template>
       <div v-if="!isShowIframe" style="margin-top:12px; margin-bottom:24px">
         <NP>
-          使用此功能前, 请先安装<NA href="https://www.tampermonkey.net/">油猴插件</NA>, 并安装<NA href="https://gist.github.com/Harry-zklcdc/2bfed48b5690efb0891263df85ce2537/raw/go-proxy-bingai.user.js">此脚本</NA>
+          使用此功能前, 请先安装<NA href="https://www.tampermonkey.net/">油猴插件</NA>, 并安装<NA href="https://greasyfork.org/zh-CN/scripts/487409-go-proxy-bingai">此脚本</NA>
           <br>
           请点击下面「打开登录页面」按钮, 在新打开登录页面中登录账号, 登录成功后点击确定
         </NP>
