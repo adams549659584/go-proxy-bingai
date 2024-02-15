@@ -113,33 +113,54 @@ function base58Decode(s) {
   return bytes.reverse().map(b => String.fromCharCode(Number(b))).join('')
 }
 
-function aesEncrypt(e, t) {
-  var a = window.CryptoJS.enc.Utf8.parse(t),
-  n = window.CryptoJS.lib.WordArray.random(128/8),
-  r = window.CryptoJS.enc.Utf8.parse(e),
-  o = window.CryptoJS.AES.encrypt(r, a, {
-    iv: n,
-    mode: window.CryptoJS.mode.CBC,
-    padding: window.CryptoJS.pad.Pkcs7
-  });
-  var result = n.concat(o.ciphertext);
-  return window.CryptoJS.enc.Base64.stringify(result);
+async function aesEncrypt(e, t) {
+  const c = new TextEncoder();
+  const mb = c.encode(e), kb = c.encode(t);
+  const iv = window.crypto.getRandomValues(new Uint8Array(16));
+
+  const ck = await window.crypto.subtle.importKey(
+    "raw",
+    kb,
+    { name: "AES-CBC", length: 256 },
+    false,
+    ["encrypt"]
+  );
+  const ed = await window.crypto.subtle.encrypt(
+    { name: "AES-CBC", iv: iv },
+    ck,
+    mb
+  )
+
+  const r = new Uint8Array(iv.byteLength + ed.byteLength);
+  r.set(new Uint8Array(iv), 0);
+  r.set(new Uint8Array(ed), iv.byteLength);
+  return btoa(String.fromCharCode.apply(null, r));
 }
 
-function aesDecrypt(e, t) {
-  var a = window.CryptoJS.enc.Utf8.parse(t),
-  r = window.CryptoJS.enc.Base64.parse(e),
-  n = window.CryptoJS.lib.WordArray.create(r.words.slice(0, 4)),
-  ciphertext = window.CryptoJS.lib.WordArray.create(r.words.slice(4)),
-  o = window.CryptoJS.AES.decrypt({
-    ciphertext: ciphertext
-  },
-  a, {
-    iv: n,
-    mode: window.CryptoJS.mode.CBC,
-    padding: window.CryptoJS.pad.Pkcs7
-  });
-  return o.toString(window.CryptoJS.enc.Utf8)
+async function aesDecrypt(e, t) {
+  const c = new TextEncoder();
+  const kb = Uint8Array.from(c.encode(t));
+  const cb = Uint8Array.from(atob(e), c => c.charCodeAt(0));
+
+  const iv = cb.slice(0, 16);
+  const ct = cb.slice(16);
+
+  const key = await window.crypto.subtle.importKey(
+    "raw",
+    kb,
+    { name: "AES-CBC", length: 256 },
+    false,
+    ["decrypt"]
+  );
+
+  const dd = await window.crypto.subtle.decrypt(
+    { name: "AES-CBC", iv: iv },
+    key,
+    ct
+  );
+
+  const d = new TextDecoder();
+  return d.decode(dd);
 }
 
 try {

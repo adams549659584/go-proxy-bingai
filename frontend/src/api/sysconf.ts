@@ -8,7 +8,7 @@ export async function getSysConfig() {
     tmpA.push(S[_G.SP[i]]);
   }
   const e = base58Decode(tmpA.join(''));
-  const url = '/sysconf?IG='+_G.IG+'&T='+encodeURI(aesEncrypt(e, _G.IG));
+  const url = '/sysconf?IG='+_G.IG+'&T='+encodeURI(await aesEncrypt(e, _G.IG));
   return fetch(url, {
     credentials: 'include',
   }).then((res) => res.json() as unknown as ApiResult<SysConfig>);

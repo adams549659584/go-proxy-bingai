@@ -12,7 +12,6 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
-    "crypto-js": "^4.2.0",
     "naive-ui": "^2.34.4",
     "pinia": "^2.0.36",
     "pinia-plugin-persistedstate": "^3.1.0",
