@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { NModal, NList, NListItem, NButton, useMessage, NSpace, NInput, NUpload, type UploadFileInfo, NEmpty } from 'naive-ui';
+import { ref, onMounted } from 'vue';
+import { NModal, NList, NListItem, NButton, useMessage, NSpace, NInput, NUpload, NConfigProvider, lightTheme, darkTheme, type UploadFileInfo, NEmpty } from 'naive-ui';
 import { usePromptStore, type IPrompt, type IPromptDownloadConfig } from '@/stores/modules/prompt';
+import { useUserStore } from '@/stores/modules/user';
 import { storeToRefs } from 'pinia';
 import VirtualList from 'vue3-virtual-scroll-list';
 import ChatPromptItem from './ChatPromptItem.vue';
@@ -10,10 +11,29 @@ const messgae = useMessage();
 const promptStore = usePromptStore();
 const { promptDownloadConfig, isShowPromptSotre, promptList, keyword, searchPromptList, optPromptConfig } = storeToRefs(promptStore);
 
+const userStore = useUserStore();
+const { themeMode } = storeToRefs(userStore)
+
 const isShowDownloadPop = ref(false);
 
 const isImporting = ref(false);
 const isExporting = ref(false);
+
+let theme = ref(lightTheme);
+
+onMounted(() => {
+  if (themeMode.value == 'light') {
+    theme.value = lightTheme;
+  } else if (themeMode.value == 'dark') {
+    theme.value = darkTheme;
+  } else if (themeMode.value == 'auto') {
+    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      theme.value = darkTheme;
+    } else {
+      theme.value = lightTheme;
+    }
+  }
+})
 
 const showAddPromptPop = () => {
   optPromptConfig.value.isShow = true;
@@ -143,55 +163,57 @@ const downloadPrompt = async (config: IPromptDownloadConfig) => {
 </script>
 
 <template>
-  <NModal class="w-11/12 xl:w-[900px]" v-model:show="isShowPromptSotre" preset="card" title="提示词库">
-    <div class="flex justify-start flex-wrap gap-2 px-5 pb-2">
-      <NInput class="basis-full xl:basis-0 xl:min-w-[300px]" placeholder="搜索提示词" v-model:value="keyword" :clearable="true"></NInput>
-      <NButton secondary type="info" @click="isShowDownloadPop = true">下载</NButton>
-      <NButton secondary type="info" @click="showAddPromptPop">添加</NButton>
-      <NUpload class="w-[56px] xl:w-auto" accept=".json" :default-upload="false" :show-file-list="false" @change="importPrompt">
-        <NButton secondary type="success" :loading="isImporting">导入</NButton>
-      </NUpload>
-      <!-- <NButton secondary type="success">导入</NButton> -->
-      <NButton secondary type="success" @click="exportPrompt" :loading="isExporting">导出</NButton>
-      <NButton secondary type="error" @click="clearPrompt">清空</NButton>
-    </div>
-    <VirtualList
-      v-if="searchPromptList.length > 0"
-      class="h-[40vh] xl:h-[60vh] overflow-y-auto"
-      :data-key="'prompt'"
-      :data-sources="searchPromptList"
-      :data-component="ChatPromptItem"
-      :keeps="10"
-    />
-    <NEmpty v-else class="h-[40vh] xl:h-[60vh] flex justify-center items-center" description="暂无数据">
-      <template #extra>
-        <NButton secondary type="info" @click="isShowDownloadPop = true">下载提示词</NButton>
-      </template>
-    </NEmpty>
-  </NModal>
-  <NModal class="w-11/12 xl:w-[600px]" v-model:show="optPromptConfig.isShow" preset="card" :title="optPromptConfig.title">
-    <NSpace vertical>
-      标题
-      <NInput placeholder="请输入标题" v-model:value="optPromptConfig.newPrompt.act"></NInput>
-      描述
-      <NInput placeholder="请输入描述" type="textarea" v-model:value="optPromptConfig.newPrompt.prompt"></NInput>
-      <NButton block secondary type="info" @click="savePrompt">保存</NButton>
-    </NSpace>
-  </NModal>
-  <NModal class="w-11/12 xl:w-[600px]" v-model:show="isShowDownloadPop" preset="card" title="下载提示词">
-    <NList class="overflow-y-auto rounded-lg" hoverable clickable>
-      <NListItem v-for="(config, index) in promptDownloadConfig" :key="index">
-        <a v-if="config.type === 1" class="no-underline text-blue-500" :href="config.url" target="_blank" rel="noopener noreferrer">{{ config.name }}</a>
-        <NInput v-else-if="config.type === 2" placeholder="请输入下载链接，支持 json 及 csv " v-model:value="config.url"></NInput>
-        <template #suffix>
-          <div class="flex justify-center gap-5">
-            <a class="no-underline" v-if="config.type === 1" :href="config.refer" target="_blank" rel="noopener noreferrer">
-              <NButton secondary>来源</NButton>
-            </a>
-            <NButton secondary type="info" @click="downloadPrompt(config)" :loading="config.isDownloading">下载</NButton>
-          </div>
+  <NConfigProvider :theme="theme">
+    <NModal class="w-11/12 xl:w-[900px]" v-model:show="isShowPromptSotre" preset="card" title="提示词库">
+      <div class="flex justify-start flex-wrap gap-2 px-5 pb-2">
+        <NInput class="basis-full xl:basis-0 xl:min-w-[300px]" placeholder="搜索提示词" v-model:value="keyword" :clearable="true"></NInput>
+        <NButton secondary type="info" @click="isShowDownloadPop = true">下载</NButton>
+        <NButton secondary type="info" @click="showAddPromptPop">添加</NButton>
+        <NUpload class="w-[56px] xl:w-auto" accept=".json" :default-upload="false" :show-file-list="false" @change="importPrompt">
+          <NButton secondary type="success" :loading="isImporting">导入</NButton>
+        </NUpload>
+        <!-- <NButton secondary type="success">导入</NButton> -->
+        <NButton secondary type="success" @click="exportPrompt" :loading="isExporting">导出</NButton>
+        <NButton secondary type="error" @click="clearPrompt">清空</NButton>
+      </div>
+      <VirtualList
+        v-if="searchPromptList.length > 0"
+        class="h-[40vh] xl:h-[60vh] overflow-y-auto"
+        :data-key="'prompt'"
+        :data-sources="searchPromptList"
+        :data-component="ChatPromptItem"
+        :keeps="10"
+      />
+      <NEmpty v-else class="h-[40vh] xl:h-[60vh] flex justify-center items-center" description="暂无数据">
+        <template #extra>
+          <NButton secondary type="info" @click="isShowDownloadPop = true">下载提示词</NButton>
         </template>
-      </NListItem>
-    </NList>
-  </NModal>
+      </NEmpty>
+    </NModal>
+    <NModal class="w-11/12 xl:w-[600px]" v-model:show="optPromptConfig.isShow" preset="card" :title="optPromptConfig.title">
+      <NSpace vertical>
+        标题
+        <NInput placeholder="请输入标题" v-model:value="optPromptConfig.newPrompt.act"></NInput>
+        描述
+        <NInput placeholder="请输入描述" type="textarea" v-model:value="optPromptConfig.newPrompt.prompt"></NInput>
+        <NButton block secondary type="info" @click="savePrompt">保存</NButton>
+      </NSpace>
+    </NModal>
+    <NModal class="w-11/12 xl:w-[600px]" v-model:show="isShowDownloadPop" preset="card" title="下载提示词">
+      <NList class="overflow-y-auto rounded-lg" hoverable clickable>
+        <NListItem v-for="(config, index) in promptDownloadConfig" :key="index">
+          <a v-if="config.type === 1" class="no-underline text-blue-500" :href="config.url" target="_blank" rel="noopener noreferrer">{{ config.name }}</a>
+          <NInput v-else-if="config.type === 2" placeholder="请输入下载链接，支持 json 及 csv " v-model:value="config.url"></NInput>
+          <template #suffix>
+            <div class="flex justify-center gap-5">
+              <a class="no-underline" v-if="config.type === 1" :href="config.refer" target="_blank" rel="noopener noreferrer">
+                <NButton secondary>来源</NButton>
+              </a>
+              <NButton secondary type="info" @click="downloadPrompt(config)" :loading="config.isDownloading">下载</NButton>
+            </div>
+          </template>
+        </NListItem>
+      </NList>
+    </NModal>
+  </NConfigProvider>
 </template>
