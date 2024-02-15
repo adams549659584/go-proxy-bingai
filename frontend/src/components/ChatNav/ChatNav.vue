@@ -369,7 +369,7 @@ const loginHandel = async ()=> {
     tmpA.push(S[_G.SP[i]]);
   }
   const e = base58Decode(tmpA.join(''));
-  iframe.contentWindow.postMessage({
+  (iframe as any).contentWindow.postMessage({
     IG: _G.IG,
     T: await aesEncrypt(e, _G.IG),
   }, '*');
