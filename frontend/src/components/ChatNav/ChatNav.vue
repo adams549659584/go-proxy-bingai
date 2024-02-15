@@ -15,6 +15,7 @@ const isShowMore = ref(false);
 const isShowSettingModal = ref(false);
 const isShowAdvancedSettingModal = ref(false);
 const isShowSetAboutModal = ref(false);
+const isShowCookieModal = ref(false);
 const isShowLoginModal = ref(false);
 const isShowIframe = ref(false);
 const userToken = ref('');
@@ -70,20 +71,8 @@ const navType = {
 };
 const navConfigs = [
   {
-    key: navType.login,
-    label: '登录账号',
-  },
-  {
     key: navType.setting,
     label: '设置',
-  },
-  {
-    key: navType.chatService,
-    label: '服务选择',
-  },
-  {
-    key: navType.promptStore,
-    label: '提示词库',
   },
   {
     key: navType.compose,
@@ -93,10 +82,6 @@ const navConfigs = [
   {
     key: navType.createImage,
     label: '图像创建',
-  },
-  {
-    key: navType.advancedSetting,
-    label: '高级设置',
   },
   {
     key: navType.reset,
@@ -164,46 +149,9 @@ const renderDropdownLabel = (option: DropdownOption) => {
 
 const handleSelect = async (key: string) => {
   switch (key) {
-    case navType.login:
-      {
-        isShowLoginModal.value = true;
-      }
-      break;
-    case navType.chatService:
-      {
-        isShowChatServiceSelectModal.value = true;
-        chatStore.checkAllSydneyConfig();
-      }
-      break;
-    case navType.promptStore:
-      {
-        isShowPromptSotre.value = true;
-      }
-      break;
     case navType.setting:
       {
-        userToken.value = userStore.getUserToken();
-        userKievRPSSecAuth.value = userStore.getUserKievRPSSecAuth();
-        userMUID.value = userStore.getUserMUID();
-        userRwBf.value = userStore.getUserRwBf();
-        history.value = historyEnable.value;
-        cookiesEnable.value = fullCookiesEnable.value;
-        if (cookiesEnable.value) { cookies.value = cookiesStr.value; }
         isShowSettingModal.value = true;
-      }
-      break;
-    case navType.advancedSetting:
-      {
-        history.value = historyEnable.value;
-        themeModeSetting.value = themeMode.value;
-        uiVersionSetting.value = uiVersion.value;
-        enterpriseSetting.value = enterpriseEnable.value;
-        customChatNumSetting.value = customChatNum.value;
-        gpt4tSetting.value = gpt4tEnable.value;
-        sydneySetting.value = sydneyEnable.value;
-        sydneyPromptSetting.value = sydneyPrompt.value;
-        isShowAdvancedSettingModal.value = true;
-        passServerSetting.value = passServer.value;
       }
       break;
     case navType.createImage:
@@ -235,6 +183,61 @@ const handleSelect = async (key: string) => {
       break;
   }
 };
+
+const settingMenu = (key: string) => {
+  switch(key) {
+    case 'autoPassCFChallenge':
+      {
+      autoPassCFChallenge()
+      }
+      break;
+    case 'login':
+      {
+        isShowLoginModal.value = true;
+      }
+      break;
+    case 'chatService':
+      {
+        isShowChatServiceSelectModal.value = true;
+        chatStore.checkAllSydneyConfig();
+      }
+      break;
+    case 'cookieSetting':
+      {
+        userToken.value = userStore.getUserToken();
+        userKievRPSSecAuth.value = userStore.getUserKievRPSSecAuth();
+        userMUID.value = userStore.getUserMUID();
+        userRwBf.value = userStore.getUserRwBf();
+        history.value = historyEnable.value;
+        cookiesEnable.value = fullCookiesEnable.value;
+        if (cookiesEnable.value) { cookies.value = cookiesStr.value; }
+        isShowCookieModal.value = true;
+      }
+      break;
+    case 'promptStore':
+      {
+        isShowPromptSotre.value = true;
+      }
+      break;
+    case 'advancedSetting':
+      {
+        history.value = historyEnable.value;
+        themeModeSetting.value = themeMode.value;
+        uiVersionSetting.value = uiVersion.value;
+        enterpriseSetting.value = enterpriseEnable.value;
+        customChatNumSetting.value = customChatNum.value;
+        gpt4tSetting.value = gpt4tEnable.value;
+        sydneySetting.value = sydneyEnable.value;
+        sydneyPromptSetting.value = sydneyPrompt.value;
+        passServerSetting.value = passServer.value;
+        isShowAdvancedSettingModal.value = true;
+      }
+      break;
+    default:
+      return;
+  }
+}
+
 const resetCache = async () => {
   isShowClearCacheModal.value = false;
   await userStore.resetCache();
@@ -416,7 +419,7 @@ const autoPassCFChallenge = async () => {
     </NDropdown>
     <NModal v-model:show="isShowLoginModal" preset="dialog" :show-icon="false">
       <template #header>
-        <div class="text-3xl py-2">登录账号</div>
+        <div class="text-3xl py-2">账号登录</div>
       </template>
       <div v-if="!isShowIframe" style="margin-top:12px; margin-bottom:24px">
         <NP>
@@ -440,9 +443,48 @@ const autoPassCFChallenge = async () => {
         <div class="text-3xl py-2">设置</div>
       </template>
       <NForm ref="formRef" label-placement="left" label-width="auto" require-mark-placement="right-hanging" style="margin-top: 16px;">
-        <NFormItem path="cookiesEnable" label="自动人机验证">
-          <NButton type="info" :loading="passingCFChallenge" @click="autoPassCFChallenge">启动</NButton>
-        </NFormItem>
+        <NGrid x-gap="0" :cols="2">
+          <NGridItem>
+            <NFormItem path="cookiesEnable" label="自动人机验证">
+              <NButton type="info" :loading="passingCFChallenge" @click="settingMenu('autoPassCFChallenge')">启动</NButton>
+            </NFormItem>
+          </NGridItem>
+          <NGridItem>
+            <NFormItem path="cookiesEnable" label="账号登录">
+              <NButton type="info" @click="settingMenu('login')">打开</NButton>
+            </NFormItem>
+          </NGridItem>
+          <NGridItem>
+            <NFormItem path="cookiesEnable" label="服务选择">
+              <NButton type="info" @click="settingMenu('chatService')">打开</NButton>
+            </NFormItem>
+          </NGridItem>
+          <NGridItem>
+            <NFormItem path="cookiesEnable" label="Cookie 设置">
+              <NButton type="info" @click="settingMenu('cookieSetting')">打开</NButton>
+            </NFormItem>
+          </NGridItem>
+          <NGridItem>
+            <NFormItem path="cookiesEnable" label="提示词库">
+              <NButton type="info" @click="settingMenu('promptStore')">打开</NButton>
+            </NFormItem>
+          </NGridItem>
+          <NGridItem>
+            <NFormItem path="cookiesEnable" label="高级设置">
+              <NButton type="info" @click="settingMenu('advancedSetting')">打开</NButton>
+            </NFormItem>
+          </NGridItem>
+        </NGrid>
+      </NForm>
+      <template #action>
+        <NButton ghost size="large" type="info" @click="isShowSettingModal = false">确定</NButton>
+      </template>
+    </NModal>
+    <NModal v-model:show="isShowCookieModal" preset="dialog" :show-icon="false">
+      <template #header>
+        <div class="text-3xl py-2">Cookie 设置</div>
+      </template>
+      <NForm ref="formRef" label-placement="left" label-width="auto" require-mark-placement="right-hanging" style="margin-top: 16px;">
         <NFormItem path="cookiesEnable" label="完整 Cookie">
           <NSwitch v-model:value="cookiesEnable" />
         </NFormItem>
@@ -480,17 +522,17 @@ const autoPassCFChallenge = async () => {
             </NFormItem>
           </NGridItem>
           <NGridItem>
-             <NFormItem path="enterpriseEnable" label="企业版">
+            <NFormItem path="enterpriseEnable" label="企业版">
               <NSwitch v-model:value="enterpriseSetting" />
             </NFormItem>
           </NGridItem>
           <NGridItem>
-             <NFormItem path="gpt4tEnable" label="GPT4 Turbo">
+            <NFormItem path="gpt4tEnable" label="GPT4 Turbo">
               <NSwitch v-model:value="gpt4tSetting" />
             </NFormItem>
           </NGridItem>
           <NGridItem>
-             <NFormItem path="sydneyEnable" label="越狱模式">
+            <NFormItem path="sydneyEnable" label="越狱模式">
               <NSwitch v-model:value="sydneySetting" />
             </NFormItem>
           </NGridItem>
