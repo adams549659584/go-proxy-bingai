@@ -167,9 +167,6 @@ export const useUserStore = defineStore(
       for (const cookie of cookiesArr) {
         const cookieArr = cookie.split('=');
         const key = cookieArr[0].trim();
-        if (removeCookieName.indexOf(key) !== -1) {
-          continue
-        }
         const val = cookieArr.length > 1 ? cookieArr.slice(1, cookieArr.length).join('=').trim() : null ;
         if (key && val) {
           cookies.set(key, val, 7 * 24 * 60, '/');
