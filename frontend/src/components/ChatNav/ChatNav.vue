@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { h, ref, onMounted, inject } from 'vue';
-import { NDropdown, type DropdownOption, NModal, NInput, NInputNumber, NButton, NGrid, NGridItem, useMessage, NImage, NForm, NFormItem, NSwitch, NTag, NSelect, NSpin, NP, NA, lightTheme, darkTheme } from 'naive-ui';
+import { NDropdown, type DropdownOption, NModal, NInput, NInputNumber, NButton, NGrid, NGridItem, useMessage, NImage, NForm, NFormItem, NSwitch, NTag, NSelect, NSpin, NP, NA, lightTheme, darkTheme, useOsTheme } from 'naive-ui';
 import settingSvgUrl from '@/assets/img/setting.svg?url';
 import { usePromptStore } from '@/stores/modules/prompt';
 import { storeToRefs } from 'pinia';
@@ -130,7 +130,7 @@ onMounted(() => {
   } else if (themeMode.value == 'dark') {
     settingIconStyle.value = { filter: 'invert(70%)' }
   } else if (themeMode.value == 'auto') {
-    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+    if (useOsTheme().value == 'dark') {
       settingIconStyle.value = { filter: 'invert(70%)' }
     } else {
       settingIconStyle.value = { filter: 'invert(0%)' }
@@ -320,7 +320,7 @@ const saveAdvancedSetting = () => {
     theme.value = darkTheme;
     settingIconStyle.value = { filter: 'invert(70%)' }
   } else if (themeModeSetting.value == 'auto') {
-    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+    if (useOsTheme().value == 'dark') {
       CIB.changeColorScheme(1);
       theme.value = darkTheme;
       settingIconStyle.value = { filter: 'invert(70%)' }

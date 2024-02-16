@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, provide } from 'vue';
-import { NMessageProvider, NConfigProvider, lightTheme, darkTheme, type GlobalThemeOverrides, NDialogProvider } from 'naive-ui';
+import { NMessageProvider, NConfigProvider, lightTheme, darkTheme, useOsTheme, type GlobalThemeOverrides, NDialogProvider } from 'naive-ui';
 import { RouterView } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { useUserStore } from '@/stores/modules/user';
@@ -20,7 +20,7 @@ onMounted(() => {
     theme.value = darkTheme;
     body?.setAttribute('style', 'background-color: #111111');
   } else if (themeMode.value == 'auto') {
-    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+    if (useOsTheme().value == 'dark') {
       theme.value = darkTheme;
       body?.setAttribute('style', 'background-color: #1d1d1d');
     } else {
