@@ -212,7 +212,7 @@ const settingMenu = (key: string) => {
         userRwBf.value = userStore.getUserRwBf();
         history.value = historyEnable.value;
         cookiesEnable.value = fullCookiesEnable.value;
-        if (cookiesEnable.value) { cookies.value = cookiesStr.value; }
+        cookies.value = cookiesStr.value;
         isShowCookieModal.value = true;
       }
       break;
@@ -600,5 +600,6 @@ const autoPassCFChallenge = async () => {
         <NButton ghost size="large" @click="isShowSetAboutModal = false" type="info">确定</NButton>
       </template>
     </NModal>
-  <CreateImage v-model:show="isShowCreateImageModal" />
-</NConfigProvider></template>
+    <CreateImage v-model:show="isShowCreateImageModal" />
+  </NConfigProvider>
+</template>
