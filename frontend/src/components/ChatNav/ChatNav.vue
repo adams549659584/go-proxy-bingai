@@ -170,12 +170,7 @@ const handleSelect = async (key: string) => {
       break;
     case navType.about:
       {
-        const S = base58Decode(_G.S);
-        let tmpA = [];
-        for (let i = 0; i < _G.SP.length; i++) {
-          tmpA.push(S[_G.SP[i]]);
-        }
-        author.value = base58Decode(tmpA.join(''));
+        author.value = _G.AT;
         isShowSetAboutModal.value = true;
         GetLastVersion();
       }
@@ -381,23 +376,16 @@ const getCookieTimeoutHandel = async() => {
 }
 
 const autoPassCFChallenge = async () => {
-  passingCFChallenge.value = true;
-  const S = base58Decode(_G.S);
-  let tmpA = [];
-  for (let i = 0; i < _G.SP.length; i++) {
-    tmpA.push(S[_G.SP[i]]);
-  }
-  const e = base58Decode(tmpA.join(''));
   let resq = await fetch('/pass', {
     credentials: 'include',
-    method: "POST", // *GET, POST, PUT, DELETE, etc.
-    mode: "cors", // no-cors, *cors, same-origin
+    method: 'POST', // *GET, POST, PUT, DELETE, etc.
+    mode: 'cors', // no-cors, *cors, same-origin
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      "IG": _G.IG,
-      "T": await aesEncrypt(e, _G.IG),
+      'IG': _G.IG,
+      'T': await aesEncrypt(_G.AT, _G.IG),
     }),
   }).then((res) => res.json())
   .catch(() => {
@@ -580,19 +568,19 @@ const autoPassCFChallenge = async () => {
         <div class="text-3xl py-2">关于</div>
       </template>
       <NForm ref="formRef" label-placement="left" label-width="auto" size="small" style="margin-top: 16px;">
-        <NFormItem path="" label="版本号">
+        <NFormItem path="version" label="版本号">
           <NTag type="info" size="small" round>{{ 'v' + localVersion }}</NTag>
         </NFormItem>
-        <NFormItem path="" label="最新版本">
+        <NFormItem path="latestVersion" label="最新版本">
           <NTag type="info" size="small" round>{{ lastVersion }}</NTag>
         </NFormItem>
-        <NFormItem path="token" label="开源地址">
+        <NFormItem path="sourceAddr" label="开源地址">
           <NButton text tag="a" :href="'https://github.com/'+author" target="_blank" type="success">{{ author }}</NButton>
         </NFormItem>
-        <NFormItem path="token" label="原作者">
+        <NFormItem path="originAuthor" label="原作者">
           <NButton text tag="a" href="https://github.com/adams549659584" target="_blank" type="success">adams549659584</NButton>
         </NFormItem>
-        <NFormItem path="token" label="原开源地址">
+        <NFormItem path="originSourceAddr" label="原开源地址">
           <NButton text tag="a" href="https://github.com/adams549659584/go-proxy-bingai" target="_blank" type="success">adams549659584/go-proxy-bingai</NButton>
         </NFormItem>
       </NForm>

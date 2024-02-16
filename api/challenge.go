@@ -11,17 +11,11 @@ const respChallengeHtml = `
 	<head>
 		<script type="text/javascript">
 		async function ChallengeComplete(){
-			const S = window.parent.base58Decode(window.parent._G.S);
-			let tmpA = [];
-			for (let i = 0; i < window.parent._G.SP.length; i++) {
-				tmpA.push(S[window.parent._G.SP[i]]);
-			}
-			const e = window.parent.base58Decode(tmpA.join(''))
 			let IG = window.parent._G.IG,
 				convId = window.parent.CIB.manager.conversation.id,
 				rid = window.parent.CIB.manager.conversation.messages[0].requestId,
 				iframeid = '%s',
-				T = await window.parent.aesEncrypt(e, window.parent._G.IG);
+				T = await window.parent.aesEncrypt(window.parent._G.AT, window.parent._G.IG);
 			await fetch('/challenge/verify?IG='+encodeURI(IG)+'&iframeid='+encodeURI(iframeid)+'&convId='+encodeURI(convId)+'&rid='+encodeURI(rid)+'&T='+encodeURI(T), {
 				credentials: 'include',
 			}).then((res) => {

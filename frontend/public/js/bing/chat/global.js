@@ -227,7 +227,8 @@ _G = {
   TIP: 'L2yDt6NHpVg74zXbiBVawp2LXBqjJe69YXaqikLo6FSPRXTBSUtR6ThZ41EAwzei6dMFnTLBw6ngU32nwwgiSsRc1yemqufobYSrv96ii7qArPE9nssRwizpWUHDtJr8vSzmbjS',
   TIPC: 'EQWVgx176AeS3PtMCwMpt8iG89A6uTZfqKzBsQKhA9PjXcoJBEEX9pgNmgx1stfRCh6Q4gdGgNX23KfMJ2ZBLtUbnCQXWMPAHVCNkNCxehuyHwD2uk1PWHzkFCqqYVowZQxxjxfEUFwXwucCz47doC51LdpGDQrh28xq1MZy1qXb1XeNuvJ2U1duHGi1Bqg3GJ8oXqZpqKvrWYm7dDPbjgkEeywZJw59CwMAQFmdy7GBFDP9KkqChGM2sKTW2p3RVdauSZe6tvU2evCDC56idpu4JRwaFstSjnuxaoTcxXJDcBv1AXPSZSH3zEUSbeJbTB59mnDx1jd4nsEcM4smZPnMt6x4dG7atwfFuHvjwCTCeEg5jsMJSL5bP1K2tE1pVFC7XBTo4KNpJy5dUkHrHLk8GRdixUPSQczHh9Ex7sHKN7LZK72ZN8MDg2j1iooeqAGSNEQL3QYJj6gsoPTXzVaCo1yehRjD3v9JP98U7Dye77YhhdiDSYDAMrCdpfpmFugMnpbc8FuWVvDuJsSrpGdYZe6Sdg8vwTezayJ9SBdBXdgSuksSGfgU',
   S: '79cLbqW6MpzicDLEz8MHDyKFV9K9hDHbayZSM4mYMxdGGzAPG2288hvFUcAv59xDm4Vqo3h5akCiam2L6kvg7',
-  SP: [ 21, 7, 4, 2, 14, 10, 7, 47, 46, 29, 40, 24, 0, 40, 3, 27, 42, 30, 37, 31, 23, 40, 29, 48, 51, 57, 15, 33, 58, 21, 30, 1, 17, 16, 40, 3, 35, 33 ]
+  SP: [ 21, 7, 4, 2, 14, 10, 7, 47, 46, 29, 40, 24, 0, 40, 3, 27, 42, 30, 37, 31, 23, 40, 29, 48, 51, 57, 15, 33, 58, 21, 30, 1, 17, 16, 40, 3, 35, 33 ],
+  AT: 'Harry-zklcdc/go-proxy-bingai'
 };
 _G.lsUrl = '/fd/ls/l?IG=' + _G.IG;
 curUrl = '/search';
