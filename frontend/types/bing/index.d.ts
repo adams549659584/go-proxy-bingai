@@ -16,6 +16,7 @@ declare const _G: {
   TIP: string;
   TIPC: string;
   SB: boolean;
+  AT: string;
 }
 
 declare const base58Encode: (n: string) => string;
