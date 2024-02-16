@@ -274,7 +274,7 @@ const saveSetting = () => {
     }
   }
   fullCookiesEnable.value = cookiesEnable.value;
-  isShowSettingModal.value = false;
+  isShowCookieModal.value = false;
 };
 
 const saveAdvancedSetting = () => {
@@ -513,7 +513,7 @@ const autoPassCFChallenge = async () => {
         </NFormItem>
       </NForm>
       <template #action>
-        <NButton size="large" @click="isShowSettingModal = false">取消</NButton>
+        <NButton size="large" @click="isShowCookieModal = false">取消</NButton>
         <NButton ghost size="large" type="info" @click="saveSetting">保存</NButton>
       </template>
     </NModal>
