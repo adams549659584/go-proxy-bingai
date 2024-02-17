@@ -15,6 +15,7 @@ declare const _G: {
   SP: Array<number>;
   TIP: string;
   TIPC: string;
+  TP: string;
   SB: boolean;
   AT: string;
 }

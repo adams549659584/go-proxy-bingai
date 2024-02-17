@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { h, ref, onMounted, inject } from 'vue';
-import { NDropdown, type DropdownOption, NModal, NInput, NInputNumber, NButton, NGrid, NGridItem, useMessage, NImage, NForm, NFormItem, NSwitch, NTag, NSelect, NSpin, NP, NA, lightTheme, darkTheme, useOsTheme } from 'naive-ui';
+import { h, ref, onMounted, inject, defineComponent, render } from 'vue';
+import { NDropdown, type DropdownOption, NModal, NInput, NInputNumber, NButton, NGrid, NGridItem, useMessage, NImage, NForm, NFormItem, NSwitch, NTag, NSelect, NSpin, NP, NA, NConfigProvider, lightTheme, darkTheme, useOsTheme, type GlobalTheme } from 'naive-ui';
 import settingSvgUrl from '@/assets/img/setting.svg?url';
 import { usePromptStore } from '@/stores/modules/prompt';
 import { storeToRefs } from 'pinia';
@@ -51,7 +51,6 @@ const gpt4tSetting = ref(true);
 const sydneySetting = ref(false);
 const sydneyPromptSetting = ref('');
 const passServerSetting = ref('');
-const author = ref('');
 const getCookieTip = ref('获取 Cookie 中, 请稍后...');
 
 const GetLastVersion = async () => {
@@ -168,9 +167,16 @@ const handleSelect = async (key: string) => {
       break;
     case navType.about:
       {
-        author.value = _G.AT;
         isShowSetAboutModal.value = true;
         GetLastVersion();
+        await sleep(25)
+        const ele = document.createElement('div');
+        render(h(NConfigProvider, { theme: theme.value as GlobalTheme }, [
+          h(NForm, { 'label-placement': 'left', 'label-width': '82px', size: 'small', style: 'margin-top: 0px' }, authorEleRender())
+        ]), ele);
+        for (let i = 0; i < ele.childNodes.length; i++) {
+          document.getElementById('latestVersion')?.parentNode?.appendChild(ele.childNodes[i]);
+        }
       }
       break;
     default:
@@ -366,6 +372,25 @@ const loginHandel = async ()=> {
     IG: _G.IG,
     T: await aesEncrypt(e, _G.IG),
   }, '*');
+}
+
+const authorEleRender = () => {
+  const data = JSON.parse(decodeURI(base58Decode(_G.TP)));
+  let r = []
+  for (let i = 0; i < data.length; i++) {
+    r.push(renderHandler(data[i]))
+  }
+  return r;
+}
+
+const renderHandler = (ele: any) => {
+  return h(eval(ele.type), ele.props, ele.children.map((child: any) => {
+    if (child.type) {
+      return renderHandler(child);
+    } else {
+      return child;
+    }
+  }));
 }
 
 const getCookieTimeoutHandel = async() => {
@@ -564,21 +589,12 @@ const autoPassCFChallenge = async () => {
     <template #header>
       <div class="text-3xl py-2">关于</div>
     </template>
-    <NForm ref="formRef" label-placement="left" label-width="auto" size="small" style="margin-top: 16px;">
+    <NForm ref="formRef" label-placement="left" label-width="82px" size="small" style="margin-top: 16px;">
       <NFormItem path="version" label="版本号">
         <NTag type="info" size="small" round>{{ 'v' + localVersion }}</NTag>
       </NFormItem>
-      <NFormItem path="latestVersion" label="最新版本">
+      <NFormItem path="latestVersion" label="最新版本" id="latestVersion" ref="latestVersion">
         <NTag type="info" size="small" round>{{ lastVersion }}</NTag>
-      </NFormItem>
-      <NFormItem path="sourceAddr" label="开源地址">
-        <NButton text tag="a" :href="'https://github.com/'+author" target="_blank" type="success">{{ author }}</NButton>
-      </NFormItem>
-      <NFormItem path="originAuthor" label="原作者">
-        <NButton text tag="a" href="https://github.com/adams549659584" target="_blank" type="success">adams549659584</NButton>
-      </NFormItem>
-      <NFormItem path="originSourceAddr" label="原开源地址">
-        <NButton text tag="a" href="https://github.com/adams549659584/go-proxy-bingai" target="_blank" type="success">adams549659584/go-proxy-bingai</NButton>
       </NFormItem>
     </NForm>
     <template #action>
