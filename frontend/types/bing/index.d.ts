@@ -339,4 +339,6 @@ declare const CIB: {
 
   changeColorScheme: (O: 0 | 1) => {};
   registerContext: (O) => {};
+  showConversation: () => {};
+  showNotebook: () => {};
 };
