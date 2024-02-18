@@ -22,10 +22,10 @@ onMounted(() => {
   } else if (themeMode.value == 'auto') {
     if (useOsTheme().value == 'dark') {
       theme.value = darkTheme;
-      body?.setAttribute('style', 'background-color: #1d1d1d');
+      body?.setAttribute('style', 'background-color: #111111');
     } else {
       theme.value = lightTheme;
-      body?.setAttribute('style', 'background-color: #141414');
+      body?.setAttribute('style', 'background-color: #f0f0f0');
     }
   }
 })
