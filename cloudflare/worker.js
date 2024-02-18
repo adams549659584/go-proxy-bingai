@@ -365,7 +365,12 @@ const verify = async (request, cookie) => {
   const res = await fetch(newReq)
   if (res.status != 200) {
     if (res.status === 451) {
-      return new Response('{"code":451,"message":"Verification Failed","data":null}', { status: 451 })
+      return new Response('{"code":451,"message":"Verification Failed","data":null}', {
+        status: 451,
+        headers: new Headers({
+          'Content-Type': 'application/json'
+        })
+      })
     }
     return new Response('{"code":500,"message":"Server Error","data":null}', { status: res.status })
   }
@@ -388,7 +393,12 @@ const verify = async (request, cookie) => {
  */
 const pass = async (request, cookie) => {
   if (request.method != 'POST') {
-    return new Response('{"code":405,"message":"Method Not Allowed","data":null}', { status: 405 });
+    return new Response('{"code":405,"message":"Method Not Allowed","data":null}', {
+      status: 405,
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      })
+    });
   }
 
   let resqBody = JSON.parse(await request.text());
@@ -439,7 +449,11 @@ const login = async (url, headers) => {
  * @returns
  */
 const bingapi = async (request, cookie) => {
-  return new Response('{"code":200,"message":"TODO","data":null}')
+  return new Response('{"code":200,"message":"TODO","data":null}', {
+    headers: new Headers({
+      'Content-Type': 'application/json'
+    })
+  })
 };
 
 export default {
@@ -459,8 +473,12 @@ export default {
     if (currentUrl.pathname === '/' || currentUrl.pathname.indexOf('/web/') === 0) {
       return home(currentUrl.pathname);
     }
-    if (currentUrl.pathname === '/sysconf') {
-      return new Response('{"code":200,"message":"success","data":{"isSysCK":false,"isAuth":true}}')
+    if (currentUrl.pathname.startsWith('/sysconf')) {
+      return new Response('{"code":200,"message":"success","data":{"isSysCK":false,"isAuth":true}}', {
+        headers: new Headers({
+          'Content-Type': 'application/json'
+        })
+      })
     }
     let targetUrl;
     if (currentUrl.pathname.includes('/sydney')) {
