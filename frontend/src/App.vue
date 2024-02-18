@@ -8,7 +8,7 @@ import { useUserStore } from '@/stores/modules/user';
 const userStore = useUserStore();
 const { themeMode } = storeToRefs(userStore);
 
-let theme = ref(lightTheme);
+const theme = ref(lightTheme);
 provide('theme', theme);
 
 onMounted(() => {

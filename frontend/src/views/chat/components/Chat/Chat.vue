@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { onMounted, ref, computed } from 'vue';
-import { NEmpty, NButton, useDialog, useMessage, NResult, NInput } from 'naive-ui';
+import { onMounted, ref, computed, h } from 'vue';
+import { NEmpty, NButton, useDialog, useMessage, NResult, NInput, NAlert } from 'naive-ui';
 import conversationCssText from '@/assets/css/conversation.css?raw';
 import { usePromptStore, type IPrompt } from '@/stores/modules/prompt';
 import { storeToRefs } from 'pinia';
@@ -138,6 +138,35 @@ const initSysConfig = async () => {
           return;
         }
         await afterAuth(res.data);
+        if (res.data.info != '') {
+          const info = JSON.parse(res.data.info);
+          message.create(info['content'], {
+            type: info['type'],
+            keepAliveOnHover: true,
+            showIcon: true,
+            render: (props) => {
+              return h(
+                NAlert,
+                {
+                  closable: true,
+                  type: props.type === 'loading' ? 'default' : props.type,
+                  title: info['title'],
+                  style: {
+                    boxShadow: 'var(--n-box-shadow)',
+                    maxWidth: 'calc(100vw - 32px)',
+                    width: '360px',
+                    position: 'fixed',
+                    top: '20px',
+                    right: '12px',
+                  }
+                },
+                {
+                  default: () => props.content
+                }
+              )
+            }
+          });
+        }
       }
       break;
     case ApiResultCode.UnLegal:

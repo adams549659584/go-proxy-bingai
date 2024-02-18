@@ -14,7 +14,8 @@ type SysConfig struct {
 	// 是否系统配置 cookie
 	IsSysCK bool `json:"isSysCK"`
 	// 是否已授权
-	IsAuth bool `json:"isAuth"`
+	IsAuth bool   `json:"isAuth"`
+	Info   string `json:"info"`
 }
 
 func SysConf(w http.ResponseWriter, r *http.Request) {
@@ -34,6 +35,7 @@ func SysConf(w http.ResponseWriter, r *http.Request) {
 	conf := SysConfig{
 		IsSysCK: len(common.USER_TOKEN_LIST) > 0,
 		IsAuth:  isAuth,
+		Info:    common.INFO,
 	}
 	helper.SuccessResult(w, conf)
 }

@@ -35,6 +35,8 @@ var (
 	SB bool
 
 	AUTHOR = "Harry-zklcdc/go-proxy-bingai"
+
+	INFO string
 )
 
 func init() {
@@ -72,6 +74,8 @@ func initEnv() {
 		BING_SYDNEY_DOMAIN = SydneyBaseUrl
 		BING_SYDNEY_URL, _ = url.Parse(BING_SYDNEY_DOMAIN)
 	}
+
+	INFO = os.Getenv("Go_Proxy_BingAI_INFO")
 }
 
 func initUserToken() {
