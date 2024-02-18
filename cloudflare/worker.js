@@ -421,6 +421,17 @@ const pass = async (request, cookie) => {
   return await fetch(newReq);
 };
 
+
+const login = async (url, headers) => {
+  console.log(url)
+  const newReq = new Request(BING_ORIGIN+'/fd/auth/signin?action=interactive&provider=windows_live_id&return_url=https%3a%2f%2fwww.bing.com%2fchat%3fq%3dBing%2bAI%26FORM%3dhpcodx%26wlsso%3d1%26wlexpsignin%3d1&src=EXPLICIT&sig=001DD71D5A386F753B1FC3055B306E8F', {
+    method: 'GET',
+    headers: headers,
+    redirect: 'manual',
+  });
+  return fetch(newReq);
+}
+
 /**
  * bingapi
  * @param {Request} request
@@ -542,6 +553,10 @@ export default {
       );
     } else {
       newHeaders.set('user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36 Edg/113.0.1774.35');
+    }
+
+    if (currentUrl.pathname.startsWith('/fd/auth/signin')) {
+      return login(currentUrl, newHeaders);
     }
 
     // newHeaders.forEach((value, key) => console.log(`${key} : ${value}`));
