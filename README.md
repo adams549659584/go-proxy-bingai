@@ -125,7 +125,9 @@
 
 [![Github Issus](https://img.shields.io/github/issues/Harry-zklcdc/go-proxy-bingai?style=flat-square&logo=github)](https://github.com/Harry-zklcdc/go-proxy-bingai/issues)
 
-[![加入 Telegram 频道](https://img.shields.io/badge/加入_Telegram_频道-ProxyBingAI🚀-blue?style=flat-square&logo=telegram)](https://t.me/GoProxyBingAI)
+[![加入 Telegram 群组](https://img.shields.io/badge/加入_Telegram_群组-ProxyBingAI🚀-blue?style=flat-square&logo=telegram)](https://t.me/GoProxyBingAI)
+
+[![加入 Discord 服务器](https://img.shields.io/badge/加入_Discord_服务器-ProxyBingAI🚀-slateblue?style=flat-square&logo=discord)](https://discord.gg/gHUhHqMp8s)
 
 
 ## ❗️ 免责声明
