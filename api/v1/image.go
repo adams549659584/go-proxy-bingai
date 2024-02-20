@@ -6,6 +6,7 @@ import (
 	"io"
 	"math/rand"
 	"net/http"
+	"strings"
 	"time"
 
 	binglib "github.com/Harry-zklcdc/bing-lib"
@@ -43,7 +44,7 @@ func ImageHandler(w http.ResponseWriter, r *http.Request) {
 	image.SetXFF(common.GetRandomIP())
 
 	cookie := r.Header.Get("Cookie")
-	if cookie == "" {
+	if cookie == "" || !strings.Contains(cookie, "_U=") {
 		if len(common.USER_TOKEN_LIST) > 0 {
 			seed := time.Now().UnixNano()
 			rng := rand.New(rand.NewSource(seed))

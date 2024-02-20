@@ -50,7 +50,7 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 	chat.SetXFF(common.GetRandomIP())
 
 	cookie := r.Header.Get("Cookie")
-	if cookie == "" {
+	if cookie == "" || !strings.Contains(cookie, "_U=") {
 		if len(common.USER_TOKEN_LIST) > 0 {
 			seed := time.Now().UnixNano()
 			rng := rand.New(rand.NewSource(seed))
