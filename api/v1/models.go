@@ -27,6 +27,18 @@ func ModelsHandler(w http.ResponseWriter, r *http.Request) {
 			Created: 1687579610,
 			OwnedBy: "Go-Proxy-BingAI",
 		},
+		{
+			Id:      GPT_35_TURBO,
+			Object:  "model",
+			Created: 1687579610,
+			OwnedBy: "Go-Proxy-BingAI",
+		},
+		{
+			Id:      GPT_4_TURBO_PREVIEW,
+			Object:  "model",
+			Created: 1687579610,
+			OwnedBy: "Go-Proxy-BingAI",
+		},
 	}
 	for _, model := range binglib.ChatModels {
 		models = append(models, modelStruct{

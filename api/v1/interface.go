@@ -9,9 +9,10 @@ import (
 var apikey = os.Getenv("APIKEY")
 
 type chatRequest struct {
-	Messages []binglib.Message `json:"messages"`
-	Model    string            `json:"model"`
-	Stream   bool              `json:"stream"`
+	Messages    []binglib.Message `json:"messages"`
+	Model       string            `json:"model"`
+	Stream      bool              `json:"stream"`
+	Temperature float64           `json:"temperature,omitempty"`
 }
 
 type chatResponse struct {
