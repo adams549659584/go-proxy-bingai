@@ -22,7 +22,7 @@ func ModelsHandler(w http.ResponseWriter, r *http.Request) {
 
 	models := []modelStruct{
 		{
-			Id:      "dall-e-3",
+			Id:      DALL_E_3,
 			Object:  "model",
 			Created: 1687579610,
 			OwnedBy: "Go-Proxy-BingAI",

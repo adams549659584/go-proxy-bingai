@@ -28,7 +28,7 @@ func ModelHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if modelId != "dall-e-3" && !common.IsInArray(binglib.ChatModels[:], modelId) {
+	if modelId != DALL_E_3 && !common.IsInArray(binglib.ChatModels[:], modelId) {
 		w.WriteHeader(http.StatusNotFound)
 		w.Write([]byte("Not Found"))
 		return

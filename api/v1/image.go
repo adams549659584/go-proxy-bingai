@@ -14,6 +14,8 @@ import (
 
 var (
 	globalImage *binglib.Image
+
+	DALL_E_3 = "dall-e-3"
 )
 
 func ImageHandler(w http.ResponseWriter, r *http.Request) {
