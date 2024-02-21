@@ -47,7 +47,9 @@ func VerifyHandler(w http.ResponseWriter, r *http.Request) {
 		Header: header,
 	}
 	if cookie, err := req.Cookie(common.PASS_SERVER_COOKIE_NAME); err == nil {
-		bypassServer = cookie.Value
+		if cookie.Value != "" {
+			bypassServer = cookie.Value
+		}
 	}
 	reqCookies := []string{}
 	for _, cookie := range req.Cookies() {

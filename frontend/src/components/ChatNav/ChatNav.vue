@@ -336,7 +336,9 @@ const saveAdvancedSetting = () => {
   sydneyEnable.value = sydneySetting.value;
   sydneyPrompt.value = sydneyPromptSetting.value;
   uiVersion.value = uiVersionSetting.value;
-  userStore.setPassServer(passServerSetting.value)
+  if (passServerSetting.value && passServerSetting.value.startsWith('http')) {
+    userStore.setPassServer(passServerSetting.value)
+  }
 
   const serpEle = document.querySelector('cib-serp');
   const sidepanel = serpEle?.shadowRoot?.querySelector('cib-conversation')?.querySelector('cib-side-panel')?.shadowRoot?.querySelector('.main')
