@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"net/http"
 	"strings"
+
+	binglib "github.com/Harry-zklcdc/bing-lib"
 )
 
 func ModelHandler(w http.ResponseWriter, r *http.Request) {
@@ -26,7 +28,7 @@ func ModelHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if modelId != "dall-e-3" && !common.IsInArray(chatMODELS, modelId) {
+	if modelId != "dall-e-3" && !common.IsInArray(binglib.ChatModels[:], modelId) {
 		w.WriteHeader(http.StatusNotFound)
 		w.Write([]byte("Not Found"))
 		return

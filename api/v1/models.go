@@ -3,6 +3,8 @@ package v1
 import (
 	"encoding/json"
 	"net/http"
+
+	binglib "github.com/Harry-zklcdc/bing-lib"
 )
 
 func ModelsHandler(w http.ResponseWriter, r *http.Request) {
@@ -26,7 +28,7 @@ func ModelsHandler(w http.ResponseWriter, r *http.Request) {
 			OwnedBy: "Go-Proxy-BingAI",
 		},
 	}
-	for _, model := range chatMODELS {
+	for _, model := range binglib.ChatModels {
 		models = append(models, modelStruct{
 			Id:      model,
 			Object:  "model",

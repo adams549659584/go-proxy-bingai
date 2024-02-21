@@ -16,9 +16,6 @@ import (
 var (
 	globalChat *binglib.Chat
 
-	chatMODELS = []string{binglib.BALANCED, binglib.BALANCED_OFFLINE, binglib.CREATIVE, binglib.CREATIVE_OFFLINE, binglib.PRECISE, binglib.PRECISE_OFFLINE,
-		binglib.BALANCED_G4T, binglib.BALANCED_G4T_OFFLINE, binglib.CREATIVE_G4T, binglib.CREATIVE_G4T_OFFLINE, binglib.PRECISE_G4T, binglib.PRECISE_G4T_OFFLINE}
-
 	STOPFLAG = "stop"
 )
 
@@ -72,7 +69,7 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 	var resq chatRequest
 	json.Unmarshal(resqB, &resq)
 
-	if !common.IsInArray(chatMODELS, resq.Model) {
+	if !common.IsInArray(binglib.ChatModels[:], resq.Model) {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte("Model Not Found"))
 		return
