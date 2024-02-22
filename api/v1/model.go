@@ -28,7 +28,7 @@ func ModelHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if !common.IsInArray([]string{DALL_E_3, GPT_35_TURBO, GPT_4_TURBO_PREVIEW}, modelId) && !common.IsInArray(binglib.ChatModels[:], modelId) {
+	if !common.IsInArray([]string{DALL_E_3, GPT_35_TURBO, GPT_4_TURBO_PREVIEW, GPT_35_TURBO_16K, GPT_4_32K}, modelId) && !common.IsInArray(binglib.ChatModels[:], modelId) {
 		w.WriteHeader(http.StatusNotFound)
 		w.Write([]byte("Not Found"))
 		return

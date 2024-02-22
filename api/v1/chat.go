@@ -19,6 +19,9 @@ var (
 	GPT_35_TURBO        = "gpt-3.5-turbo"
 	GPT_4_TURBO_PREVIEW = "gpt-4-turbo-preview"
 
+	GPT_35_TURBO_16K = "gpt-3.5-turbo-16k"
+	GPT_4_32K        = "gpt-4-32k"
+
 	STOPFLAG = "stop"
 )
 
@@ -73,7 +76,7 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 	json.Unmarshal(resqB, &resq)
 
 	if !common.IsInArray(binglib.ChatModels[:], resq.Model) {
-		if !common.IsInArray([]string{GPT_35_TURBO, GPT_4_TURBO_PREVIEW}, resq.Model) {
+		if !common.IsInArray([]string{GPT_35_TURBO, GPT_4_TURBO_PREVIEW, GPT_35_TURBO_16K, GPT_4_32K}, resq.Model) {
 			w.WriteHeader(http.StatusBadRequest)
 			w.Write([]byte("Model Not Found"))
 			return
@@ -98,6 +101,25 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 				resq.Model = binglib.BALANCED_G4T
 			} else if resq.Temperature >= 1.25 {
 				resq.Model = binglib.CREATIVE_G4T
+			}
+		}
+
+		if resq.Model == GPT_35_TURBO_16K {
+			if resq.Temperature <= 0.75 {
+				resq.Model = binglib.PRECISE_18K
+			} else if resq.Temperature > 0.75 && resq.Temperature < 1.25 {
+				resq.Model = binglib.BALANCED_18K
+			} else if resq.Temperature >= 1.25 {
+				resq.Model = binglib.CREATIVE_18K
+			}
+		}
+		if resq.Model == GPT_4_32K {
+			if resq.Temperature <= 0.75 {
+				resq.Model = binglib.PRECISE_G4T_18K
+			} else if resq.Temperature > 0.75 && resq.Temperature < 1.25 {
+				resq.Model = binglib.BALANCED_G4T_18K
+			} else if resq.Temperature >= 1.25 {
+				resq.Model = binglib.CREATIVE_G4T_18K
 			}
 		}
 	}
