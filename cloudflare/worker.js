@@ -316,7 +316,7 @@ const challengeResponseBody = `
  */
 const challenge = async (request) => {
   if (request.method != 'GET') {
-    return new Response('{"code":405,"message":"Method Not Allowed","data":null}')
+    return Response.json({ code: 405, message: 'Method Not Allowed', data: null }, { status: 405 });
   }
 
   const currentUrl = new URL(request.url);
@@ -333,7 +333,7 @@ const challenge = async (request) => {
  */
 const verify = async (request, cookie) => {
   if (request.method != 'GET') {
-    return new Response('{"code":405,"message":"Method Not Allowed","data":null}', { status: 405 })
+    return Response.json({ code: 405, message: 'Method Not Allowed', data: null }, { status: 405 });
   }
 
   let reqCookies = request.headers.get('Cookie').split('; ');
@@ -365,23 +365,17 @@ const verify = async (request, cookie) => {
   const res = await fetch(newReq)
   if (res.status != 200) {
     if (res.status === 451) {
-      return new Response('{"code":451,"message":"Verification Failed","data":null}', {
-        status: 451,
-        headers: new Headers({
-          'Content-Type': 'application/json'
-        })
-      })
+      return Response.json({ code: 451, message: "Verification Failed", data: null}, { status: 451 })
     }
-    return new Response('{"code":500,"message":"Server Error","data":null}', { status: res.status })
+    return Response.json({ code:500, message: "Server Error", data: null }, { status: res.status })
   }
   const resData = await res.json();
 
   const cookies = resData.result.cookies.split('; ')
-  const newRes = new Response(JSON.stringify(resData));
+  const newRes = Response.json(JSON.stringify(resData));
   for (let v of cookies) {
     newRes.headers.append('Set-Cookie', v+'; path=/');
   }
-  newRes.headers.set('Content-Type', 'application/json; charset=utf-8');
   return newRes;
 };
 
@@ -393,12 +387,7 @@ const verify = async (request, cookie) => {
  */
 const pass = async (request, cookie) => {
   if (request.method != 'POST') {
-    return new Response('{"code":405,"message":"Method Not Allowed","data":null}', {
-      status: 405,
-      headers: new Headers({
-        'Content-Type': 'application/json'
-      })
-    });
+    return Response.json({ code: 405, message: 'Method Not Allowed', data: null }, { status: 405 });
   }
 
   let resqBody = JSON.parse(await request.text());
@@ -449,11 +438,7 @@ const login = async (url, headers) => {
  * @returns
  */
 const bingapi = async (request, cookie) => {
-  return new Response('{"code":200,"message":"TODO","data":null}', {
-    headers: new Headers({
-      'Content-Type': 'application/json'
-    })
-  })
+  return Response.json({ code: 200, message: 'TODO', data: null })
 };
 
 export default {
@@ -474,11 +459,7 @@ export default {
       return home(currentUrl.pathname);
     }
     if (currentUrl.pathname.startsWith('/sysconf')) {
-      return new Response('{"code":200,"message":"success","data":{"isSysCK":false,"isAuth":true}}', {
-        headers: new Headers({
-          'Content-Type': 'application/json'
-        })
-      })
+      return Response.json({ code: 200, message: 'success', data: { isSysCK: false, isAuth: true } })
     }
     let targetUrl;
     if (currentUrl.pathname.includes('/sydney')) {
