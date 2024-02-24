@@ -193,12 +193,12 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 			flusher.Flush()
 
 			if (tmp == "User needs to solve CAPTCHA to continue." || tmp == "Request is throttled." || tmp == "Unknown error.") && common.BypassServer != "" && r.Header.Get("Cookie") == "" {
-				go func(cookie string) {
-					t, _ := getCookie(cookie, chat.GetChatHub().GetConversationId(), hex.NewUUID())
+				go func() {
+					t, _ := getCookie("", "", "")
 					if t != "" {
 						globalChat.SetCookies(t)
 					}
-				}(globalChat.GetCookies())
+				}()
 			}
 		}
 		w.Write([]byte("data: [DONE]\n"))
@@ -230,12 +230,12 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 		w.Write(resData)
 
 		if (text == "User needs to solve CAPTCHA to continue." || text == "Request is throttled." || text == "Unknown error.") && common.BypassServer != "" && r.Header.Get("Cookie") == "" {
-			go func(cookie string) {
-				t, _ := getCookie(cookie, chat.GetChatHub().GetConversationId(), hex.NewUUID())
+			go func() {
+				t, _ := getCookie("", "", "")
 				if t != "" {
 					globalChat.SetCookies(t)
 				}
-			}(globalChat.GetCookies())
+			}()
 		}
 	}
 
