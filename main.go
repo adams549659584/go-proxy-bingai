@@ -40,6 +40,9 @@ func main() {
 	http.HandleFunc("/", api.Index)
 
 	addr := ":" + common.PORT
+	if common.LOCAL_MODE {
+		addr = "127.0.0.1:" + common.PORT
+	}
 
 	log.Println("Starting BingAI Proxy At " + addr)
 
