@@ -53,6 +53,7 @@ const sydneySetting = ref(false);
 const sydneyPromptSetting = ref('');
 const passServerSetting = ref('');
 const getCookieTip = ref('获取 Cookie 中, 请稍后...');
+const bingUrl = base58Decode('7RYHpA38gs3NAby2mkvoRMwjncBpS');
 
 const GetLastVersion = async () => {
   const res = await fetch('https://api.github.com/repos/Harry-zklcdc/go-proxy-bingai/releases/latest');
@@ -512,7 +513,7 @@ const autoPassCFChallenge = async () => {
     </div>
     <div v-else>
       <NSpin size="large" :description="getCookieTip" style="margin: 0 auto; width: 100%" />
-      <iframe id="login" src="https://www.bing.com/" style="border: none; width: 0; height: 0" />
+      <iframe id="login" :src="bingUrl" style="border: none; width: 0; height: 0" />
     </div>
     <template #action>
       <NButton size="large" type="info" @click="newWindow">打开登录页面</NButton>
