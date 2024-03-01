@@ -25,6 +25,9 @@ func init() {
 
 func getCookie(reqCookie, convId, rid string) (cookie string, err error) {
 	cookie = reqCookie
+	if common.AUTH_KEY != "" {
+		cookie += "; " + common.AUTH_KEY_COOKIE_NAME + "=" + common.AUTH_KEY
+	}
 	c := request.NewRequest()
 	res := c.SetUrl("http://localhost:"+common.PORT+"/search?q=Bing+AI&showconv=1&FORM=hpcodx&ajaxhist=0&ajaxserp=0&cc=us").
 		SetHeader("User-Agent", common.User_Agent).
@@ -47,5 +50,9 @@ func getCookie(reqCookie, convId, rid string) (cookie string, err error) {
 	if err != nil || status != http.StatusOK {
 		return
 	}
-	return resp.Result.Cookies + "; _U=" + hex.NewHex(128), nil
+	cookie = resp.Result.Cookies + "; _U=" + hex.NewHex(128)
+	if common.AUTH_KEY != "" {
+		cookie += "; " + common.AUTH_KEY_COOKIE_NAME + "=" + common.AUTH_KEY
+	}
+	return cookie, nil
 }
