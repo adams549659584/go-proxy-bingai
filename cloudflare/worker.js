@@ -563,6 +563,7 @@ export default {
       method: request.method,
       headers: newHeaders,
       body: request.body,
+      redirect: 'manual',
     });
 
     // console.log('request url : ', newReq.url);
