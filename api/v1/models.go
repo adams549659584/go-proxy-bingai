@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"adams549659584/go-proxy-bingai/common"
 	"encoding/json"
 	"net/http"
 
@@ -69,6 +70,7 @@ func ModelsHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))
+		common.Logger.Error("ModelsHandler Marshal Error: %v", err)
 		return
 	}
 

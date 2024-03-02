@@ -6,7 +6,6 @@ import (
 	"crypto/tls"
 	"fmt"
 	"io"
-	"log"
 	"math/rand"
 	"net/http"
 	"net/http/httputil"
@@ -198,13 +197,13 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 			contentEncoding := res.Header.Get("Content-Encoding")
 			switch contentEncoding {
 			case "gzip":
-				// log.Println("ContentEncoding : ", contentEncoding, " Path : ", originalPath)
+				Logger.Debug("ContentEncoding : ", contentEncoding, " Path : ", originalPath)
 				modifyGzipBody(res, originalScheme, originalHost)
 			case "br":
-				// log.Println("ContentEncoding : ", contentEncoding, " Path : ", originalPath)
+				Logger.Debug("ContentEncoding : ", contentEncoding, " Path : ", originalPath)
 				modifyBrBody(res, originalScheme, originalHost)
 			default:
-				log.Println("ContentEncoding default : ", contentEncoding, " Path : ", originalPath)
+				Logger.Debug("ContentEncoding default : ", contentEncoding, " Path : ", originalPath)
 				modifyDefaultBody(res, originalScheme, originalHost)
 			}
 		}
@@ -240,8 +239,8 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 			for _, delLocationDomain := range DEL_LOCATION_DOMAINS {
 				if strings.HasPrefix(location, delLocationDomain) {
 					res.Header.Set("Location", location[len(delLocationDomain):])
-					log.Println("Del Location Domain ：", location)
-					log.Println("RandIP : ", randIP)
+					Logger.Debug("Del Location Domain ：", location)
+					Logger.Debug("RandIP : ", randIP)
 					// 换新ip
 					randIP = GetRandomIP()
 				}
@@ -266,7 +265,7 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 		return nil
 	}
 	errorHandler := func(res http.ResponseWriter, req *http.Request, err error) {
-		log.Println("代理异常 ：", err)
+		Logger.Error("代理异常 ：", err)
 		res.Write([]byte(err.Error()))
 	}
 
@@ -315,7 +314,7 @@ func getRandCookie(req *http.Request) (int, string) {
 	if ckRandIndex != nil && ckRandIndex.Value != "" {
 		tmpIndex, err := strconv.Atoi(ckRandIndex.Value)
 		if err != nil {
-			log.Println("ckRandIndex err ：", err)
+			Logger.Error("ckRandIndex err ：", err)
 			return 0, ""
 		}
 		if tmpIndex < utLen {

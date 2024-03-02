@@ -32,10 +32,12 @@ func VerifyHandler(w http.ResponseWriter, r *http.Request) {
 	token, err := aes.Decrypt(T, IG)
 	if err != nil {
 		helper.ErrorResult(w, http.StatusInternalServerError, "Server Error")
+		common.Logger.Error("VerifyHandler Decrypt Error: %v", err)
 		return
 	}
 	if token != common.AUTHOR {
 		helper.ErrorResult(w, http.StatusUnavailableForLegalReasons, "T error")
+		common.Logger.Error("VerifyHandler T error: %v", token)
 		return
 	}
 
@@ -64,12 +66,14 @@ func VerifyHandler(w http.ResponseWriter, r *http.Request) {
 	resp, status, err := binglib.Bypass(bypassServer, strings.Join(reqCookies, "; "), iframeid, IG, convId, rid, T)
 	if err != nil {
 		helper.ErrorResult(w, http.StatusInternalServerError, err.Error())
+		common.Logger.Error("VerifyHandler Bypass Error: %v", err)
 		return
 	}
 	if status != http.StatusOK {
 		respBytes, err := json.Marshal(resp)
 		if err != nil {
 			helper.ErrorResult(w, http.StatusInternalServerError, err.Error())
+			common.Logger.Error("VerifyHandler Bypass Marshal Error: %v", err)
 			return
 		}
 		helper.ErrorResult(w, status, string(respBytes))

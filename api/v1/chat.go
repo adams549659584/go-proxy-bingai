@@ -69,6 +69,7 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))
+		common.Logger.Error("ReadAll Error: %v", err)
 		return
 	}
 
@@ -128,6 +129,7 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))
+		common.Logger.Error("NewConversation Error: %v", err)
 		return
 	}
 
@@ -173,6 +175,7 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 				if err != nil {
 					w.WriteHeader(http.StatusInternalServerError)
 					w.Write([]byte(err.Error()))
+					common.Logger.Error("Marshal Error: %v", err)
 					return
 				}
 				w.Write([]byte("data: "))
@@ -185,6 +188,7 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				w.WriteHeader(http.StatusInternalServerError)
 				w.Write([]byte(err.Error()))
+				common.Logger.Error("Marshal Error: %v", err)
 				return
 			}
 			w.Write([]byte("data: "))
@@ -208,6 +212,7 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(err.Error()))
+			common.Logger.Error("Chat Error: %v", err)
 			return
 		}
 
@@ -224,6 +229,7 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(err.Error()))
+			common.Logger.Error("Marshal Error: %v", err)
 			return
 		}
 		w.WriteHeader(http.StatusOK)

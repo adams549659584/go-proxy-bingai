@@ -66,6 +66,7 @@ func ImageHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))
+		common.Logger.Error("ReadAll Error: %v", err)
 		return
 	}
 
@@ -81,6 +82,7 @@ func ImageHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(err.Error()))
+			common.Logger.Error("Marshal Error: %v", err)
 			return
 		}
 		w.Write(resData)
@@ -91,6 +93,7 @@ func ImageHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))
+		common.Logger.Error("Image Error: %v", err)
 		return
 	}
 
@@ -104,6 +107,7 @@ func ImageHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))
+		common.Logger.Error("Marshal Error: %v", err)
 		return
 	}
 	w.Write(resData)

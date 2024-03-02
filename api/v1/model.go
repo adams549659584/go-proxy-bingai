@@ -44,6 +44,7 @@ func ModelHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))
+		common.Logger.Error("ModelHandler Marshal Error: %v", err)
 		return
 	}
 	w.Write(respData)

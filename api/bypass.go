@@ -39,16 +39,19 @@ func BypassHandler(w http.ResponseWriter, r *http.Request) {
 	err = json.Unmarshal(resq, &request)
 	if err != nil {
 		helper.CommonResult(w, http.StatusInternalServerError, err.Error(), nil)
+		common.Logger.Error("BypassHandler Unmarshal Error: %v", err)
 		return
 	}
 
 	token, err := aes.Decrypt(request.T, request.IG)
 	if err != nil {
 		helper.ErrorResult(w, http.StatusInternalServerError, "Server Error")
+		common.Logger.Error("BypassHandler Decrypt Error: %v", err)
 		return
 	}
 	if token != common.AUTHOR {
 		helper.ErrorResult(w, http.StatusUnavailableForLegalReasons, "T error")
+		common.Logger.Error("BypassHandler T error: %v", token)
 		return
 	}
 
@@ -79,12 +82,14 @@ func BypassHandler(w http.ResponseWriter, r *http.Request) {
 	resp, status, err := binglib.Bypass(bypassServer, strings.Join(reqCookies, "; "), "local-gen-"+hex.NewUUID(), request.IG, "", "", request.T)
 	if err != nil {
 		helper.ErrorResult(w, http.StatusInternalServerError, err.Error())
+		common.Logger.Error("Bypass Error: %v", err)
 		return
 	}
 	if status != http.StatusOK {
 		respBytes, err := json.Marshal(resp)
 		if err != nil {
 			helper.ErrorResult(w, http.StatusInternalServerError, err.Error())
+			common.Logger.Error("Bypass Marshal Error: %v", err)
 			return
 		}
 		helper.ErrorResult(w, status, string(respBytes))
