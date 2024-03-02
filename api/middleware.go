@@ -46,7 +46,10 @@ func Middleware(next http.HandlerFunc) http.HandlerFunc {
 		}
 		wr := newResponseWriter(w)
 		next(wr, r)
-		ip := strings.Split(r.Header.Get("X-Forwarded-For"), ", ")[0]
+		ip := r.Header.Get("X-Real-IP")
+		if ip == "" {
+			ip = strings.Split(r.Header.Get("X-Forwarded-For"), ", ")[0]
+		}
 		if ip == "" {
 			ip = strings.Split(r.RemoteAddr, ":")[0]
 		}
