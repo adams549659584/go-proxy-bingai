@@ -50,7 +50,10 @@ func getCookie(reqCookie, convId, rid string) (cookie string, err error) {
 		common.Logger.Error("Bypass Error: %v", err)
 		return
 	}
-	cookie = resp.Result.Cookies + "; _U=" + hex.NewHex(128)
+	cookie = resp.Result.Cookies
+	if len(common.USER_TOKEN_LIST) == 0 {
+		cookie += "; _U=" + hex.NewHex(128)
+	}
 	if common.AUTH_KEY != "" {
 		cookie += "; " + common.AUTH_KEY_COOKIE_NAME + "=" + common.AUTH_KEY
 	}
