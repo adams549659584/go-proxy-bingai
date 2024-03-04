@@ -27,7 +27,16 @@
         "BYPASS_SERVER": "https://bypass.zklcdc.xyz",
         "LOCAL_MODE": "true",
         "LOG_LEVEL": "DEBUG",
-        // "Go_Proxy_BingAI_AUTH_KEY": "xxx",
+        "Go_Proxy_BingAI_AUTH_KEY": "xxx",
+        // "APIKEY": "sk-xxxxxxxxxxxxxx",
+        // Cookie
+        // "Go_Proxy_BingAI_USER_TOKEN_1": "xxx",
+        // "USER_KievRPSSecAuth": "xxx",
+        // "USER_RwBf": "xxx",
+        // "USER_MUID": "xxx",
+        // Base Domain
+        // "BING_BASE_URL": "https://www.bing.com",
+        // "SYDNEY_BASE_URL": "https://sydney.bing.com",
       }
     }
   ]
