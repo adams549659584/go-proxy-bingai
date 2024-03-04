@@ -21,6 +21,8 @@ var (
 	GPT_35_TURBO_16K = "gpt-3.5-turbo-16k"
 	GPT_4_32K        = "gpt-4-32k"
 
+	GPT_4_VISION = "gpt-4-vision-preview"
+
 	STOPFLAG = "stop"
 )
 
@@ -68,8 +70,8 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 	var resq chatRequest
 	json.Unmarshal(resqB, &resq)
 
-	if !common.IsInArray(binglib.ChatModels[:], resq.Model) {
-		if !common.IsInArray([]string{GPT_35_TURBO, GPT_4_TURBO_PREVIEW, GPT_35_TURBO_16K, GPT_4_32K}, resq.Model) {
+	if !common.IsInArray(binglib.ChatModels[:], strings.ReplaceAll(resq.Model, "-vision", "")) {
+		if !common.IsInArray([]string{GPT_35_TURBO, GPT_4_TURBO_PREVIEW, GPT_35_TURBO_16K, GPT_4_32K, GPT_4_VISION}, resq.Model) {
 			w.WriteHeader(http.StatusBadRequest)
 			w.Write([]byte("Model Not Found"))
 			return
@@ -115,6 +117,16 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 				resq.Model = binglib.CREATIVE_G4T_18K
 			}
 		}
+
+		if resq.Model == GPT_4_VISION {
+			if resq.Temperature <= 0.75 {
+				resq.Model = binglib.PRECISE_G4T + "-vision"
+			} else if resq.Temperature > 0.75 && resq.Temperature < 1.25 {
+				resq.Model = binglib.BALANCED_G4T + "-vision"
+			} else if resq.Temperature >= 1.25 {
+				resq.Model = binglib.CREATIVE_G4T + "-vision"
+			}
+		}
 	}
 
 	err = chat.NewConversation()
@@ -125,9 +137,17 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	chat.SetStyle(resq.Model)
+	chat.SetStyle(strings.ReplaceAll(resq.Model, "-vision", ""))
 
-	prompt, msg := chat.MsgComposer(resq.Messages)
+	prompt, msg, image := chat.MsgComposer(resq.Messages)
+
+	if !strings.Contains(resq.Model, "-vision") && image != "" {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("Image is not supported in this model"))
+		common.Logger.Error("Chat Error: Image is not supported in this model")
+		return
+	}
+
 	resp := chatResponse{
 		Id:                "chatcmpl-NewBing",
 		Object:            "chat.completion.chunk",
@@ -147,7 +167,7 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 
 		text := make(chan string)
 		defer close(text)
-		go chat.ChatStream(prompt, msg, text)
+		go chat.ChatStream(prompt, msg, text, image)
 		var tmp string
 
 		for {
@@ -201,7 +221,7 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("data: [DONE]\n"))
 		flusher.Flush()
 	} else {
-		text, err := chat.Chat(prompt, msg)
+		text, err := chat.Chat(prompt, msg, image)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(err.Error()))
