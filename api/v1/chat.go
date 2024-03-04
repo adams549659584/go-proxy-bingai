@@ -146,6 +146,7 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/event-stream")
 
 		text := make(chan string)
+		defer close(text)
 		go chat.ChatStream(prompt, msg, text)
 		var tmp string
 
