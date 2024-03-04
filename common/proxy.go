@@ -99,11 +99,11 @@ func NewSingleHostReverseProxy(target *url.URL) *httputil.ReverseProxy {
 			req.Header.Set("Referer", fmt.Sprintf("%s/edgesvc/compose", EDGE_SVC_URL.String()))
 			req.Header.Set("Origin", EDGE_SVC_URL.String())
 		} else if strings.Contains(originalPath, "/sydney/") {
-			req.Header.Set("Referer", fmt.Sprintf("%s/search?q=Bing+AI", BING_URL.String()))
+			req.Header.Set("Referer", fmt.Sprintf("%s/chat?q=Bing+AI", BING_URL.String()))
 			req.Header.Set("Origin", BING_URL.String())
 			req.Header.Set("Host", BING_SYDNEY_URL.Host)
 		} else {
-			req.Header.Set("Referer", fmt.Sprintf("%s/search?q=Bing+AI", BING_URL.String()))
+			req.Header.Set("Referer", fmt.Sprintf("%s/chat?q=Bing+AI", BING_URL.String()))
 			req.Header.Set("Origin", target.String())
 		}
 

@@ -498,7 +498,7 @@ export default {
     if (request.headers.has('referer') && request.headers.get('referer').indexOf('web/compose.html') != -1) {
       newHeaders.set('referer', 'https://edgeservices.bing.com/edgesvc/compose');
     } else {
-      newHeaders.set('referer', 'https://www.bing.com/search?q=Bing+AI&showconv=1&FORM=hpcodx');
+      newHeaders.set('referer', 'https://www.bing.com/chat?q=Bing+AI&showconv=1&FORM=hpcodx');
     }
     const randIP = getRandomIP();
     // console.log('randIP : ', randIP);
