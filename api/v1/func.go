@@ -3,6 +3,7 @@ package v1
 import (
 	"adams549659584/go-proxy-bingai/common"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 
@@ -13,13 +14,20 @@ import (
 )
 
 func init() {
-	go func() {
-		time.Sleep(200 * time.Millisecond)
+	VERCEL_URL := os.Getenv("VERCEL_URL")
+	if VERCEL_URL == "" {
+		go func() {
+			time.Sleep(200 * time.Millisecond)
+			t, _ := getCookie("", "", "")
+			common.Logger.Info("BingAPI Ready!")
+			globalChat = binglib.NewChat(t).SetBingBaseUrl("http://localhost:" + common.PORT).SetSydneyBaseUrl("ws://localhost:" + common.PORT).SetBypassServer(common.BypassServer)
+			globalImage = binglib.NewImage(t).SetBingBaseUrl("http://localhost:" + common.PORT).SetBypassServer(common.BypassServer)
+		}()
+	} else {
 		t, _ := getCookie("", "", "")
-		common.Logger.Info("BingAPI Ready!")
-		globalChat = binglib.NewChat(t).SetBingBaseUrl("http://localhost:" + common.PORT).SetSydneyBaseUrl("ws://localhost:" + common.PORT).SetBypassServer(common.BypassServer)
-		globalImage = binglib.NewImage(t).SetBingBaseUrl("http://localhost:" + common.PORT).SetBypassServer(common.BypassServer)
-	}()
+		globalChat = binglib.NewChat(t).SetBypassServer(common.BypassServer)
+		globalImage = binglib.NewImage(t).SetBypassServer(common.BypassServer)
+	}
 }
 
 func getCookie(reqCookie, convId, rid string) (cookie string, err error) {
@@ -28,9 +36,17 @@ func getCookie(reqCookie, convId, rid string) (cookie string, err error) {
 		cookie += "; " + common.AUTH_KEY_COOKIE_NAME + "=" + common.AUTH_KEY
 	}
 	c := request.NewRequest()
-	res := c.SetUrl("http://localhost:"+common.PORT+"/search?q=Bing+AI&showconv=1&FORM=hpcodx&ajaxhist=0&ajaxserp=0&cc=us").
-		SetHeader("User-Agent", common.User_Agent).
-		SetHeader("Cookie", cookie).Do()
+	var res *request.Client
+	if os.Getenv("VERCEL_URL") == "" {
+		res = c.SetUrl("http://localhost:"+common.PORT+"/chat?q=Bing+AI&showconv=1&FORM=hpcodx&ajaxhist=0&ajaxserp=0&cc=us").
+			SetHeader("User-Agent", common.User_Agent).
+			SetHeader("Cookie", cookie).Do()
+	} else {
+		res = c.SetUrl("https://www.bing.com/chat?q=Bing+AI&showconv=1&FORM=hpcodx&ajaxhist=0&ajaxserp=0&cc=us").
+			SetHeader("User-Agent", common.User_Agent).
+			SetHeader("Cookie", cookie).Do()
+
+	}
 	headers := res.GetHeaders()
 	for k, v := range headers {
 		if strings.ToLower(k) == "set-cookie" {
