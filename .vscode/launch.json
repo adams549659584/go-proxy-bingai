@@ -27,7 +27,7 @@
         "BYPASS_SERVER": "https://bypass.zklcdc.xyz",
         "LOCAL_MODE": "true",
         "LOG_LEVEL": "DEBUG",
-        "Go_Proxy_BingAI_AUTH_KEY": "xxx",
+        // "Go_Proxy_BingAI_AUTH_KEY": "xxx",
         // "APIKEY": "sk-xxxxxxxxxxxxxx",
         // Cookie
         // "Go_Proxy_BingAI_USER_TOKEN_1": "xxx",
