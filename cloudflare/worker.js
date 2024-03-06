@@ -1,13 +1,18 @@
 import { brotli_decode } from "./bjs.js"
+import { bingapiModels, bingapiModel, bingapiChat, getRandomIP } from "./bingapi.js"
+
 // 同查找 _U 一样, 查找 KievRPSSecAuth 的值并替换下方的xxx
-const KievRPSSecAuth = '';
-const _RwBf = '';
-const MUID = '';
-const _U = '';
+const CUSTOM_OPTIONS = {
+    KievRPSSecAuth: '',
+    _RwBf: '',
+    MUID: '',
+    _U: '',
 
-const BYPASS_SERVER = '';
+    BYPASS_SERVER: '',
+    APIKEY: '',
 
-const NIGHTLY = false;
+    NIGHTLY: false,
+}
 
 const WEB_CONFIG = {
   WORKER_URL: '', // 如无特殊需求请，保持为''
@@ -47,38 +52,7 @@ const KEEP_REQ_HEADERS = [
   'x-ms-client-request-id',
   'x-ms-useragent',
 ];
-const IP_RANGE = [
-  ['4.150.64.0', '4.150.127.255'],       // Azure Cloud EastUS2 16382
-  ['4.152.0.0', '4.153.255.255'],        // Azure Cloud EastUS2 131070
-  ['13.68.0.0', '13.68.127.255'],        // Azure Cloud EastUS2 32766
-  ['13.104.216.0', '13.104.216.255'],    // Azure EastUS2 256
-  ['20.1.128.0', '20.1.255.255'],        // Azure Cloud EastUS2 32766
-  ['20.7.0.0', '20.7.255.255'],          // Azure Cloud EastUS2 65534
-  ['20.22.0.0', '20.22.255.255'],        // Azure Cloud EastUS2 65534
-  ['40.84.0.0', '40.84.127.255'],        // Azure Cloud EastUS2 32766
-  ['40.123.0.0', '40.123.127.255'],      // Azure Cloud EastUS2 32766
-  ['4.214.0.0', '4.215.255.255'],        // Azure Cloud JapanEast 131070
-  ['4.241.0.0', '4.241.255.255'],        // Azure Cloud JapanEast 65534
-  ['40.115.128.0', '40.115.255.255'],    // Azure Cloud JapanEast 32766
-  ['52.140.192.0', '52.140.255.255'],    // Azure Cloud JapanEast 16382
-  ['104.41.160.0', '104.41.191.255'],    // Azure Cloud JapanEast 8190
-  ['138.91.0.0', '138.91.15.255'],       // Azure Cloud JapanEast 4094
-  ['151.206.65.0', '151.206.79.255'],    // Azure Cloud JapanEast 256
-  ['191.237.240.0', '191.237.241.255'],  // Azure Cloud JapanEast 512
-  ['4.208.0.0', '4.209.255.255'],        // Azure Cloud NorthEurope 131070
-  ['52.169.0.0', '52.169.255.255'],      // Azure Cloud NorthEurope 65534
-  ['68.219.0.0', '68.219.127.255'],      // Azure Cloud NorthEurope 32766
-  ['65.52.64.0', '65.52.79.255'],        // Azure Cloud NorthEurope 4094
-  ['98.71.0.0', '98.71.127.255'],        // Azure Cloud NorthEurope 32766
-  ['74.234.0.0', '74.234.127.255'],      // Azure Cloud NorthEurope 32766
-  ['4.151.0.0', '4.151.255.255'],        // Azure Cloud SouthCentralUS 65534
-  ['13.84.0.0', '13.85.255.255'],        // Azure Cloud SouthCentralUS 131070
-  ['4.255.128.0', '4.255.255.255'],      // Azure Cloud WestCentralUS 32766
-  ['13.78.128.0', '13.78.255.255'],      // Azure Cloud WestCentralUS 32766
-  ['4.175.0.0', '4.175.255.255'],        // Azure Cloud WestEurope 65534
-  ['13.80.0.0', '13.81.255.255'],        // Azure Cloud WestEurope 131070
-  ['20.73.0.0', '20.73.255.255'],        // Azure Cloud WestEurope 65534
-];
+
 
 /**
  * 随机整数 [min,max)
@@ -87,41 +61,6 @@ const IP_RANGE = [
  * @returns
  */
 const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min)) + min;
-
-/**
- * ip 转 int
- * @param {string} ip
- * @returns
- */
-const ipToInt = (ip) => {
-  const ipArr = ip.split('.');
-  let result = 0;
-  result += +ipArr[0] << 24;
-  result += +ipArr[1] << 16;
-  result += +ipArr[2] << 8;
-  result += +ipArr[3];
-  return result;
-};
-
-/**
- * int 转 ip
- * @param {number} intIP
- * @returns
- */
-const intToIp = (intIP) => {
-  return `${(intIP >> 24) & 255}.${(intIP >> 16) & 255}.${(intIP >> 8) & 255}.${intIP & 255}`;
-};
-
-const getRandomIP = () => {
-  const randIndex = getRandomInt(0, IP_RANGE.length);
-  const startIp = IP_RANGE[randIndex][0];
-  const endIp = IP_RANGE[randIndex][1];
-  const startIPInt = ipToInt(startIp);
-  const endIPInt = ipToInt(endIp);
-  const randomInt = getRandomInt(startIPInt, endIPInt);
-  const randomIP = intToIp(randomInt);
-  return randomIP;
-};
 
 /**
  * 生成随机字符串
@@ -194,7 +133,7 @@ const rewriteBody = async (res) => {
  */
 const home = async (pathname) => {
   let baseUrl;
-  if (NIGHTLY) {
+  if (CUSTOM_OPTIONS.NIGHTLY) {
     baseUrl = 'https://raw.githubusercontent.com/Harry-zklcdc/go-proxy-bingai/nightly/';
   } else {
     baseUrl = 'https://raw.githubusercontent.com/Harry-zklcdc/go-proxy-bingai/master/';
@@ -337,7 +276,7 @@ const verify = async (request, cookie) => {
   }
 
   let reqCookies = request.headers.get('Cookie').split('; ');
-  let bypassServer = BYPASS_SERVER;
+  let bypassServer = CUSTOM_OPTIONS.BYPASS_SERVER;
   for (let i = 0; i < reqCookies.length; i++) {
       let cookie = reqCookies[i];
       if (cookie.startsWith('BingAI_Pass_Server')) {
@@ -393,7 +332,7 @@ const pass = async (request, cookie) => {
   let resqBody = JSON.parse(await request.text());
 
   let reqCookies = request.headers.get('Cookie').split('; ');
-  let bypassServer = BYPASS_SERVER;
+  let bypassServer = CUSTOM_OPTIONS.BYPASS_SERVER;
   for (let i = 0; i < reqCookies.length; i++) {
       let cookie = reqCookies[i];
       if (cookie.startsWith('BingAI_Pass_Server')) {
@@ -438,7 +377,30 @@ const login = async (url, headers) => {
  * @returns
  */
 const bingapi = async (request, cookie) => {
-  return Response.json({ code: 200, message: 'TODO', data: null })
+  const currentUrl = new URL(request.url);
+  if ((currentUrl.pathname.startsWith('/v1/models/')) || (currentUrl.pathname.startsWith('/api/v1/models/'))) {
+    return bingapiModel(request, Object.assign({cookie: cookie}, CUSTOM_OPTIONS));
+  }
+  if ((currentUrl.pathname === '/v1/models') || (currentUrl.pathname === '/api/v1/models')) {
+    return bingapiModels(request, Object.assign({cookie: cookie}, CUSTOM_OPTIONS));
+  }
+  if ((currentUrl.pathname === '/v1/chat/completions') || (currentUrl.pathname === '/api/v1/chat/completions')) {
+    if (request.method == 'OPTIONS') {
+      return Response.json({ code: 200, message: 'OPTIONS', data: null }, {
+        headers: {
+          "Allow": "POST, OPTIONS",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "POST, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type, Authorization, Cookie",
+        }
+      });
+    }
+    if (request.method != 'POST') {
+      return Response.json({ code: 405, message: 'Method Not Allowed', data: null }, { status: 405 });
+    }
+    return bingapiChat(request, Object.assign({cookie: cookie}, CUSTOM_OPTIONS));
+  }
+  return Response.json({ code: 404, message: 'API No Found', data: null }, { status: 404 });
 };
 
 export default {
@@ -507,25 +469,25 @@ export default {
     let cookies = cookie;
 
     if (!cookie.includes('KievRPSSecAuth=')) {
-      if (KievRPSSecAuth.length !== 0) {
-        cookies += '; KievRPSSecAuth=' + KievRPSSecAuth;
+      if (CUSTOM_OPTIONS.KievRPSSecAuth.length !== 0) {
+        cookies += '; KievRPSSecAuth=' + CUSTOM_OPTIONS.KievRPSSecAuth;
       } else {
         cookies += '; KievRPSSecAuth=' + randomString(512);
       }
     }
     if (!cookie.includes('_RwBf=')) {
-      if (_RwBf.length !== 0) {
-        cookies += '; _RwBf=' + _RwBf
+      if (CUSTOM_OPTIONS._RwBf.length !== 0) {
+        cookies += '; _RwBf=' + CUSTOM_OPTIONS._RwBf
       }
     }
     if (!cookie.includes('MUID=')) {
-      if (MUID.length !== 0) {
-        cookies += '; MUID=' + MUID
+      if (CUSTOM_OPTIONS.MUID.length !== 0) {
+        cookies += '; MUID=' + CUSTOM_OPTIONS.MUID
       }
     }
     if (!cookie.includes('_U=')) {
-      if (_U.length !== 0) {
-        cookies += '; _U=' + _U;
+      if (CUSTOM_OPTIONS._U.length !== 0) {
+        cookies += '; _U=' + CUSTOM_OPTIONS._U;
       }
     }
 
