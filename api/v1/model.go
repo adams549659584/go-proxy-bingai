@@ -47,5 +47,6 @@ func ModelHandler(w http.ResponseWriter, r *http.Request) {
 		common.Logger.Error("ModelHandler Marshal Error: %v", err)
 		return
 	}
+	w.Header().Set("Content-Type", "application/json")
 	w.Write(respData)
 }

@@ -246,6 +246,7 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		w.WriteHeader(http.StatusOK)
+		w.Header().Set("Content-Type", "application/json")
 		w.Write(resData)
 
 		if (text == "User needs to solve CAPTCHA to continue." || text == "Request is throttled." || text == "Unknown error.") && common.BypassServer != "" && r.Header.Get("Cookie") == "" {

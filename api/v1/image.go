@@ -98,5 +98,6 @@ func ImageHandler(w http.ResponseWriter, r *http.Request) {
 		common.Logger.Error("Marshal Error: %v", err)
 		return
 	}
+	w.Header().Set("Content-Type", "application/json")
 	w.Write(resData)
 }
