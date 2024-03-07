@@ -47,6 +47,9 @@ jobs:
           GOOS=windows GOARCH=arm64 go build -ldflags="-s -w" -tags netgo -trimpath -o go-proxy-bingai.exe main.go && tar -zcvf go-proxy-bingai-windows-arm64.tar.gz go-proxy-bingai.exe
           GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w" -tags netgo -trimpath -o go-proxy-bingai main.go && tar -zcvf go-proxy-bingai-darwin-amd64.tar.gz go-proxy-bingai
           GOOS=darwin GOARCH=arm64 go build -ldflags="-s -w" -tags netgo -trimpath -o go-proxy-bingai main.go && tar -zcvf go-proxy-bingai-darwin-arm64.tar.gz go-proxy-bingai
+          GOOS=freebsd GOARCH=amd64 go build -ldflags="-s -w" -tags netgo -trimpath -o go-proxy-bingai main.go && tar -zcvf go-proxy-bingai-freebsd-amd64.tar.gz go-proxy-bingai
+          GOOS=freebsd GOARCH=arm64 go build -ldflags="-s -w" -tags netgo -trimpath -o go-proxy-bingai main.go && tar -zcvf go-proxy-bingai-freebsd-arm64.tar.gz go-proxy-bingai
+          GOOS=freebsd GOARCH=arm GOARM=7 go build -ldflags="-s -w" -tags netgo -trimpath -o go-proxy-bingai main.go && tar -zcvf go-proxy-bingai-freebsd-armv7.tar.gz go-proxy-bingai
 
       - name: Create Release and Upload Release Asset
         uses: softprops/action-gh-release@v1
@@ -59,6 +62,9 @@ jobs:
             go-proxy-bingai-windows-arm64.tar.gz
             go-proxy-bingai-darwin-amd64.tar.gz
             go-proxy-bingai-darwin-arm64.tar.gz
+            go-proxy-bingai-freebsd-amd64.tar.gz
+            go-proxy-bingai-freebsd-arm64.tar.gz
+            go-proxy-bingai-freebsd-armv7.tar.gz
 
       - uses: actions/upload-artifact@v3
         with:
