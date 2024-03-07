@@ -1,4 +1,4 @@
-package api
+package helper
 
 import (
 	"adams549659584/go-proxy-bingai/common"
@@ -11,15 +11,15 @@ import (
 
 type responseWriter struct {
 	http.ResponseWriter
-	statusCode int
+	StatusCode int
 }
 
-func newResponseWriter(w http.ResponseWriter) *responseWriter {
+func NewResponseWriter(w http.ResponseWriter) *responseWriter {
 	return &responseWriter{w, http.StatusOK}
 }
 
 func (rw *responseWriter) WriteHeader(code int) {
-	rw.statusCode = code
+	rw.StatusCode = code
 	rw.ResponseWriter.WriteHeader(code)
 }
 
@@ -44,7 +44,7 @@ func Middleware(next http.HandlerFunc) http.HandlerFunc {
 			w.WriteHeader(http.StatusUnavailableForLegalReasons)
 			return
 		}
-		wr := newResponseWriter(w)
+		wr := NewResponseWriter(w)
 		next(wr, r)
 		ip := r.Header.Get("X-Real-IP")
 		if ip == "" {
@@ -54,9 +54,9 @@ func Middleware(next http.HandlerFunc) http.HandlerFunc {
 			ip = strings.Split(r.RemoteAddr, ":")[0]
 		}
 		if strings.HasPrefix(r.URL.Path, "/web/") {
-			common.Logger.Debug("%s - %s %s - %d - %s", ip, r.Method, r.URL.Path, wr.statusCode, r.Header.Get("User-Agent"))
+			common.Logger.Debug("%s - %s %s - %d - %s", ip, r.Method, r.URL.Path, wr.StatusCode, r.Header.Get("User-Agent"))
 		} else {
-			common.Logger.Info("%s - %s %s - %d - %s", ip, r.Method, r.URL.Path, wr.statusCode, r.Header.Get("User-Agent"))
+			common.Logger.Info("%s - %s %s - %d - %s", ip, r.Method, r.URL.Path, wr.StatusCode, r.Header.Get("User-Agent"))
 		}
 	})
 }

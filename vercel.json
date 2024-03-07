@@ -1,16 +1,14 @@
 {
   "name": "go-proxy-bingai",
   "version": 2,
-  "builds": [
-    {
-      "src": "/api/{index,web,sydney,edgesvc,designer,sys-config,bypass,challenge,verify}.go",
-      "use": "@vercel/go"
+  "functions": {
+    "api/*.go": {
+      "runtime": "@vercel/go@3.0.5"
     },
-    {
-      "src": "/api/v1/{chat,image}.go",
-      "use": "@vercel/go"
+    "api/v1/*.js": {
+      "memory": 512
     }
-  ],
+  },
   "routes": [
     {
       "src": "/sysconf",
@@ -29,20 +27,12 @@
       "dest": "/api/verify.go"
     },
     {
-      "src": "/v1/chat/completions",
-      "dest": "/api/v1/chat.go"
+      "src": "/v1/.*",
+      "dest": "/api/v1/vercel.js"
     },
     {
-      "src": "/api/v1/chat/completions",
-      "dest": "/api/v1/chat.go"
-    },
-    {
-      "src": "/v1/images/generations",
-      "dest": "/api/v1/image.go"
-    },
-    {
-      "src": "/api/v1/images/generations",
-      "dest": "/api/v1/image.go"
+      "src": "/api/v1/.*",
+      "dest": "/api/v1/vercel.js"
     },
     {
       "src": "/designer/.*",

@@ -139,10 +139,10 @@ export async function bingapiChat(request, options) {
   let newReq = new Request(options.BYPASS_SERVER, {
     method: 'POST',
     headers: {
-      cookie: options.Cookie,
+      cookie: options.cookie,
     },
     body: JSON.stringify({
-      cookies: options.Cookie,
+      cookies: options.cookie,
       iframeid: 'local-gen-' + crypto.randomUUID(),
       IG: IG,
       T: await aesEncrypt(AUTHOR, IG),
