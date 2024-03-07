@@ -1,5 +1,5 @@
 import { brotli_decode } from "./bjs.js"
-import { bingapiModels, bingapiModel, bingapiChat, getRandomIP } from "./bingapi.js"
+import { bingapiModels, bingapiModel, bingapiChat, bingapiImage, getRandomIP } from "./bingapi.js"
 
 // 同查找 _U 一样, 查找 KievRPSSecAuth 的值并替换下方的xxx
 const CUSTOM_OPTIONS = {
@@ -386,10 +386,10 @@ const bingapi = async (request, cookie) => {
   if ((currentUrl.pathname.startsWith('/v1/models/')) || (currentUrl.pathname.startsWith('/api/v1/models/'))) {
     return bingapiModel(request, Object.assign({ cookie: cookie }, CUSTOM_OPTIONS));
   }
-  if ((currentUrl.pathname === '/v1/models') || (currentUrl.pathname === '/api/v1/models')) {
+  if (currentUrl.pathname.startsWith('/v1/models') || currentUrl.pathname.startsWith('/api/v1/models')) {
     return bingapiModels(request, Object.assign({ cookie: cookie }, CUSTOM_OPTIONS));
   }
-  if ((currentUrl.pathname === '/v1/chat/completions') || (currentUrl.pathname === '/api/v1/chat/completions')) {
+  if (currentUrl.pathname.startsWith('/v1/chat/completions') || currentUrl.pathname.startsWith('/api/v1/chat/completions')) {
     if (request.method == 'OPTIONS') {
       return Response.json({ code: 200, message: 'OPTIONS', data: null }, {
         headers: {
@@ -404,6 +404,22 @@ const bingapi = async (request, cookie) => {
       return Response.json({ code: 405, message: 'Method Not Allowed', data: null }, { status: 405 });
     }
     return bingapiChat(request, Object.assign({ cookie: cookie }, CUSTOM_OPTIONS));
+  }
+  if (currentUrl.pathname.startsWith('/v1/images/generations') || currentUrl.pathname.startsWith('/api/v1/images/generations')) {
+    if (request.method == 'OPTIONS') {
+      return Response.json({ code: 200, message: 'OPTIONS', data: null }, {
+        headers: {
+          "Allow": "POST, OPTIONS",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "POST, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type, Authorization, Cookie",
+        }
+      });
+    }
+    if (request.method != 'POST') {
+      return Response.json({ code: 405, message: 'Method Not Allowed', data: null }, { status: 405 });
+    }
+    return bingapiImage(request, Object.assign({ cookie: cookie }, CUSTOM_OPTIONS));
   }
   return Response.json({ code: 404, message: 'API No Found', data: null }, { status: 404 });
 };
@@ -512,7 +528,7 @@ export default {
     if (currentUrl.pathname === '/challenge/verify') {
       return verify(request, cookies);
     }
-    if (currentUrl.pathname.indexOf('/v1') === 0 || currentUrl.pathname.indexOf('/api/v1') === 0) {
+    if (currentUrl.pathname.startsWith('/v1') || currentUrl.pathname.startsWith('/api/v1')) {
       return bingapi(request, cookies);
     }
     if (currentUrl.pathname === '/pass') {

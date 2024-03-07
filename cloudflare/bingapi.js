@@ -1,8 +1,8 @@
 const AUTHOR = 'Harry-zklcdc/go-proxy-bingai';
 
 const SPILT = '\x1e';
-const BING_ORIGIN = 'https://www.bing.com';
-const SYDNEY_ORIGIN = 'https://sydney.bing.com';
+const BING_ORIGIN = 'http://localhost:8080';
+const SYDNEY_ORIGIN = 'http://localhost:8080';
 
 export const bingchatModel = {
   PRECISE: 'Precise',          // 精准
@@ -136,35 +136,17 @@ export async function bingapiChat(request, options) {
   }
 
   // Get CCT Cookie
-  const IG = crypto.randomUUID().replace(/-/g, '').toUpperCase();
-  let newReq = new Request(options.BYPASS_SERVER, {
-    method: 'POST',
-    headers: {
-      cookie: options.cookie,
-    },
-    body: JSON.stringify({
-      cookies: options.cookie,
-      iframeid: 'local-gen-' + crypto.randomUUID(),
-      IG: IG,
-      T: await aesEncrypt(AUTHOR, IG),
-    }),
-  });
-  let res = await fetch(newReq);
-  if (!res.ok) {
-    return helperResponseJson({ error: 'Get CCT Cookie Error' }, 500);
-  }
-  let resBody = await res.json();
-  const cctCookie = resBody.result.cookies;
+  const cctCookie = options.cookie + '; ' + (await getCctCookie(options));
 
   // Get New Conversation
-  newReq = new Request(BING_ORIGIN + '/turing/conversation/create?bundleVersion=1.1467.6', {
+  let newReq = new Request(BING_ORIGIN + '/turing/conversation/create?bundleVersion=1.1467.6', {
     headers: getNewHeaders(cctCookie),
   })
-  res = await fetch(newReq);
+  let res = await fetch(newReq);
   if (!res.ok) {
     return helperResponseJson({ error: 'Get New Conversation Error' }, 500);
   }
-  resBody = await res.json();
+  let resBody = await res.json();
   const chatHub = {
     conversationId: resBody.conversationId,
     clientId: resBody.clientId,
@@ -531,14 +513,85 @@ export async function bingapiChat(request, options) {
   }
 };
 
+const imageResponse = {
+  created: 1687579610,
+  data: []
+}
+
+const imageStruct = {
+  url: ''
+}
+
 /**
  * BingAPI Image
  * @param {Request} request 
  * @param {Object} options
  * @returns {Response}
  */
-export function bingapiImage(request, options) {
-  // TODO
+export async function bingapiImage(request, options) {
+  const resq = await toJSON(request.body);
+
+  const authApiKey = request.headers.get('Authorization');
+  if (authApiKey != 'Bearer ' + options.APIKEY && options.APIKEY != '') {
+    return helperResponseJson({ error: 'Unauthorized' }, 401);
+  }
+
+  if (resq.prompt == '' || resq.prompt == undefined || resq.prompt == null) {
+    return helperResponseJson({ error: 'Prompt is required' }, 400);
+  }
+
+  const cctCookie = options.cookie + '; ' + (await getCctCookie(options));
+
+  const headers = getNewHeaders(cctCookie);
+  headers.set('Content-Type', 'application/x-www-form-urlencoded');
+  let newReq = new Request(BING_ORIGIN + '/images/create?q=' + encodeURIComponent(resq.prompt) + '&rt=4&FORM=GENCRE', {
+    method: 'POST',
+    headers: headers,
+    body: 'q=' + encodeURIComponent(resq.prompt) + '&qs=ds',
+    redirect: 'manual'
+  })
+  let res = await fetch(newReq);
+  if (res.status != 302) {
+    return helperResponseJson({ error: 'Generate Image Error' }, 500);
+  }
+
+  const imageUrl = new URL(BING_ORIGIN + res.headers.get('Location'));
+  const id = imageUrl.searchParams.get('id')
+  newReq = new Request(BING_ORIGIN + res.headers.get('Location'), {
+    headers: headers,
+  });
+  res = await fetch(newReq);
+  if (!res.ok) {
+    return helperResponseJson({ error: 'Generate Image Error' }, 500);
+  }
+
+  let i = 0, resBody = '';
+  for (i = 0; i < 120; i ++) {
+    await sleep(1000);
+    newReq = new Request(BING_ORIGIN + '/images/create/async/results/' + id, {
+      headers: headers,
+    });
+    res = await fetch(newReq);
+    resBody = await res.text();
+    if (res.headers.get('Content-Type').indexOf('text/html') != -1 && resBody.length > 1) {
+      break
+    }
+  }
+
+  if (i >= 120) {
+    return helperResponseJson({ error: 'Generate Image Timeout' }, 500);
+  }
+
+  const regResults = resBody.match(/<img.*\/>/g)
+  const respData = Object.assign({}, imageResponse);
+  regResults.forEach(v => {
+    const url = v.match(/src="([^"]*)"/)[1].split('?')[0];
+    if (url.indexOf('/rp/') == -1) {
+      respData.data.push(Object.assign({}, imageStruct, { url: url }));
+    }
+  })
+  
+  return helperResponseJson(respData);
 };
 
 const modelInfo = {
@@ -618,6 +671,42 @@ function helperResponseJson(response, statusCode = 200) {
       'Content-Type': 'application/json'
     }
   });
+}
+
+/**
+ * Get CCT Cookie
+ * @param {string} cookie 
+ * @returns {string}
+ */
+async function getCctCookie(options) {
+  const IG = crypto.randomUUID().replace(/-/g, '').toUpperCase();
+  let newReq = new Request(options.BYPASS_SERVER, {
+    method: 'POST',
+    headers: {
+      cookie: options.cookie,
+    },
+    body: JSON.stringify({
+      cookies: options.cookie,
+      iframeid: 'local-gen-' + crypto.randomUUID(),
+      IG: IG,
+      T: await aesEncrypt(AUTHOR, IG),
+    }),
+  });
+  let res = await fetch(newReq);
+  if (!res.ok) {
+    return cookie;
+  }
+  let resBody = await res.json();
+  return resBody.result.cookies;
+}
+
+/**
+ * Sleep
+ * @param {number} ms 
+ * @returns {Promise}
+ */
+async function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 /**
@@ -765,11 +854,11 @@ function getNewHeaders(cookie) {
 }
 
 /**
- * to JSON
+ * to String
  * @param {ReadableStream} body 
- * @returns {Promise<Object>}
+ * @returns {Promise<string>}
  */
-async function toJSON(body) {
+async function toString(body) {
   const reader = body.getReader(); // `ReadableStreamDefaultReader`
   const decoder = new TextDecoder();
   const chunks = [];
@@ -778,7 +867,7 @@ async function toJSON(body) {
 
     // all chunks have been read?
     if (done) {
-      return JSON.parse(chunks.join(''));
+      return chunks.join('');
     }
 
     const chunk = decoder.decode(value, { stream: true });
@@ -786,6 +875,15 @@ async function toJSON(body) {
     return read(); // read the next chunk
   }
   return read();
+}
+
+/**
+ * to JSON
+ * @param {ReadableStream} body 
+ * @returns {Promise<Object>}
+ */
+async function toJSON(body) {
+  return JSON.parse(await toString(body));
 };
 
 /**

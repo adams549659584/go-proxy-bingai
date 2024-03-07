@@ -1,4 +1,4 @@
-import { bingapiChat, bingapiModel, bingapiModels } from '../../cloudflare/bingapi.js'
+import { bingapiChat, bingapiImage, bingapiModel, bingapiModels } from '../../cloudflare/bingapi.js'
 
 export const config = {
   runtime: 'edge',
@@ -39,6 +39,22 @@ export default function ChatHandler(request) {
       return Response.json({ code: 405, message: 'Method Not Allowed', data: null }, { status: 405 });
     }
     return bingapiChat(request, CUSTOM_OPTIONS);
+  }
+  if (currentUrl.pathname.startsWith('/v1/images/generations') || currentUrl.pathname.startsWith('/api/v1/images/generations')) {
+    if (request.method == 'OPTIONS') {
+      return Response.json({ code: 200, message: 'OPTIONS', data: null }, {
+        headers: {
+          "Allow": "POST, OPTIONS",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "POST, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type, Authorization, Cookie",
+        }
+      });
+    }
+    if (request.method != 'POST') {
+      return Response.json({ code: 405, message: 'Method Not Allowed', data: null }, { status: 405 });
+    }
+    return bingapiImage(request, Object.assign({ cookie: cookie }, CUSTOM_OPTIONS));
   }
   return Response.json({ code: 404, message: 'API No Found', data: null }, { status: 404 });
 }
