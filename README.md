@@ -52,7 +52,7 @@
 
 > #### Cloudflare Worker 部署
 >
-> [![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://github.com/Harry-zklcdc/go-proxy-bingai/wiki/Cloudflare-Worker-%E9%83%A8%E7%BD%B2)
+> [![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/Harry-zklcdc/go-proxy-bingai-cfwk)
 
 ### 人机验证服务器
 

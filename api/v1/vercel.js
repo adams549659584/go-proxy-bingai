@@ -1,4 +1,4 @@
-import { bingapiChat, bingapiModel, bingapiModels } from '../../cloudflare/bingapi.js'
+import { bingapiChat, bingapiModel, bingapiModels } from '../../cloudflare/src/bingapi.js'
 
 export const config = {
   runtime: 'edge',
