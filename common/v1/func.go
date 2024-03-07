@@ -15,6 +15,11 @@ import (
 
 func init() {
 	VERCEL_URL := os.Getenv("VERCEL_URL")
+	if !blankApikey && apikey == "" {
+		common.Logger.Info("APIKEY is empty, generate a new one.")
+		apikey = "sk-" + hex.NewHex(32)
+		common.Logger.Info("APIKEY: %s", apikey)
+	}
 	if VERCEL_URL == "" {
 		go func() {
 			time.Sleep(200 * time.Millisecond)

@@ -10,6 +10,7 @@ const CUSTOM_OPTIONS = {
 
     BYPASS_SERVER: '',
     APIKEY: '',
+    Go_Proxy_BingAI_BLANK_API_KEY: false,
 
     NIGHTLY: false,
 }
@@ -377,6 +378,9 @@ const login = async (url, headers) => {
  * @returns
  */
 const bingapi = async (request, cookie) => {
+  if (!CUSTOM_OPTIONS.Go_Proxy_BingAI_BLANK_API_KEY && CUSTOM_OPTIONS.APIKEY == '') {
+    CUSTOM_OPTIONS.APIKEY = 'sk-' + randomString(32);
+  }
   const currentUrl = new URL(request.url);
   if ((currentUrl.pathname.startsWith('/v1/models/')) || (currentUrl.pathname.startsWith('/api/v1/models/'))) {
     return bingapiModel(request, Object.assign({cookie: cookie}, CUSTOM_OPTIONS));

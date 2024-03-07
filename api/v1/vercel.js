@@ -10,6 +10,11 @@ export default function ChatHandler(request) {
     cookie: request.headers.get('Cookie') || '',
     BYPASS_SERVER: 'https://bypass.zklcdc.xyz',
     APIKEY: process.env.APIKEY,
+    Go_Proxy_BingAI_BLANK_API_KEY: process.env.Go_Proxy_BingAI_BLANK_API_KEY,
+  }
+
+  if (!CUSTOM_OPTIONS.Go_Proxy_BingAI_BLANK_API_KEY && CUSTOM_OPTIONS.APIKEY == '') {
+    CUSTOM_OPTIONS.APIKEY = 'sk-' + crypto.randomUUID().replace(/-/g, '');
   }
 
   const currentUrl = new URL(request.url);
