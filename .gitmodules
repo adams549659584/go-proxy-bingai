@@ -1,3 +1,0 @@
-[submodule "cloudflare"]
-	path = cloudflare
-	url = https://github.com/Harry-zklcdc/go-proxy-bingai-cfwk.git

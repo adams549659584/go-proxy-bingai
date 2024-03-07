@@ -1,0 +1,7 @@
+name = "go-proxy-bingai"
+main = "cloudflare/worker.js"
+compatibility_date = "2023-07-31"
+workers_dev = true
+rules = [
+  { type = "ESModule", globs = ["**/*.js"], fallthrough = true }
+]
