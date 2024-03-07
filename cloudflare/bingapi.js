@@ -129,6 +129,7 @@ export async function bingapiChat(request, options) {
   }
 
   const [prompt, msg, image] = MsgComposer(resq.messages);
+  let imageUrl;
 
   if (image != '' && !resq.model.endsWith('-vision')) {
     return helperResponseJson({ error: 'Image is not supported in this model' }, 400);
@@ -169,6 +170,30 @@ export async function bingapiChat(request, options) {
     clientId: resBody.clientId,
     conversationSignature: res.headers.get('X-Sydney-Conversationsignature'),
     encryptedConversationSignature: res.headers.get('X-Sydney-Encryptedconversationsignature')
+  }
+
+  if (image.startsWith('http')) {
+    imageUrl = image;
+  } else if (image.indexOf('base64,') != -1) {
+    imageUrl = image.split(',')[1];
+    const formData = new FormData()
+    formData.append('knowledgeRequest', '{"imageInfo":{},"knowledgeRequest":{"invokedSkills":["ImageById"],"subscriptionId":"Bing.Chat.Multimodal","invokedSkillsRequestData":{"enableFaceBlur":true},"convoData":{"convoid":"' + chatHub.conversationId + '","convotone":"' + resq.model.replace('-g4t', '').replace('-offline', '').replace('-18k', '').replace('-vision', '') + '"}}}');
+    formData.append('imageBase64', imageUrl.replace(' ', '+'));
+    const headers = getNewHeaders(cctCookie)
+    headers.set('Content-Type', 'multipart/form-data');
+    newReq = new Request(BING_ORIGIN + '/images/kblob', {
+      method: 'POST',
+      headers: headers,
+      body: formData,
+    });
+    res = await fetch(newReq);
+    if (!res.ok) {
+      return helperResponseJson({ error: 'Upload Image Error' }, 500);
+    }
+    resBody = await res.json();
+    imageUrl = BING_ORIGIN + '/images/blob?bcid=' + resBody.blobId;
+  } else {
+    imageUrl = '';
   }
 
   const systemContext = []
@@ -358,8 +383,8 @@ export async function bingapiChat(request, options) {
     type: 4,
   };
   if (image != '') {
-    SydneyData.arguments[0].message.imageUrl = image;
-    SydneyData.arguments[0].message.originalImageUrl = image;
+    SydneyData.arguments[0].message.imageUrl = imageUrl;
+    SydneyData.arguments[0].message.originalImageUrl = imageUrl;
   }
 
   let text = '';
@@ -422,7 +447,7 @@ export async function bingapiChat(request, options) {
           if (data.arguments[0].messages != undefined && data.arguments[0].messages != null) {
             if (data.arguments[0].messages.length > 0) {
               if (data.arguments[0].messages[0].messageType == 'InternalSearchResult') { return false; }
-              const tmp = data.arguments[0].messages[0].text == undefined ? '' : data.arguments[0].messages[0].text;
+              const tmp = data.arguments[0].messages[0].text || '';
               if (tmp.length > text.length) {
                 respData.choices[0] = Object.assign(choicesStruct, { delta: { content: tmp.replace(text, '') } })
                 await writer.write(encoder.encode('data: ' + JSON.stringify(respData) + '\n\n'));
@@ -480,7 +505,7 @@ export async function bingapiChat(request, options) {
         } else if (data.type == 1) {
           if (data.arguments[0].messages != undefined && data.arguments[0].messages != null) {
             if (data.arguments[0].messages.length > 0) {
-              text = data.arguments[0].messages[0].text == undefined ? '' : data.arguments[0].messages[0].text;
+              text = data.arguments[0].messages[0].text || '';
             }
           }
         } else if (data.type == 2) {
@@ -838,12 +863,4 @@ function MsgComposer(msgs) {
   }
   msg += "\n\n`you`:";
   return [prompt, msg, image];
-}
-
-async function blockFunction(duration) {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve('Function blocked for ' + duration + ' milliseconds');
-    }, duration);
-  });
 }
