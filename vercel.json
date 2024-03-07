@@ -54,5 +54,8 @@
       "src": "/.*",
       "dest": "/api/index.go"
     }
-  ]
+  ],
+  "github": {
+    "silent": true
+  }
 }
