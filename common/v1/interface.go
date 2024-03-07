@@ -7,7 +7,7 @@ import (
 )
 
 var apikey = os.Getenv("APIKEY")
-var blankApikey = os.Getenv("Go_Proxy_BingAI_BLANK_API_KEY") == ""
+var blankApikey = os.Getenv("Go_Proxy_BingAI_BLANK_API_KEY") != ""
 
 type chatRequest struct {
 	Messages    []binglib.Message `json:"messages"`
