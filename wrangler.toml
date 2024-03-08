@@ -5,3 +5,6 @@ workers_dev = true
 rules = [
   { type = "ESModule", globs = ["**/*.js"], fallthrough = true }
 ]
+
+[placement]
+mode = "smart"
