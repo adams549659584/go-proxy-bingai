@@ -66,7 +66,7 @@ const choicesStruct = {
  * BingAPI Chat
  * @param {Request} request 
  * @param {Object} options
- * @returns {Response}
+ * @returns {Promise<Response>}
  */
 export async function bingapiChat(request, options) {
   const resq = await toJSON(request.body);
@@ -526,7 +526,7 @@ const imageStruct = {
  * BingAPI Image
  * @param {Request} request 
  * @param {Object} options
- * @returns {Response}
+ * @returns {Promise<Response>}
  */
 export async function bingapiImage(request, options) {
   const resq = await toJSON(request.body);
@@ -675,8 +675,8 @@ function helperResponseJson(response, statusCode = 200) {
 
 /**
  * Get CCT Cookie
- * @param {string} cookie 
- * @returns {string}
+ * @param {Object} options 
+ * @returns {Promise<string>}
  */
 async function getCctCookie(options) {
   const IG = crypto.randomUUID().replace(/-/g, '').toUpperCase();
@@ -694,7 +694,7 @@ async function getCctCookie(options) {
   });
   let res = await fetch(newReq);
   if (!res.ok) {
-    return cookie;
+    return options.cookie || '';
   }
   let resBody = await res.json();
   return resBody.result.cookies;
