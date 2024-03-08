@@ -7,11 +7,44 @@ export const config = {
 
 export default function ChatHandler(request) {
   const CUSTOM_OPTIONS = {
-    cookie: request.headers.get('Cookie') || '',
     BYPASS_SERVER: 'https://bypass.zklcdc.xyz',
     APIKEY: process.env.APIKEY,
     Go_Proxy_BingAI_BLANK_API_KEY: process.env.Go_Proxy_BingAI_BLANK_API_KEY,
+
+    KievRPSSecAuth: process.env.USER_KievRPSSecAuth || '',
+    _RwBf: process.env.USER_RwBf || '',
+    MUID: process.env.USER_MUID || '',
+    _U: process.env.Go_Proxy_BingAI_USER_TOKEN || '',
   }
+
+  const cookie = request.headers.get('Cookie') || '';
+  let cookies = cookie;
+  if (!cookie.includes('KievRPSSecAuth=')) {
+    if (CUSTOM_OPTIONS.KievRPSSecAuth.length !== 0) {
+      cookies += '; KievRPSSecAuth=' + CUSTOM_OPTIONS.KievRPSSecAuth;
+    } else {
+      cookies += '; KievRPSSecAuth=' + randomString(512);
+    }
+  }
+  if (!cookie.includes('_RwBf=')) {
+    if (CUSTOM_OPTIONS._RwBf.length !== 0) {
+      cookies += '; _RwBf=' + CUSTOM_OPTIONS._RwBf
+    }
+  }
+  if (!cookie.includes('MUID=')) {
+    if (CUSTOM_OPTIONS.MUID.length !== 0) {
+      cookies += '; MUID=' + CUSTOM_OPTIONS.MUID
+    }
+  }
+  if (!cookie.includes('_U=')) {
+    if (CUSTOM_OPTIONS._U.length !== 0) {
+      const _Us = CUSTOM_OPTIONS._U.split(',');
+      console.log(_Us[getRandomInt(0, _Us.length)])
+      cookies += '; _U=' + _Us[getRandomInt(0, _Us.length)];
+    }
+  }
+
+  CUSTOM_OPTIONS.cookie = cookies;
 
   if (!CUSTOM_OPTIONS.Go_Proxy_BingAI_BLANK_API_KEY && CUSTOM_OPTIONS.APIKEY == '') {
     CUSTOM_OPTIONS.APIKEY = 'sk-' + crypto.randomUUID().replace(/-/g, '');

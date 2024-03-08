@@ -518,7 +518,9 @@ export default {
     }
     if (!cookie.includes('_U=')) {
       if (CUSTOM_OPTIONS._U.length !== 0) {
-        cookies += '; _U=' + CUSTOM_OPTIONS._U;
+        const _Us = CUSTOM_OPTIONS._U.split(',');
+        console.log(_Us[getRandomInt(0, _Us.length)])
+        cookies += '; _U=' + _Us[getRandomInt(0, _Us.length)];
       }
     }
 
