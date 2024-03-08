@@ -435,6 +435,10 @@ export async function bingapiChat(request, options) {
                 await writer.write(encoder.encode('data: ' + JSON.stringify(respData) + '\n\n'));
                 text = tmp;
               }
+              if (data.arguments[0].messages[0].messageType == 'InternalSearchQuery' || data.arguments[0].messages[0].messageType == 'InternalLoaderMessage') {
+                respData.choices[0] = Object.assign(choicesStruct, { delta: { content: '\n\n' } })
+                await writer.write(encoder.encode('data: ' + JSON.stringify(respData) + '\n\n'));
+              }
             }
           }
         } else if (data.type == 2) {
