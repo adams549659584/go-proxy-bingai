@@ -1,7 +1,7 @@
 name: Build Go-Proxy-BingAI Nightly
 on:
   schedule:
-    - cron: '0 18 * * *'
+    - cron: '0 16 * * *'
   workflow_dispatch:
 
 jobs:

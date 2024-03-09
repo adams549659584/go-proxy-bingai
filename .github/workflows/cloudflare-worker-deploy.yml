@@ -1,6 +1,8 @@
 name: Cloudfalre Worker Deploy
 on:
   push:
+    branches:
+      - master
   repository_dispatch:
   workflow_dispatch:
 
