@@ -5,6 +5,27 @@ export const config = {
   supportsResponseStreaming: true,
 };
 
+/**
+ * 随机整数 [min,max)
+ * @param {number} min
+ * @param {number} max
+ * @returns
+ */
+const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min)) + min;
+
+/**
+ * 生成随机字符串
+ * @param {number} e
+ * @returns
+ */
+const randomString = (e) => {
+  e = e || 32;
+  const t = "ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678_-+";
+  var n = "";
+  for (let i = 0; i < e; i++) n += t.charAt(getRandomInt(0, t.length));
+  return n;
+}
+
 export default function ChatHandler(request) {
   const CUSTOM_OPTIONS = {
     BYPASS_SERVER: 'https://bypass.zklcdc.xyz',
