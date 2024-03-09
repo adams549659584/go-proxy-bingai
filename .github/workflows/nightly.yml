@@ -11,6 +11,8 @@ jobs:
     if: github.repository == 'Harry-zklcdc/go-proxy-bingai'
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: dev
 
       - name: Set up Go
         uses: actions/setup-go@v4
@@ -102,6 +104,8 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: dev
 
       - name: Setup timezone
         uses: zcong1993/setup-timezone@master
@@ -154,6 +158,8 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: dev
 
       - name: Setup timezone
         uses: zcong1993/setup-timezone@master
