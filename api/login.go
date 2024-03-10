@@ -3,7 +3,6 @@ package api
 import (
 	"adams549659584/go-proxy-bingai/common/helper"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 	"strings"
@@ -86,7 +85,6 @@ func loginPostHandler(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 		}
-		fmt.Println(err.Error())
 		respdata.Cookies = cookies
 		respdata.Code = strings.Split(err.Error(), "code: ")[1]
 		respdata.Context = auth
