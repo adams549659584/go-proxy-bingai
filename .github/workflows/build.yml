@@ -38,6 +38,7 @@ jobs:
           git add web/*
           git commit -m "[Upgrade] 🚀 Upload latest webFile"
           git push origin HEAD:master
+          git push origin HEAD:dev
 
       - name: Build binary
         run: |
