@@ -15,6 +15,10 @@
       "dest": "/api/sys-config.go"
     },
     {
+      "src": "/api/ms/login",
+      "dest": "/api/login.go"
+    },
+    {
       "src": "/pass",
       "dest": "/api/bypass.go"
     },

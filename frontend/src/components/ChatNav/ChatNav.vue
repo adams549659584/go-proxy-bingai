@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { h, ref, onMounted, inject, defineComponent, render } from 'vue';
-import { NDropdown, type DropdownOption, NModal, NInput, NInputNumber, NButton, NGrid, NGridItem, useMessage, NImage, NForm, NFormItem, NSwitch, NTag, NSelect, NSpin, NP, NA, NConfigProvider, lightTheme, darkTheme, useOsTheme, type GlobalTheme } from 'naive-ui';
+import { NDropdown, type DropdownOption, NModal, NInput, NInputNumber, NButton, NGrid, NGridItem, useMessage, NImage, NForm, NFormItem, NSwitch, NTag, NSelect, NSpin, NP, NA, NConfigProvider, NSpace, NRadio, NRadioGroup, lightTheme, darkTheme, useOsTheme, type GlobalTheme } from 'naive-ui';
 import conversationCssText from '@/assets/css/conversation.css?raw';
 import settingSvgUrl from '@/assets/img/setting.svg?url';
 import { usePromptStore } from '@/stores/modules/prompt';
@@ -54,6 +54,42 @@ const sydneyPromptSetting = ref('');
 const passServerSetting = ref('');
 const getCookieTip = ref('获取 Cookie 中, 请稍后...');
 const bingUrl = base58Decode('7RYHpA38gs3NAby2mkvoRMwjncBpS');
+
+const oneKeyLogin = ref('false');
+const loginTypeOptions = ref([
+  {
+    label: '账号登录',
+    value: 'false',
+  },
+  {
+    label: '一键登录',
+    value: 'true',
+  }
+]);
+const msLoginAccount = ref('');
+const msLoginPassword = ref('');
+const msLoginType = ref('passwd');
+const msLoginCode = ref('');
+const msLogining = ref(false);
+const msContinueing = ref(false);
+const msLoginTypeOptions = ref([
+{
+    label: '密码登录',
+    value: 'passwd',
+  },
+  {
+    label: '邮箱验证码登录',
+    value: 'email',
+  },
+  {
+    label: '2FA登录',
+    value: 'device',
+  }
+])
+const msLoginContext = ref({
+  cookies: '',
+  context: {}
+});
 
 const GetLastVersion = async () => {
   const res = await fetch('https://api.github.com/repos/Harry-zklcdc/go-proxy-bingai/releases/latest');
@@ -439,6 +475,186 @@ const loginHandel = async ()=> {
   }, '*');
 }
 
+const msLoginHandel = async () => {
+  msLogining.value = true;
+  switch (msLoginType.value) {
+    case 'passwd':
+      {
+        if (!msLoginAccount.value) {
+          message.warning('请先填入账号');
+          msLogining.value = false;
+          break;
+        } else if (!msLoginPassword.value) {
+          message.warning('请先填入密码');
+          msLogining.value = false;
+          break;
+        }
+        const res = await fetch('/api/ms/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            account: msLoginAccount.value,
+            password: msLoginPassword.value,
+            type: msLoginType.value,
+          })
+        })
+        if (!res.ok) {
+          message.error('登录失败, 请重试');
+          msLogining.value = false;
+          break;
+        }
+        message.success('登录成功');
+        isShowLoginModal.value = false;
+        const resData = await res.json();
+        userStore.saveCookies(resData.data.cookies);
+        cookiesStr.value = resData.data.cookies;
+        fullCookiesEnable.value = true;
+        window.location.href = '/';
+      }
+      break;
+    case 'email':
+      {
+        if (!msLoginAccount.value) {
+          message.warning('请先填入账号');
+          msLogining.value = false;
+          break;
+        }
+        const res = await fetch('/api/ms/login', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            account: msLoginAccount.value,
+            type: msLoginType.value,
+            verify_code: msLoginCode.value,
+            cookies: msLoginContext.value.cookies,
+            context: msLoginContext.value.context,
+          }),
+        })
+        if (!res.ok) {
+          message.error('登录失败, 请重试');
+          msLogining.value = false;
+          break;
+        }
+        message.success('登录成功');
+        isShowLoginModal.value = false;
+        const resData = await res.json();
+        userStore.saveCookies(resData.data.cookies);
+        cookiesStr.value = resData.data.cookies;
+        fullCookiesEnable.value = true;
+        window.location.href = '/';
+      }
+      break;
+    case 'device':
+      {
+        if (!msLoginAccount.value) {
+          message.warning('请先填入账号');
+          msLogining.value = true;
+          break;
+        }
+        const res = await fetch('/api/ms/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            account: msLoginAccount.value,
+            type: msLoginType.value,
+          })
+        })
+        const resData = await res.json();
+        if (res.status != 201) {
+          message.error('获取2FA失败, 请重试');
+          msLogining.value = false;
+          break;
+        }
+        message.success('获取2FA成功, 请在手机上查看并输入验证码');
+        msLoginCode.value = resData.data.code;
+        msLoginContext.value.cookies = resData.data.cookies;
+        msLoginContext.value.context = resData.data.context;
+        await msLoginContinueHandel();
+      }
+      break;
+    default:
+      msLogining.value = false;
+      break;
+  }
+}
+
+const msLoginContinueHandel = async () => {
+  msContinueing.value = true;
+  switch (msLoginType.value) {
+    case 'email':
+      {
+        if (!msLoginAccount.value) {
+          message.warning('请先填入账号');
+          msLogining.value = true;
+          break;
+        }
+        const res = await fetch('/api/ms/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            account: msLoginAccount.value,
+            type: msLoginType.value,
+          })
+        })
+        if (res.status != 201) {
+          message.error('获取邮箱验证码失败, 请重试');
+          msContinueing.value = false;
+          break;
+        }
+        message.success('获取邮箱验证码成功, 请检查邮箱');
+        msContinueing.value = false;
+        const resData = await res.json();
+        msLoginContext.value.cookies = resData.data.cookies;
+        msLoginContext.value.context = resData.data.context;
+      }
+      break;
+    case 'device':
+      {
+        if (!msLoginAccount.value) {
+          message.warning('请先填入账号');
+          msLogining.value = true;
+          break;
+        }
+        const res = await fetch('/api/ms/login', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            account: msLoginAccount.value,
+            type: msLoginType.value,
+            cookies: msLoginContext.value.cookies,
+            context: msLoginContext.value.context,
+          }),
+        })
+        if (!res.ok) {
+          message.error('获取2FA失败, 请重试');
+          msLogining.value = false;
+          break;
+        }
+        message.success('登录成功');
+        isShowLoginModal.value = false;
+        const resData = await res.json();
+        userStore.saveCookies(resData.data.cookies);
+        cookiesStr.value = resData.data.cookies;
+        fullCookiesEnable.value = true;
+        window.location.href = '/';
+      }
+      break;
+    default:
+      msContinueing.value = false;
+      break;
+  }
+}
+
 const authorEleRender = () => {
   const data = JSON.parse(decodeURI(base58Decode(_G.TP)));
   let r = []
@@ -504,21 +720,46 @@ const autoPassCFChallenge = async () => {
     <template #header>
       <div class="text-3xl py-2">账号登录</div>
     </template>
-    <div v-if="!isShowIframe" style="margin-top:12px; margin-bottom:24px">
-      <NP>
-        使用此功能前, 请先安装<NA href="https://www.tampermonkey.net/">油猴插件</NA>, 并安装<NA href="https://greasyfork.org/zh-CN/scripts/487409-go-proxy-bingai">此脚本</NA>
-        <br>
-        请点击下面「打开登录页面」按钮, 在新打开登录页面中登录账号, 登录成功后点击确定
-      </NP>
+    <NSelect v-model:value="oneKeyLogin" :options="loginTypeOptions" size="large" placeholder="选择登录方式" />
+    <div v-if="oneKeyLogin == 'true'">
+      <div v-if="!isShowIframe" style="margin-top:12px; margin-bottom:24px">
+        <NP>
+          使用此功能前, 请先安装<NA href="https://www.tampermonkey.net/">油猴插件</NA>, 并安装<NA href="https://greasyfork.org/zh-CN/scripts/487409-go-proxy-bingai">此脚本</NA>
+          <br>
+          请点击下面「打开登录页面」按钮, 在新打开登录页面中登录账号, 登录成功后点击确定
+        </NP>
+      </div>
+      <div v-else>
+        <NSpin size="large" :description="getCookieTip" style="margin: 0 auto; width: 100%" />
+        <iframe id="login" :src="bingUrl" style="border: none; width: 0; height: 0" />
+      </div>
     </div>
     <div v-else>
-      <NSpin size="large" :description="getCookieTip" style="margin: 0 auto; width: 100%" />
-      <iframe id="login" :src="bingUrl" style="border: none; width: 0; height: 0" />
+      <NForm ref="formRef" label-placement="left" label-width="auto" require-mark-placement="right-hanging" style="margin-top: 16px;">
+        <NFormItem path="cookiesEnable" label="登录方式">
+          <NRadioGroup v-model:value="msLoginType">
+            <NSpace vertical>
+              <NRadio v-for="item in msLoginTypeOptions" size="large" :key="item.value" :value="item.value">{{ item.label }}</NRadio>
+            </NSpace>
+          </NRadioGroup>
+        </NFormItem>
+        <NFormItem path="account" label="账号">
+          <NInput size="large" v-model:value="msLoginAccount" type="text" placeholder="账号" />
+        </NFormItem>
+        <NFormItem v-show="msLoginType === 'passwd'" path="password" label=" 密码">
+          <NInput size="large" v-model:value="msLoginPassword" type="password" show-password-on="click" placeholder="密码" />
+        </NFormItem>
+        <NFormItem v-show="msLoginType !== 'passwd'" path="verify_code" label="验证码">
+          <NInput size="large" v-model:value="msLoginCode" type="text" placeholder="验证码" :disabled="msLoginType === 'device'" />
+        </NFormItem>
+      </NForm>
     </div>
     <template #action>
-      <NButton size="large" type="info" @click="newWindow">打开登录页面</NButton>
-      <NButton size="large" @click="isShowLoginModal = false">取消</NButton>
-      <NButton ghost size="large" type="info" @click="loginHandel">确定</NButton>
+      <NButton v-show="oneKeyLogin == 'true'" size="large" type="info" @click="newWindow">打开登录页面</NButton>
+      <NButton v-show="oneKeyLogin == 'true'" size="large" @click="isShowLoginModal = false">取消</NButton>
+      <NButton v-show="oneKeyLogin == 'true'" ghost size="large" type="info" @click="loginHandel">确定</NButton>
+      <NButton v-show="oneKeyLogin != 'true' && msLoginType === 'email'" size="large" type="info" :loading="msContinueing" @click="msLoginContinueHandel">获取邮箱验证码</NButton>
+      <NButton v-show="oneKeyLogin != 'true'" ghost size="large" type="info" :loading="msLogining" @click="msLoginHandel">确定</NButton>
     </template>
   </NModal>
   <NModal v-model:show="isShowSettingModal" preset="dialog" :show-icon="false">

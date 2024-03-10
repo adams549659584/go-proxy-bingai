@@ -21,6 +21,7 @@ func main() {
 	http.HandleFunc("/api/v1/models", helper.Middleware(v1.ModelsHandler))
 
 	http.HandleFunc("/sysconf", helper.Middleware(api.SysConf))
+	http.HandleFunc("/api/ms/login", helper.Middleware(api.LoginHandler))
 
 	http.HandleFunc("/pass", helper.Middleware(api.BypassHandler))
 	http.HandleFunc("/turing/captcha/challenge", helper.Middleware(api.ChallengeHandler))

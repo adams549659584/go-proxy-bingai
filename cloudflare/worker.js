@@ -455,26 +455,28 @@ export default {
       return Response.json({ code: 200, message: 'success', data: { isSysCK: false, isAuth: true, info: CUSTOM_OPTIONS.INFO } })
     }
     let targetUrl;
-    if (currentUrl.pathname.includes('/sydney')) {
+    if (currentUrl.pathname.startsWith('/sydney')) {
       targetUrl = new URL(SYDNEY_ORIGIN + currentUrl.pathname + currentUrl.search);
-    } else if (currentUrl.pathname.includes('/edgesvc')) {
+    } else if (currentUrl.pathname.startsWith('/edgesvc')) {
       targetUrl = new URL(EDGE_ORIGIN + currentUrl.pathname + currentUrl.search);
-    } else if (currentUrl.pathname.includes('/designer/')) {
+    } else if (currentUrl.pathname.startsWith('/designer/')) {
       targetUrl = new URL(DESIGNER_ORIGIN + currentUrl.pathname.replaceAll('/designer/', '/') + currentUrl.search);
-    } else if (currentUrl.pathname.includes('/designer-cdn/')) {
+    } else if (currentUrl.pathname.startsWith('/designer-cdn/')) {
       targetUrl = new URL(DESIGNER_CDN_ORIGIN + currentUrl.pathname.replaceAll('/designer-cdn/', '/') + currentUrl.search);
-    } else if (currentUrl.pathname.includes('/designer-app/')) {
+    } else if (currentUrl.pathname.startsWith('/designer-app/')) {
       targetUrl = new URL(DESIGNER_APP_ORIGIN + currentUrl.pathname.replaceAll('/designer-app/', '/') + currentUrl.search);
-    } else if (currentUrl.pathname.includes('/designer-app-edog/')) {
+    } else if (currentUrl.pathname.startsWith('/designer-app-edog/')) {
       targetUrl = new URL(DESIGNER_APP_EDOG_ORIGIN + currentUrl.pathname.replaceAll('/designer-app-edog/', '/') + currentUrl.search);
-    } else if (currentUrl.pathname.includes('/designer-document/')) {
+    } else if (currentUrl.pathname.startsWith('/designer-document/')) {
       targetUrl = new URL(DESIGNER_DOCUMENT_ORIGIN + currentUrl.pathname.replaceAll('/designer-document/', '/') + currentUrl.search);
-    } else if (currentUrl.pathname.includes('/designer-userassets/')) {
+    } else if (currentUrl.pathname.startsWith('/designer-userassets/')) {
       targetUrl = new URL(DESIGNER_USERASSETS_ORIGIN + currentUrl.pathname.replaceAll('/designer-userassets/', '/') + currentUrl.search);
-    } else if (currentUrl.pathname.includes('/designer-mediasuggestion/')) {
+    } else if (currentUrl.pathname.startsWith('/designer-mediasuggestion/')) {
       targetUrl = new URL(DESIGNER_MEDIASUGGESTION_ORIGIN + currentUrl.pathname.replaceAll('/designer-mediasuggestion/', '/') + currentUrl.search);
-    } else if (currentUrl.pathname.includes('/designer-rtc/')) {
+    } else if (currentUrl.pathname.startsWith('/designer-rtc/')) {
       targetUrl = new URL(DESIGNER_RTC_ORIGIN + currentUrl.pathname.replaceAll('/designer-rtc/', '/') + currentUrl.search);
+    } else if (currentUrl.pathname.startsWith('/api/ms/login')) {
+      targetUrl = new URL(CUSTOM_OPTIONS.BYPASS_SERVER + currentUrl.pathname + currentUrl.search);
     } else {
       targetUrl = new URL(BING_ORIGIN + currentUrl.pathname + currentUrl.search);
     }
