@@ -6,7 +6,7 @@ toolchain go1.21.6
 
 require (
 	github.com/Harry-zklcdc/bing-lib v1.6.5
-	github.com/Harry-zklcdc/ms-auth v1.1.4
+	github.com/Harry-zklcdc/ms-auth v1.1.5
 	github.com/andybalholm/brotli v1.1.0
 	github.com/refraction-networking/utls v1.6.2
 )
