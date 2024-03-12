@@ -2,13 +2,15 @@ version: '3'
 
 services:
   go-proxy-bingai:
-    image: zklcdc/go-proxy-bingai
-    container_name: go-proxy-bingai
+    image: zklcdc/go-proxy-bingai:latest-with-pass
+    container_name: go-proxy-bingai-with-pass
     restart: always
+    depends_on:
+      - go-bingai-pass
     ports:
       - 8080:8080
+      - 45678:45678
     environment:
-      - BYPASS_SERVER=https://bypass.zklcdc.xyz
       # - BING_BASE_URL=https://www.bing.com
       # - SYDNEY_BASE_URL=https://sydney.bing.com
       # - HTTP_PROXY=http://172.17.0.1:18080
@@ -18,4 +20,4 @@ services:
       # - USER_KievRPSSecAuth=xxx
       # - USER_RwBf=xxx
       # - USER_MUID=xxx
-      # - APIKEY=sk-xxx
+      - APIKEY=sk-xxx
