@@ -3,6 +3,7 @@ package v1
 import (
 	"adams549659584/go-proxy-bingai/common"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 
@@ -13,6 +14,9 @@ import (
 )
 
 func init() {
+	apikey = os.Getenv("APIKEY")
+	blankApikey = os.Getenv("Go_Proxy_BingAI_BLANK_API_KEY") != ""
+
 	if !blankApikey && apikey == "" {
 		common.Logger.Info("APIKEY is empty, generate a new one.")
 		apikey = "sk-" + hex.NewHex(32)

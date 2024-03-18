@@ -1,13 +1,11 @@
 package v1
 
 import (
-	"os"
-
 	binglib "github.com/Harry-zklcdc/bing-lib"
 )
 
-var apikey = os.Getenv("APIKEY")
-var blankApikey = os.Getenv("Go_Proxy_BingAI_BLANK_API_KEY") != ""
+var apikey string
+var blankApikey bool
 
 type chatRequest struct {
 	Messages    []binglib.Message `json:"messages"`
