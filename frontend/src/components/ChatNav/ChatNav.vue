@@ -231,7 +231,6 @@ const handleSelect = async (key: string) => {
       {
         CIB.showNotebook();
         const galileoIndex = CIB.config.sydney.request.optionsSets.indexOf('galileo');
-        console.log(galileoIndex)
         if (galileoIndex > -1) {
           CIB.config.sydney.request.optionsSets[galileoIndex] = 'clgalileo';
         }
@@ -242,8 +241,10 @@ const handleSelect = async (key: string) => {
         };
         await sleep(25);
         const serpEle = document.querySelector('cib-serp');
-        const disclaimer = serpEle?.shadowRoot?.querySelector('cib-ai-disclaimer') as HTMLElement;
-        disclaimer?.shadowRoot?.querySelector('.disclaimer')?.remove();
+        const notebook = serpEle?.shadowRoot?.querySelector('cib-notebook');
+        const disclaimer = notebook?.shadowRoot?.querySelector('cib-ai-disclaimer');
+        disclaimer?.shadowRoot?.querySelector('div')?.remove();
+        disclaimer?.shadowRoot?.querySelector('div')?.remove();
       }
       break;
     case navType.setting:
@@ -395,14 +396,14 @@ const saveAdvancedSetting = () => {
   const threadsContainer = sidepanel?.querySelector('.threads-container') as HTMLElement;
   if (!isMobile()) {
     if (history.value && userStore.getUserToken() && !enterpriseEnable.value) {
-      if (tmpuiVersion === 'v2') {
-        threadsHeader.style.display = 'flex'
-        threadsContainer.style.display = 'block'
-      } else {
+      if (tmpuiVersion === 'v1') {
         CIB.vm.sidePanel.panels = [
           { type: 'threads', label: '最近的活动' },
           { type: 'plugins', label: '插件' }
         ]
+      } else {
+        threadsHeader.style.display = 'flex'
+        threadsContainer.style.display = 'block'
       }
     } else {
       if (tmpuiVersion === 'v2') {

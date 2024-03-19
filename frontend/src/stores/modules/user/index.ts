@@ -71,16 +71,16 @@ export const useUserStore = defineStore(
         if (!historyEnable.value || !token || enterpriseEnable.value) {
           const serpEle = document.querySelector('cib-serp');
           const sidepanel = serpEle?.shadowRoot?.querySelector('cib-conversation')?.querySelector('cib-side-panel')?.shadowRoot?.querySelector('.main')
-          if (uiVersion.value === 'v2') {
-            const threadsHeader = sidepanel?.querySelector('.threads-header') as HTMLElement;
-            const threadsContainer = sidepanel?.querySelector('.threads-container') as HTMLElement;
-            threadsHeader.style.display = 'none'
-            threadsContainer.style.display = 'none'
-          } else {
+          if (uiVersion.value === 'v1') {
             CIB.vm.sidePanel.panels = [
               { type: 'plugins', label: '插件' }
             ]
             CIB.vm.sidePanel.selectedPanel = 'plugins'
+          } else {
+            const threadsHeader = sidepanel?.querySelector('.threads-header') as HTMLElement;
+            const threadsContainer = sidepanel?.querySelector('.threads-container') as HTMLElement;
+            threadsHeader.style.display = 'none'
+            threadsContainer.style.display = 'none'
           }
         }
       }
