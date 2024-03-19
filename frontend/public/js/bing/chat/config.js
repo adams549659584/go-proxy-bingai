@@ -1639,3 +1639,5 @@ if (UserStoreGet('enterpriseEnable')) {
   _w['_sydConvTranslation']['welcomeSubtitleText'] = '由 AI 支持的适用于 Web 的 Copilot'
   _w['_sydConvTranslation']['inputRaiLabel'] = '你的个人和公司数据在此聊天中受到保护'
 }
+
+_G.Region = UserStoreGet('langRegion') || 'CN'

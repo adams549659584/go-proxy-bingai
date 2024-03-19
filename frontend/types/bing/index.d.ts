@@ -10,6 +10,7 @@ declare const ChatHomeScreen: {
 };
 
 declare const _G: {
+  Region: string;
   IG: string;
   S: string;
   SP: Array<number>;

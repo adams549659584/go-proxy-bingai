@@ -333,7 +333,7 @@ export async function bingapiChat(request, options) {
           userIpAddress: getRandomIP(),
           locale: 'zh-CN',
           market: 'en-US',
-          region: 'US',
+          region: 'CN',
           location: 'lat:47.639557;long:-122.128159;re=1000m;',
           locationHints: [
             {
@@ -341,7 +341,9 @@ export async function bingapiChat(request, options) {
               state: 'California',
               city: 'Los Angeles',
               timezoneoffset: 8,
+              dma: 819,
               countryConfidence: 8,
+              cityConfidence: 5,
               Center: {
                 Latitude: 78.4156,
                 Longitude: -101.4458,

@@ -33,13 +33,14 @@ const { isShowChatServiceSelectModal } = storeToRefs(chatStore);
 const userStore = useUserStore();
 const localVersion = __APP_INFO__.version;
 const lastVersion = ref('加载中...');
-const { historyEnable, themeMode, uiVersion, fullCookiesEnable, cookiesStr, enterpriseEnable, customChatNum, gpt4tEnable, sydneyEnable, sydneyPrompt, passServer } = storeToRefs(userStore);
+const { historyEnable, themeMode, uiVersion, langRegion, fullCookiesEnable, cookiesStr, enterpriseEnable, customChatNum, gpt4tEnable, sydneyEnable, sydneyPrompt, passServer } = storeToRefs(userStore);
 
 let cookiesEnable = ref(false);
 let cookies = ref('');
 let history = ref(true);
 let themeModeSetting = ref('auto');
 let uiVersionSetting = ref('v3');
+let langRegionSetting = ref('CN');
 let theme = ref(inject('theme'));
 
 let settingIconStyle = ref({
@@ -160,6 +161,17 @@ const uiVersionOptions = ref([
   {
     label: 'V3',
     value: 'v3',
+  }
+]);
+
+const langRegionOptions = ref([
+  {
+    label: '中文优先',
+    value: 'CN',
+  },
+  {
+    label: '英文优先',
+    value: 'US',
   }
 ]);
 
@@ -325,6 +337,7 @@ const settingMenu = (key: string) => {
         history.value = historyEnable.value;
         themeModeSetting.value = themeMode.value;
         uiVersionSetting.value = uiVersion.value;
+        langRegionSetting.value = langRegion.value;
         enterpriseSetting.value = enterpriseEnable.value;
         customChatNumSetting.value = customChatNum.value;
         gpt4tSetting.value = gpt4tEnable.value;
@@ -388,6 +401,10 @@ const saveAdvancedSetting = () => {
   uiVersion.value = uiVersionSetting.value;
   if (passServerSetting.value && passServerSetting.value.startsWith('http')) {
     userStore.setPassServer(passServerSetting.value)
+  }
+  if (langRegion.value != langRegionSetting.value) {
+    langRegion.value = langRegionSetting.value;
+    _G.Region = langRegionSetting.value;
   }
 
   const serpEle = document.querySelector('cib-serp');
@@ -862,6 +879,9 @@ const autoPassCFChallenge = async () => {
           </NFormItem>
         </NGridItem>
       </NGrid>
+      <NFormItem path="langRegion" label="语言理解能力">
+        <NSelect v-model:value="langRegionSetting" :options="langRegionOptions" size="large" placeholder="语言理解能力" />
+      </NFormItem>
       <NFormItem path="sydneyPrompt" label="人机验证服务器">
         <NInput size="large" v-model:value="passServerSetting" type="text" placeholder="人机验证服务器" />
       </NFormItem>
