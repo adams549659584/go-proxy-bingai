@@ -206,7 +206,7 @@ try {
   console.error(error);
 }
 _G = {
-  Region: 'US',
+  Region: 'CN',
   Lang: 'zh-CN',
   ST: typeof si_ST !== 'undefined' ? si_ST : new Date(),
   Mkt: 'en-US',
