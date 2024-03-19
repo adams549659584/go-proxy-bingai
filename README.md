@@ -10,7 +10,7 @@
 
 一键部署, 国内可用, 无需登录即可畅聊
 
-![Golang](https://img.shields.io/badge/Golang-1.21.6-blue?style=flat-square&logo=go) ![Vue3](https://img.shields.io/badge/Vue-3.3.2-green?style=flat-square&logo=vue.js)
+![Golang](https://img.shields.io/badge/Golang-1.22.1-blue?style=flat-square&logo=go) ![Vue3](https://img.shields.io/badge/Vue-3.3.2-green?style=flat-square&logo=vue.js)
 
 ![GitHub stars](https://img.shields.io/github/stars/Harry-zklcdc/go-proxy-bingai.svg?style=flat-square&label=Stars&logo=github) ![GitHub forks](https://img.shields.io/github/forks/Harry-zklcdc/go-proxy-bingai.svg?style=flat-square&label=Forks&logo=github) ![Release](https://img.shields.io/github/v/release/Harry-zklcdc/go-proxy-bingai.svg?style=flat-square&label=Release&logo=github&color=light-green)
 
@@ -70,7 +70,7 @@
 
 ✅ 支持现有开源 ChatGPT 提示词库
 
-✅ 一键登录 (需配合[油猴脚本使用](https://greasyfork.org/zh-CN/scripts/487409-go-proxy-bingai))
+✅ 一键登录
 
 ✅ 登录账号支持画图
 
