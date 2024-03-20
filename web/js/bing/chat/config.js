@@ -111,6 +111,8 @@ _w['_sydConvConfig'] = {
   enableFreeSydneyV2Style: true,
   // Microsoft Designer
   enableDesignerGPT: true,
+  // Phone UI Full Screen
+  enableCopilotFullScreenUX: true,
   enableFullScreenIframe: true,
   enableDelayedMsgHandlerDisposal: true,
   defaultMaxPersonaCount: 6,
@@ -264,11 +266,15 @@ _w['_sydConvConfig'] = {
   enableSimpleVoiceInput: true,
   enableSpeechFateTTSStop: true,
   enableSydPreloadAudioTTS: true,
+  enableSpeechGetUserMedia: true,
   enableSpeechErrorHandling: true,
   enableSpeechTTSLatencyLogging: true,
   enableSpeechIconDarkTheme: true,
   enableAudioPreloadLimit: true,
   enableSpeechAriaLabel: true,
+  // 连续语音聊天
+  enableAutoReopenMic: true,
+  enableAutoReopenMicTTSStopped: true,
   enableMessageShareableSignalV2: true,
   enableSydneyShareLink: true,
   enableCloudflareCaptcha: true,
@@ -448,9 +454,11 @@ _w['_sydConvConfig'] = {
   efhof: true,
   visualSearchSubscriptionId: 'Bing.Chat.Multimodal',
   eifpiab: true,
+  evscamprd: true,
+  vscamprdname: 'FileUploadCameraProvider',
   multimediaSearchFormCode: 'IACMIR',
   multimediaSearchEnableMediaCanvas: true,
-  multimediaSearchMaxImageCount: 5
+  multimediaSearchMaxImageCount: 5,
 };
 _w['_sydThreads'] = {
   threads: [],
@@ -1641,3 +1649,6 @@ if (UserStoreGet('enterpriseEnable')) {
 }
 
 _G.Region = UserStoreGet('langRegion') || 'CN'
+
+_w['_sydConvConfig']['enableAutoReopenMic'] = UserStoreGet('autoReopenMic') || true
+_w['_sydConvConfig']['enableAutoReopenMicTTSStopped'] = UserStoreGet('autoReopenMic') || true
