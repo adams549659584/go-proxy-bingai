@@ -272,6 +272,9 @@ _w['_sydConvConfig'] = {
   enableSpeechIconDarkTheme: true,
   enableAudioPreloadLimit: true,
   enableSpeechAriaLabel: true,
+  // 连续语音聊天
+  enableAutoReopenMic: true,
+  enableAutoReopenMicTTSStopped: true,
   enableMessageShareableSignalV2: true,
   enableSydneyShareLink: true,
   enableCloudflareCaptcha: true,
@@ -1646,3 +1649,6 @@ if (UserStoreGet('enterpriseEnable')) {
 }
 
 _G.Region = UserStoreGet('langRegion') || 'CN'
+
+_w['_sydConvConfig']['enableAutoReopenMic'] = UserStoreGet('autoReopenMic') || true
+_w['_sydConvConfig']['enableAutoReopenMicTTSStopped'] = UserStoreGet('autoReopenMic') || true
