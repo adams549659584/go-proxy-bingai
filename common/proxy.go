@@ -24,6 +24,7 @@ var (
 	BING_SYDNEY_URL, _              = url.Parse(BING_SYDNEY_DOMAIN)
 	BING_URL, _                     = url.Parse("https://www.bing.com")
 	EDGE_SVC_URL, _                 = url.Parse("https://edgeservices.bing.com")
+	BING_SR_URT, _                  = url.Parse("https://sr.bing.com")
 	DISIGNER_URL, _                 = url.Parse("https://designer.microsoft.com")
 	DISIGNER_CDN_URL, _             = url.Parse("https://cdn.designerapp.osi.office.net")
 	DISIGNER_APP_URL, _             = url.Parse("https://designerapp.officeapps.live.com")
@@ -333,6 +334,7 @@ func replaceResBody(originalBody string, originalScheme string, originalHost str
 	if originalScheme == "https" {
 		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, BING_URL.Host, originalHost)
 		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, EDGE_SVC_URL.Host, originalHost)
+		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, BING_SR_URT.Host, originalHost)
 		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_CDN_URL.Host, originalHost+"/designer/cdn")
 		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_APP_EDOG_URL.Host, originalHost+"/designer/app-edog")
 		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_DOCUMENT_URL.Host, originalHost+"/designer/document")
@@ -345,6 +347,7 @@ func replaceResBody(originalBody string, originalScheme string, originalHost str
 		originalDomain := fmt.Sprintf("%s://%s", originalScheme, originalHost)
 		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, BING_URL.String(), originalDomain)
 		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, EDGE_SVC_URL.Host, originalHost)
+		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, BING_SR_URT.String(), originalDomain)
 		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_CDN_URL.String(), originalDomain+"/designer/cdn")
 		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_APP_EDOG_URL.String(), originalDomain+"/designer/app-edog")
 		modifiedBodyStr = strings.ReplaceAll(modifiedBodyStr, DISIGNER_DOCUMENT_URL.String(), originalDomain+"/designer/document")

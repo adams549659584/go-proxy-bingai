@@ -31,6 +31,7 @@ func main() {
 
 	http.HandleFunc("/edgesvc/", helper.Middleware(api.Edgesvc))
 	http.HandleFunc("/sydney/", helper.Middleware(api.Sydney))
+	http.HandleFunc("/opaluqu/", helper.Middleware(api.Opaluqu))
 
 	if common.IS_DEBUG_MODE {
 		http.HandleFunc("/web/", helper.Middleware(web.DebugWebHandler))
