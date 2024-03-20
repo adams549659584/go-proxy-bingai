@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { h, ref, onMounted, inject, defineComponent, render } from 'vue';
-import { NDropdown, type DropdownOption, NModal, NInput, NInputNumber, NButton, NGrid, NGridItem, useMessage, NImage, NForm, NFormItem, NSwitch, NTag, NSelect, NSpin, NP, NA, NConfigProvider, NSpace, NRadio, NRadioGroup, lightTheme, darkTheme, useOsTheme, type GlobalTheme } from 'naive-ui';
+import { NDropdown, type DropdownOption, NModal, NInput, NInputNumber, NButton, NGrid, NGridItem, useMessage, NImage, NForm, NFormItem, NSwitch, NTag, NSelect, NSpin, NP, NA, NConfigProvider, NSpace, NRadio, NRadioGroup, NTooltip, lightTheme, darkTheme, useOsTheme, type GlobalTheme } from 'naive-ui';
 import conversationCssText from '@/assets/css/conversation.css?raw';
 import settingSvgUrl from '@/assets/img/setting.svg?url';
 import { usePromptStore } from '@/stores/modules/prompt';
@@ -791,7 +791,12 @@ const autoPassCFChallenge = async () => {
       <NGrid x-gap="0" :cols="2">
         <NGridItem>
           <NFormItem path="cookiesEnable" label="自动人机验证">
-            <NButton type="info" :loading="passingCFChallenge" @click="settingMenu('autoPassCFChallenge')">启动</NButton>
+            <NTooltip>
+              <template #trigger>
+                <NButton type="info" :loading="passingCFChallenge" @click="settingMenu('autoPassCFChallenge')">启动</NButton>
+              </template>
+              旧版本的人机验证, 现已完全自动代理通过
+            </NTooltip>
           </NFormItem>
         </NGridItem>
         <NGridItem>
