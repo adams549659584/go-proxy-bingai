@@ -111,6 +111,8 @@ _w['_sydConvConfig'] = {
   enableFreeSydneyV2Style: true,
   // Microsoft Designer
   enableDesignerGPT: true,
+  // Phone UI Full Screen
+  enableCopilotFullScreenUX: true,
   enableFullScreenIframe: true,
   enableDelayedMsgHandlerDisposal: true,
   defaultMaxPersonaCount: 6,
@@ -264,6 +266,7 @@ _w['_sydConvConfig'] = {
   enableSimpleVoiceInput: true,
   enableSpeechFateTTSStop: true,
   enableSydPreloadAudioTTS: true,
+  enableSpeechGetUserMedia: true,
   enableSpeechErrorHandling: true,
   enableSpeechTTSLatencyLogging: true,
   enableSpeechIconDarkTheme: true,
@@ -448,9 +451,11 @@ _w['_sydConvConfig'] = {
   efhof: true,
   visualSearchSubscriptionId: 'Bing.Chat.Multimodal',
   eifpiab: true,
+  evscamprd: true,
+  vscamprdname: 'FileUploadCameraProvider',
   multimediaSearchFormCode: 'IACMIR',
   multimediaSearchEnableMediaCanvas: true,
-  multimediaSearchMaxImageCount: 5
+  multimediaSearchMaxImageCount: 5,
 };
 _w['_sydThreads'] = {
   threads: [],
