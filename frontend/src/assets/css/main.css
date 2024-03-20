@@ -27,3 +27,9 @@
     display: initial;
   }
 }
+
+@media(max-width:1024px) {
+	.b_wlcmCont {
+    display: initial;
+  }
+}
